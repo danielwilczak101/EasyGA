@@ -1,0 +1,8 @@
+README.md
+setup.py
+src/helloworld.py
+src/EasyGA.egg-info/PKG-INFO
+src/EasyGA.egg-info/SOURCES.txt
+src/EasyGA.egg-info/dependency_links.txt
+src/EasyGA.egg-info/requires.txt
+src/EasyGA.egg-info/top_level.txt
