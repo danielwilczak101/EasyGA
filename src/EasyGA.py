@@ -1,7 +1,8 @@
+from initialization.random_initialization import random_initialization
+
 def check_gene(value):
     assert value != "" , "Gene can not be empty"
     return value
-
 
 ## Your main structure
 class gene:
@@ -20,10 +21,6 @@ class gene:
     def get_value(self):
         return self.value
 
-    # Should the gene creation of the genes veriation be
-    # included in the gene class or should the use just
-    # assign value to the gene and we move on?
-
 class chromosome:
     # Defults
         # fitness = double, genes = [gene,gene,gene,etc]
@@ -37,10 +34,31 @@ class chromosome:
     def add_gene(self,gene):
         self.genes.append(gene)
 
+    def print_chromosome(self):
+        for i in range(len(self.genes)):
+            print(f"[{self.genes[i].get_value()}],", end = '')
+
+
 class population:
     # chromosomes = [chromosome,chromosome,etc]
-    def __init__(self, chromosome):
+    def __init__(self):
         self.chromosomes = []
 
-class ga:
-    pass
+    def add_chromosome(self,chromosome):
+        self.chromosomes.append(chromosome)
+
+class GA:
+    def __init__(self, population_size, chromosome_length, user_gene_function):
+        # User defined variables
+        self.population_size = population_size
+        self.chromosome_length = chromosome_length
+        self.user_gene_function = user_gene_function
+        # setup required variables
+        self.population = []
+        # Setup ga implimentation structure
+        self.initialization_impl = random_initialization()
+
+
+    def initialize(self):
+        # Create the initial population
+        self.population = self.initialization_impl.initialize(self.population_size, self.chromosome_length, self.user_gene_function)
