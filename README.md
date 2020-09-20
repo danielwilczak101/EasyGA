@@ -37,7 +37,9 @@ print(ga.population.chromosomes[0].print_chromosome())
 
 # Developing EasyGA
 Download the repository to some folder
-
+```
+git clone <CURRENT URL>
+```
 Then install the repositroy using this command:
 ```
 pip install -e .
