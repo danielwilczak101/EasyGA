@@ -36,7 +36,7 @@ print(ga.population.chromosomes[0].print_chromosome())
 ```
 
 # Developing EasyGA
-Download the repository to some folder
+Download the repository to some folder - If you never used git. Look up a youtube tutorial. It will all make sense.
 ```
 git clone https://github.com/danielwilczak101/EasyGA.git
 ```
