@@ -20,7 +20,7 @@ import EasyGA
 import random
 import EasyGA
 
-# The user defined function
+# The user defined gene function
 def user_gene_function():
     return random.randint(1, 100)
 
