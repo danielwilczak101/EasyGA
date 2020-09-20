@@ -21,13 +21,6 @@ class gene:
     def get_value(self):
         return self.value
 
-<<<<<<< HEAD
-=======
-    # Should the gene creation of the genes-veriation be
-    # included in the gene class or should the use just
-    # assign value to the gene and we move on?
-
->>>>>>> 70c9e443a58e7efe5d2cc9e31a129c190ac43b98
 class chromosome:
     # Defults
         # fitness = double, genes = [gene,gene,gene,etc]
