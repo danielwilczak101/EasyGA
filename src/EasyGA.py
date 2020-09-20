@@ -20,7 +20,7 @@ class gene:
     def get_value(self):
         return self.value
 
-    # Should the gene creation of the genes veriation be
+    # Should the gene creation of the genes-veriation be
     # included in the gene class or should the use just
     # assign value to the gene and we move on?
 
