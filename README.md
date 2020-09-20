@@ -38,7 +38,7 @@ print(ga.population.chromosomes[0].print_chromosome())
 # Developing EasyGA
 Download the repository to some folder
 ```
-git clone <CURRENT URL>
+git clone https://github.com/danielwilczak101/EasyGA.git
 ```
 Then install the repositroy using this command:
 ```
