@@ -35,7 +35,10 @@ Chromosome_length = 10
 # Create the Genetic algorithm
 ga = EasyGA.GA(Population_size, Chromosome_length,user_gene_function)
 ga.initialize()
+```
 
+## Getting your genes and chromosomes from the population:
+```Python
 # Looking to print the first Chromosome
 ga.population.chromosomes[0].print_chromosome()
 
@@ -48,9 +51,9 @@ print(f"my_chromosome: {my_chromosome}")
 # Looking to get the data of one gene in the chromosome
 my_gene = ga.population.chromosomes[0].genes[0].get_value()
 print(f"my_gene: {my_gene}")
-
 ```
-## Ouput
+
+# Ouput:
 ```Python
 [99],[30],[59],[77],[68],[57],[14],[92],[85],[27]
 
