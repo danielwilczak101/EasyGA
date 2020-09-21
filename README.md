@@ -19,6 +19,10 @@ ga = EasyGA.GA()
 # Run your defult GA
 ga.initialize()
 ```
+# Output
+```Python
+print("Output HERE")
+```
 
 ## How to use EasyGA:
 ```python
