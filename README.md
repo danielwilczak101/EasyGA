@@ -19,7 +19,7 @@ ga = EasyGA.GA()
 # Run the defult genetic algorithm
 ga.evolve()
 ```
-# Output
+### Output
 ```Python
 print("Output HERE")
 ```
