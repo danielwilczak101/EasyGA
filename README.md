@@ -33,7 +33,7 @@ ga = EasyGA.GA(Population_size, Chromosome_length,user_gene_function)
 ga.initialize()
 
 # Looking at the first chromosome in the population
-print(ga.population.chromosomes[0].print_chromosome())
+ga.population.chromosomes[0].print_chromosome()
 
 ```
 
