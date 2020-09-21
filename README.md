@@ -1,6 +1,6 @@
 # EasyGA - A general solution to Genetic Algorithms
 
-The project has just started
+Project description
 
 ## Installation:
 
@@ -10,12 +10,7 @@ Run the rolling to install:
 pip3 install EasyGA
 ```
 
-To use the package:
-```python
-import EasyGA
-```
-
-## All you need to get started:
+## How to use EasyGA:
 ```python
 import random
 import EasyGA
