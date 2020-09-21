@@ -10,6 +10,16 @@ Run the rolling to install:
 pip3 install EasyGA
 ```
 
+## Getting started with EasyGA
+```Python
+import EasyGA
+
+# Setup your defult GA
+ga = EasyGA.GA()
+# Run your defult GA
+ga.initialize()
+```
+
 ## How to use EasyGA:
 ```python
 import random
