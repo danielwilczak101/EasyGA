@@ -1,3 +1,4 @@
+# Defult packages for GA functionality
 from initialization.random_initialization import random_initialization
 
 def check_gene(value):
@@ -8,41 +9,49 @@ def check_gene(value):
 ## Your main structure
 class gene:
     # Defults
-        # fitness = double , value = Anything
+        # fitness = Anything, value = Anything
     def __init__(self, value):
         self.fitness = None
         self.value = check_gene(value)
 
-    def get_fitness(self):
-        return self.fitness
-
     def set_fitness(self,fitness):
         self.fitness = fitness
+
+    def get_fitness(self):
+        return self.fitness
 
     def get_value(self):
         return self.value
 
+    def print_value(self):
+        print(self.value)
+
+    def print_fitness(self):
+        print(self.fitness)
+
 class chromosome:
     # Defults
-        # fitness = double, genes = [gene,gene,gene,etc]
+        # fitness = Anything, genes = [gene,gene,gene,etc]
     def __init__(self):
         self.fitness = None
         self.genes = []
 
+    def add_gene(self,gene):
+        self.genes.append(gene)
+
     def get_fitness(self):
         return self.score
 
-    def add_gene(self,gene):
-        self.genes.append(gene)
+    def get_chromosome(self):
+        return self.genes
 
     def print_chromosome(self):
         for i in range(len(self.genes)):
             # Print the gene one by one.
             if(i == len(self.genes) - 1):
-                print(f"[{self.genes[i].get_value()}]", end = '')
+                print(f"[{self.genes[i].get_value()}]")
             else:
                 print(f"[{self.genes[i].get_value()}],", end = '')
-
 
 class population:
     # population = [chromosome,chromosome,etc]
