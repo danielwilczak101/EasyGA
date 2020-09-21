@@ -37,7 +37,7 @@ ga = EasyGA.GA(Population_size, Chromosome_length,user_gene_function)
 ga.initialize()
 ```
 
-## Getting your genes and chromosomes from the population:
+# Getting your Genes and Chromosomes from the population:
 ```Python
 # Looking to print the first Chromosome
 ga.population.chromosomes[0].print_chromosome()
