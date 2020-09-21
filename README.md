@@ -37,7 +37,7 @@ ga = EasyGA.GA(Population_size, Chromosome_length,user_gene_function)
 ga.initialize()
 ```
 
-# Getting your Genes and Chromosomes from the population:
+### Getting your Genes and Chromosomes from the population:
 ```Python
 # Looking to print the first Chromosome
 ga.population.chromosomes[0].print_chromosome()
@@ -53,7 +53,7 @@ my_gene = ga.population.chromosomes[0].genes[0].get_value()
 print(f"my_gene: {my_gene}")
 ```
 
-# Ouput:
+### Ouput:
 ```Python
 [99],[30],[59],[77],[68],[57],[14],[92],[85],[27]
 
@@ -75,7 +75,7 @@ my_gene: 99
 ```
 
 
-# Developing EasyGA:
+## Developing EasyGA:
 Download the repository to some folder - If you never used git. Look up a youtube tutorial. It will all make sense.
 ```
 git clone https://github.com/danielwilczak101/EasyGA.git
@@ -85,7 +85,7 @@ Then install the repositroy using this command:
 pip install -e .
 ```
 
-# Working on developing a devel branch:
+## Working on developing a devel branch:
 To install EASY, along with the tools you need to develop and run tests, run the following in your virtual env:
 
 ```bash
