@@ -5,10 +5,11 @@ with open("README.md", "r") as fh:
 
 setup(
     name='EasyGA',
-    version='0.0.7',
+    version='0.0.8',
     description='A ubiquitous or general purpuse GA',
     py_modules=["EasyGA"],
     package_dir={'':'src'},
+    python_requires='>=3.6',
     url="https://github.com/danielwilczak101/EasyGA",
     author="Daniel Wilczak",
     author_email="danielwilczak101@gmail.com",

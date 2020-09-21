@@ -1,6 +1,7 @@
 from initialization.random_initialization import random_initialization
 
 def check_gene(value):
+    #Check to make sure the gene is not empty
     assert value != "" , "Gene can not be empty"
     return value
 
@@ -36,11 +37,15 @@ class chromosome:
 
     def print_chromosome(self):
         for i in range(len(self.genes)):
-            print(f"[{self.genes[i].get_value()}],", end = '')
+            # Print the gene one by one.
+            if(i == len(self.genes) - 1):
+                print(f"[{self.genes[i].get_value()}]", end = '')
+            else:
+                print(f"[{self.genes[i].get_value()}],", end = '')
 
 
 class population:
-    # chromosomes = [chromosome,chromosome,etc]
+    # population = [chromosome,chromosome,etc]
     def __init__(self):
         self.chromosomes = []
 
