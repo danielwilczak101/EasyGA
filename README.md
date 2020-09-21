@@ -49,6 +49,7 @@ ga.population.chromosomes[0].genes[0].print_value()
 my_chromosome = ga.population.chromosomes[0]
 print(f"my_chromosome: {my_chromosome.get_chromosome()}")
 print(f"my_chromosome fitness: {my_chromosome.get_fitness()}")
+
 # Looking to get the data of one gene in the chromosome
 my_gene = ga.population.chromosomes[0].genes[0]
 print(f"my_gene: {my_gene.get_value()}")
