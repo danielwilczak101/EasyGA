@@ -51,7 +51,5 @@ pip install -e .
 To install EASY, along with the tools you need to develop and run tests, run the following in your virtual env:
 
 ```bash
-$ pip install -e .[dev]
-=======
 $ pip install -e .[devel]
 ```
