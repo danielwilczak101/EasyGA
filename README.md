@@ -14,10 +14,10 @@ pip3 install EasyGA
 ```Python
 import EasyGA
 
-# Setup your defult GA
+# Setup the defult genetic algorithm
 ga = EasyGA.GA()
-# Run your defult GA
-ga.initialize()
+# Run the defult genetic algorithm
+ga.evolve()
 ```
 # Output
 ```Python
