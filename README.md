@@ -2,7 +2,7 @@
 
 The project has just started
 
-## Installation
+## Installation:
 
 Run the rolling to install:
 
@@ -15,7 +15,7 @@ To use the package:
 import EasyGA
 ```
 
-## Example
+## Example:
 ```python
 import random
 import EasyGA
@@ -37,7 +37,7 @@ ga.population.chromosomes[0].print_chromosome()
 
 ```
 
-# Developing EasyGA
+# Developing EasyGA:
 Download the repository to some folder - If you never used git. Look up a youtube tutorial. It will all make sense.
 ```
 git clone https://github.com/danielwilczak101/EasyGA.git
@@ -47,7 +47,7 @@ Then install the repositroy using this command:
 pip install -e .
 ```
 
-# Working on developing a devel branch
+# Working on developing a devel branch:
 To install EASY, along with the tools you need to develop and run tests, run the following in your virtual env:
 
 ```bash
