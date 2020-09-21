@@ -46,18 +46,20 @@ ga.population.chromosomes[0].print_chromosome()
 ga.population.chromosomes[0].genes[0].print_value()
 
 # Looking to get the data of a chromosome
-my_chromosome = ga.population.chromosomes[0].get_chromosome()
-print(f"my_chromosome: {my_chromosome}")
+my_chromosome = ga.population.chromosomes[0]
+print(f"my_chromosome: {my_chromosome.get_chromosome()}")
+print(f"my_chromosome fitness: {my_chromosome.get_fitness()}")
 # Looking to get the data of one gene in the chromosome
-my_gene = ga.population.chromosomes[0].genes[0].get_value()
-print(f"my_gene: {my_gene}")
+my_gene = ga.population.chromosomes[0].genes[0]
+print(f"my_gene: {my_gene.get_value()}")
+print(f"my_gene fitness: {my_gene.get_fitness()}")
 ```
 
 ### Ouput:
 ```Python
-[99],[30],[59],[77],[68],[57],[14],[92],[85],[27]
+[38],[40],[29],[35],[85],[96],[87],[96],[53],[44]
 
-99
+38
 
 my_chromosome: [<EasyGA.gene object at 0x7fb5642d4860>,
  <EasyGA.gene object at 0x7fb5642d4898>,
@@ -70,8 +72,9 @@ my_chromosome: [<EasyGA.gene object at 0x7fb5642d4860>,
         <EasyGA.gene object at 0x7fb5642d4cc0>,
          <EasyGA.gene object at 0x7fb5642d4cf8>]
 
-my_gene: 99
-
+my_chromosome fitness: None
+my_gene: 38
+my_gene fitness: None
 ```
 
 

@@ -40,7 +40,7 @@ class chromosome:
         self.genes.append(gene)
 
     def get_fitness(self):
-        return self.score
+        return self.fitness
 
     def get_chromosome(self):
         return self.genes
