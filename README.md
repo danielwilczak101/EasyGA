@@ -10,7 +10,7 @@ Run the rolling to install:
 pip3 install EasyGA
 ```
 
-## Getting started with EasyGA
+## Getting started with EasyGA:
 ```Python
 import EasyGA
 
@@ -19,7 +19,7 @@ ga = EasyGA.GA()
 # Run the defult genetic algorithm
 ga.evolve()
 ```
-### Output
+### Output:
 ```Python
 print("Output HERE")
 ```
