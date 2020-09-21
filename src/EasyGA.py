@@ -62,7 +62,8 @@ class population:
         self.chromosomes.append(chromosome)
 
 class GA:
-    def __init__(self, population_size, chromosome_length, user_gene_function):
+    def __init__(self, population_size, chromosome_length,
+                    user_gene_function,user_fitness_function):
         # User defined variables
         self.population_size = population_size
         self.chromosome_length = chromosome_length
@@ -75,4 +76,6 @@ class GA:
 
     def initialize(self):
         # Create the initial population
-        self.population = self.initialization_impl.initialize(self.population_size, self.chromosome_length, self.user_gene_function)
+        self.population = self.initialization_impl.initialize(self.population_size,
+                                                                self.chromosome_length,
+                                                                 self.user_gene_function)

@@ -6,7 +6,7 @@ def user_gene_function():
     return random.randint(1, 100)
 
 # The user defined Fitness Function
-def user_fitness_function():
+def user_fitness_function(chromosome):
     pass
 
 # Standard user size requirements
@@ -14,7 +14,8 @@ Population_size = 10
 Chromosome_length = 10
 
 # Create the Genetic algorithm
-ga = EasyGA.GA(Population_size, Chromosome_length,user_gene_function)
+ga = EasyGA.GA(Population_size, Chromosome_length,
+                user_gene_function,user_fitness_function)
 ga.initialize()
 
 # Looking to print the first Chromosome
