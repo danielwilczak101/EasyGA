@@ -79,10 +79,13 @@ Download the repository to some folder - If you never used git. Look up a youtub
 ```
 git clone https://github.com/danielwilczak101/EasyGA.git
 ```
-Then install the repositroy using this command:
+Or download as a zip file.
 ```
-pip install -e .
+https://github.com/danielwilczak101/EasyGA/archive/master.zip
 ```
+Use the example.py file inside the src folder to run your code and test while we build the package
+
+
 
 ## Working on developing a devel branch:
 To install EASY, along with the tools you need to develop and run tests, run the following in your virtual env:
