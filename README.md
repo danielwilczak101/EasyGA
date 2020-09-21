@@ -75,6 +75,17 @@ my_gene fitness: None
 
 
 ## Developing EasyGA:
+### If you know how to use Github and git ignore this section.
+
+### Getting started with development
+To work together we plan on using github and the git framework. This is made easy with the Atom software.
+
+Download Atom for whatever OS you have.
+https://atom.io/
+
+Use the github tab to pull the github repository. Its self explanitory.
+
+
 Download the repository to some folder - If you never used git. Look up a youtube tutorial. It will all make sense.
 ```
 git clone https://github.com/danielwilczak101/EasyGA.git
