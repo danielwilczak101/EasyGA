@@ -38,7 +38,7 @@ class chromosome:
     def print_chromosome(self):
         for i in range(len(self.genes)):
             # Print the gene one by one.
-            if(i == range(len(self.genes))):
+            if(i == len(self.genes)):
                 print(f"[{self.genes[i].get_value()}]", end = '')
             else:
                 print(f"[{self.genes[i].get_value()}],", end = '')
