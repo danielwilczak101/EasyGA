@@ -15,7 +15,7 @@ To use the package:
 import EasyGA
 ```
 
-## Example:
+## All you need to get started:
 ```python
 import random
 import EasyGA
