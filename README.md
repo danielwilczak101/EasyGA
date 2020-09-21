@@ -1,6 +1,6 @@
 # EasyGA - A general solution to Genetic Algorithms
 
-The projects has just started
+The project has just started
 
 ## Installation
 
