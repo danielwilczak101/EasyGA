@@ -10,7 +10,7 @@ Run the rolling to install:
 pip3 install EasyGA
 ```
 
-To use the package
+To use the package:
 ```python
 import EasyGA as ga
 ```
