@@ -15,7 +15,7 @@ class defaults:
     def default_fitness_function():
         pass
 
-    def default_initialize_functio():
+    def default_initialize_function():
         return random_initialization()
 
     def default_selection_function():
@@ -27,5 +27,15 @@ class defaults:
     def default_mutations_function():
         return per_gene_mutation()
 
-    def default_termination_function(generations):
-        return generation_termination(generations)
+    def default_termination_point_function(amount):
+        # The default termination point is based on how
+        # many generations the user wants to run.
+        return generation_termination(amount)
+
+    def defult_get_highest_fitness():
+        # Get the highest fitness of the current generation
+        pass
+
+    def default_get_lowest_fitness():
+        # Get the lowest fitness of the current generation
+        pass

@@ -30,3 +30,10 @@ class GA:
     # def evolve(self):
     #     # Evolve will run all the functions
     #     initialize()
+
+    def evolve():
+        pass
+
+    def evolve_generation(self, number_of_generations):
+        # This is where the generatoin progression happens.
+        pass
