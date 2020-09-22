@@ -62,20 +62,56 @@ class population:
         self.chromosomes.append(chromosome)
 
 class GA:
-    def __init__(self, population_size, chromosome_length,
-                    user_gene_function,user_fitness_function):
-        # User defined variables
-        self.population_size = population_size
-        self.chromosome_length = chromosome_length
-        self.user_gene_function = user_gene_function
-        # setup required variables
-        self.population = []
-        # Setup ga implimentation structure
-        self.initialization_impl = random_initialization()
-
+    def __init__(self):
+        # Default variables
+        self.population_size = defaults.generations
+        self.chromosome_length = defaults.chromosome_length
+        self.generations = defaults.generations
+        # Defualt ga implimentation structure
+        self.create_gene = defaults.default_gene_function()
+        self.initialization = defaults.default_initialize()
+        self.mutation = defaults.default_mutations_function()
+        self.selection = defaults.default_selection_function()
+        self.crossover = defaults.default_crossover_function()
+        self.termination = defaults.default_termination_function(self.generations)
+        self.fitness_function = defaults.default_fitness_function()
 
     def initialize(self):
         # Create the initial population
-        self.population = self.initialization_impl.initialize(self.population_size,
+        self.population = self.initialization.initialize(self.population_size,
                                                                 self.chromosome_length,
                                                                  self.user_gene_function)
+
+    def evolve(self):
+        # Evolve will run all the functions
+        initialize()
+
+
+class defaults(self):
+
+    def __init__(self):
+        self.generations = 3
+        self.chromosome_length = 4
+        self.population_size = 5
+        self.mutation_rate = 0.03
+
+    def default_gene_function():
+        return random.randint(1, 100)
+
+    def default_fitness_function():
+        pass
+
+    def default_initialize_functio():
+        return random_initialization()
+
+    def default_selection_function():
+        return tournament_selection()
+
+    def default_crossover_function():
+        return fast_single_point_crossover()
+
+    def default_mutations_function():
+        return per_gene_mutation()
+
+    def default_termination_function(generations):
+        return generation_termination(generations)

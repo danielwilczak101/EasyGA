@@ -14,36 +14,55 @@ pip3 install EasyGA
 ```Python
 import EasyGA
 
-# Setup the defult genetic algorithm
+# Setup the default genetic algorithm
 ga = EasyGA.GA()
-# Run the defult genetic algorithm
+# Run the default genetic algorithm
 ga.evolve()
 ```
-### Output:
-```Python
-print("Output HERE")
+
+# Output:
+```python
+Put the out here
 ```
 
-## How to use EasyGA:
+## Different version that is more customized:
 ```python
 import random
 import EasyGA
 
+# Setup the default genetic algorithm
+ga = EasyGA.GA()
+
+# User set sizes
+ga.population_size = 10
+ga.chromosome_length = 10
+ga.generations = 10
+
 # The user defined gene function
 def user_gene_function():
-    return random.randint(1, 100)
+    pass
 
-# The user defined Fitness Function
+# The user defined Fitness function that gives the chromosome some kind of fitness
 def user_fitness_function(chromosome):
     pass
 
-# Standard user size requirements
-Population_size = 10
-Chromosome_length = 10
+# The user defined initialization function
+def user_initialization_function():
+    pass
 
-# Create the Genetic algorithm
-ga = EasyGA.GA(Population_size, Chromosome_length,user_gene_function,user_fitness_function)
-ga.initialize()
+# User sets the gene function
+ga.gene = user_gene_function
+# Set the fitness functions
+ga.fitness =  user_fitness_function
+# Changing the initialization function.
+ga.initialization = user_initialization_function
+# Run the customized genetic algorithm
+ga.eveolve()
+```
+
+# Output:
+```python
+Put the out here
 ```
 
 ### Getting your Genes and Chromosomes from the population:
