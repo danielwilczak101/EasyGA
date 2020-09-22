@@ -25,7 +25,7 @@ ga.evolve()
 Put the out here
 ```
 
-## Different version that is more customized:
+## Customized:
 ```python
 import random
 import EasyGA
@@ -65,46 +65,35 @@ ga.eveolve()
 Put the out here
 ```
 
-### Getting your Genes and Chromosomes from the population:
-```Python
-# Looking to print the first Chromosome
-ga.population.chromosomes[0].print_chromosome()
+# How Testing works
 
-# Looking to print one gene in chromosome 0
-ga.population.chromosomes[0].genes[0].print_value()
+### Getting started with testing
 
-# Looking to get the data of a chromosome
-my_chromosome = ga.population.chromosomes[0]
-print(f"my_chromosome: {my_chromosome.get_chromosome()}")
-print(f"my_chromosome fitness: {my_chromosome.get_fitness()}")
-
-# Looking to get the data of one gene in the chromosome
-my_gene = ga.population.chromosomes[0].genes[0]
-print(f"my_gene: {my_gene.get_value()}")
-print(f"my_gene fitness: {my_gene.get_fitness()}")
+```bash
+pip3 install pytest
 ```
 
-### Ouput:
-```Python
-[38],[40],[29],[35],[85],[96],[87],[96],[53],[44]
-
-38
-
-my_chromosome: [<EasyGA.gene object at 0x7fb5642d4860>,
- <EasyGA.gene object at 0x7fb5642d4898>,
-  <EasyGA.gene object at 0x7fb5642d4908>,
-   <EasyGA.gene object at 0x7fb5642d49e8>,
-    <EasyGA.gene object at 0x7fb5642d4b00>,
-     <EasyGA.gene object at 0x7fb5642d4ba8>,
-      <EasyGA.gene object at 0x7fb5642d4b70>,
-       <EasyGA.gene object at 0x7fb5642d4c88>,
-        <EasyGA.gene object at 0x7fb5642d4cc0>,
-         <EasyGA.gene object at 0x7fb5642d4cf8>]
-
-my_chromosome fitness: None
-my_gene: 38
-my_gene fitness: None
+### Navigate to your EasyGA folder and run:
+```bash
+pytest
 ```
+
+#### Output
+```bash
+============================== 1 passed in 0.02s ===============================
+danielwilczak@Daniels-MacBook-Pro EasyGA % pytest
+============================= test session starts ==============================
+platform darwin -- Python 3.8.6rc1, pytest-6.0.2, py-1.9.0, pluggy-0.13.1
+rootdir: /Users/danielwilczak/github/EasyGA
+collected 1 item                                                               
+
+src/gene/test_gene.py .                                                  [100%]
+
+============================== 1 passed in 0.03s ===============================  
+
+```
+
+This is only example and we will create hundreds of tests so this list will become bigger and bigger.
 
 
 ## Developing EasyGA:
