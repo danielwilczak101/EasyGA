@@ -22,7 +22,7 @@ class GA:
         self.population = self.initialization.initialize(self.population_size,
                                                                 self.chromosome_length,
                                                                  self.user_gene_function)
-
+                                                                 
     def evolve(self):
         # Evolve will run all the functions
         initialize()
