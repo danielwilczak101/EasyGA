@@ -1,8 +1,8 @@
-class defaults(self):
+import random
+
+class defaults:
 # Defult values so that the user doesnt have to explicidly
 # state every feature of the genetic algorithm.
-
-
     def __init__(self):
         self.generations = 3
         self.chromosome_length = 4
