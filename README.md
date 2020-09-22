@@ -107,7 +107,7 @@ https://atom.io/
 
 Use the github tab to pull the github repository. Its self explanitory.
 
-Use the example.py file inside the src folder to run your code and test while we build the package.
+Use the <b>run_testig.py</b> file inside the src folder to run your code and test while we build the package.
 
 ## Other options
 
