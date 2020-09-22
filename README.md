@@ -20,7 +20,7 @@ ga = EasyGA.GA()
 ga.evolve()
 ```
 
-# Output:
+### Output:
 ```python
 Put the out here
 ```
@@ -60,7 +60,7 @@ ga.initialization = user_initialization_function
 ga.eveolve()
 ```
 
-# Output:
+### Output:
 ```python
 Put the out here
 ```
