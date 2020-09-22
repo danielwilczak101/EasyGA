@@ -93,7 +93,7 @@ src/gene/test_gene.py .                                                  [100%]
 
 ```
 
-This is only example and we will create hundreds of tests so this list will become bigger and bigger.
+This is only an example and we will create hundreds of tests so this list will become bigger and bigger.
 
 
 ## Developing EasyGA:
