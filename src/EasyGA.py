@@ -32,8 +32,12 @@ class GA:
     #     initialize()
 
     def evolve():
+        # If you just want to evolve through all generations
         pass
 
     def evolve_generation(self, number_of_generations):
-        # This is where the generatoin progression happens.
+        # If you want to evolve through a number of generations
+        # and be able to pause and output data based on that generation run.
         pass
+
+    # What about if you want to see how each
