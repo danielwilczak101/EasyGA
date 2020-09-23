@@ -4,6 +4,8 @@ import EasyGA
 # Create the Genetic algorithm
 ga = EasyGA.GA()
 
+# Start the population
 ga.initialize()
 
-ga.population.chromosome[0].print_chromosome()
+for chromosome in ga.population.chromosomes:
+    print(chromosome.genes[0].__dict__)

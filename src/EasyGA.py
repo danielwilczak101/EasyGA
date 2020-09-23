@@ -1,15 +1,11 @@
-# Import all the data structure onjects
-from initialization.gene import gene
-from initialization.chromosome import chromosome
-from initialization.population import population
-
-
-from initialization.random_gene import random_gene
+# Import all the data prebuilt modules
+from initialization.gene_creation.gene_random import random_gene
 from initialization.random_initialization import random_initialization
+
+
 
 class GA:
     def __init__(self):
-
         # Default variables
         self.population = None
         self.generations = 3
@@ -17,7 +13,7 @@ class GA:
         self.population_size = 5
         self.mutation_rate = 0.03
         # Defualt EastGA implimentation structure
-        self.gene_function_impl = random_gene(1,100)
+        self.gene_function_impl = random_gene
         # Set the GA Configuration
         self.initialization_impl = random_initialization()
         #self.mutation_impl = PerGeneMutation(Mutation_rate)

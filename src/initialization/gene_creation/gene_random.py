@@ -9,7 +9,5 @@ def check_values(low,high):
     assert high > low , "High value can not be smaller then low value"
     assert high != 0, "High value can not be zero"
 
-def random_gene(low,high):
-    # Check the values so that they follow the rules.
-    check_values(low,high)
+def random_gene():
     return random.randint(1,100)
