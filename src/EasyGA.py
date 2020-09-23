@@ -53,4 +53,7 @@ class GA:
         return create_gene(value)
 
     def make_chromosome(self):
-        pass
+        return create_chromosome()
+
+    def make_population(self):
+        return create_population()
