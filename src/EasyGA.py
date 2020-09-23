@@ -2,13 +2,14 @@
 from initialization.random_initialization import random_initialization
 
 import random
-from defaults import defaults
-import gene
+from defaults.defaults import defaults
+from gene.gene import gene
 
 class GA:
     def __init__(self):
         # Default variables
-         self.gene = defaults.default_gene_function()
+         self.gene = gene(defaults.default_gene_function())
+         self.chromosome_length = defaults.chromosome_length
     #     self.population_size = defaults.generations
     #     self.chromosome_length = defaults.chromosome_length
     #     self.generations = defaults.generations
