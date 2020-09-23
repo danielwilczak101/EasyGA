@@ -3,8 +3,6 @@ from .population_structure.population import population as create_population
 from .chromosome_structure.chromosome import chromosome as create_chromosome
 from .gene_structure.gene import gene as create_gene
 
-from .initialization import initialization
-
 class random_initialization:
     def initialize(self,chromosome_length,population_size,gene_function):
         # I dont understand why python needs this in its scope but it does.

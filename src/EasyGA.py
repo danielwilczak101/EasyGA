@@ -1,8 +1,20 @@
 # Import all the data prebuilt modules
+from initialization.population_structure.population import population as create_population
+from initialization.chromosome_structure.chromosome import chromosome as create_chromosome
+from initialization.gene_structure.gene import gene as create_gene
+
+# Import functions for defaults
 from initialization.gene_creation.gene_random import random_gene
+# Import functionality defaults
 from initialization.random_initialization import random_initialization
 
+
 class GA:
+
+    global population
+    global chromosome
+    global gene
+
     def __init__(self):
         # Default variables
         self.population = None
@@ -37,4 +49,8 @@ class GA:
         # and be able to pause and output data based on that generation run.
         pass
 
-    # What about if you want to see how each
+    def make_gene(self,value):
+        return create_gene(value)
+
+    def make_chromosome(self):
+        pass
