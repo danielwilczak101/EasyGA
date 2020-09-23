@@ -2,8 +2,6 @@
 from initialization.gene_creation.gene_random import random_gene
 from initialization.random_initialization import random_initialization
 
-
-
 class GA:
     def __init__(self):
         # Default variables
