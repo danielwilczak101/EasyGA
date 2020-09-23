@@ -1,20 +1,20 @@
+from initialization.population import population
+from initialization.chromosome import chromosome
+from initialization.gene import gene
+
 from initialization.initialization import initialization
-import EasyGA as ga
-import random
 
 class random_initialization(initialization):
-    def initialize(self, population_size, chromosome_length,user_defined_function):
+    def initialize(self,chromosome_length,population_size,gene_function):
         # Create the population object
-        population = ga.population()
+        population = population.population()
         # Fill the population with chromosomes
         for i in range(population_size):
-            #Create the chromosome object
-            chromosome = ga.chromosome()
+            chromosome = chromosome.chromosome()
             #Fill the Chromosome with genes
             for j in range(chromosome_length):
-                # File the gene object with a value
-                    # Where the user function is being implimented ---
-                chromosome.add_gene(ga.gene(user_defined_function()))
-                    # --------
+                gene = gene.gene(gene_function)
+                chromosome.add_gene(gene)
+
             population.add_chromosome(chromosome)
         return population

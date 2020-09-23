@@ -1,36 +1,38 @@
-# Defult packages for GA functionality
-from initialization.random_initialization import random_initialization
+# Import all the data structure onjects
+from initialization.gene import gene
+from initialization.chromosome import chromosome
+from initialization.population import population
 
-import random
-from defaults.defaults import defaults
-from gene.gene import gene
+
+from initialization.random_gene import random_gene
+from initialization.random_initialization import random_initialization
 
 class GA:
     def __init__(self):
-        # Default variables
-         self.gene = gene(defaults.default_gene_function())
-         self.chromosome_length = defaults.chromosome_length
-    #     self.population_size = defaults.generations
-    #     self.chromosome_length = defaults.chromosome_length
-    #     self.generations = defaults.generations
-    #     # Defualt ga implimentation structure
 
-    #     self.initialization = defaults.default_initialize()
-    #     self.mutation = defaults.default_mutations_function()
-    #     self.selection = defaults.default_selection_function()
-    #     self.crossover = defaults.default_crossover_function()
-    #     self.termination = defaults.default_termination_function(self.generations)
-    #     self.fitness_function = defaults.default_fitness_function()
-    #
-    # def initialize(self):
-    #     # Create the initial population
-    #     self.population = self.initialization.initialize(self.population_size,
-    #                                                             self.chromosome_length,
-    #                                                              self.user_gene_function)
-    #
-    # def evolve(self):
-    #     # Evolve will run all the functions
-    #     initialize()
+        # Default variables
+        self.population = None
+        self.generations = 3
+        self.chromosome_length = 4
+        self.population_size = 5
+        self.mutation_rate = 0.03
+        # Defualt EastGA implimentation structure
+        self.gene_function_impl = random_gene(1,100)
+        # Set the GA Configuration
+        self.initialization_impl = random_initialization()
+        #self.mutation_impl = PerGeneMutation(Mutation_rate)
+        #self.selection_impl = TournamentSelection()
+        #self.crossover_impl = FastSinglePointCrossover()
+        #self.termination_impl = GenerationTermination(Total_generations)
+        #self.evaluation_impl = TestEvaluation()
+
+
+    def initialize(self):
+        # Create the first population
+        self.population = self.initialization_impl.initialize(
+        self.population_size,
+        self.chromosome_length,
+        self.gene_function_impl)
 
     def evolve():
         # If you just want to evolve through all generations

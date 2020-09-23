@@ -1,3 +1,3 @@
 class initialization:
-    def initialize(self, population_size, chromosome_length,user_defined_function):
+    def initialize(self,chromosome_length,population_size,gene_function):
         return []  # return an array of chromosomes for generation 0
