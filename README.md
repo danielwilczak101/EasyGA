@@ -30,39 +30,31 @@ Put the out here
 import random
 import EasyGA
 
-# Setup the default genetic algorithm
+# Create the Genetic algorithm
 ga = EasyGA.GA()
 
-# User set sizes
-ga.population_size = 10
-ga.chromosome_length = 10
-ga.generations = 10
+# Makes a new gene
+new_gene = ga.make_gene("HelloWorld")
+# Makes a chromosome to store genes in
+new_chromosome = ga.make_chromosome()
+# Makes a Population to store chromosomes in
+new_population = ga.make_population()
 
-# The user defined gene function
-def user_gene_function():
-    pass
+ga.initialize()
 
-# The user defined Fitness function that gives the chromosome some kind of fitness
-def user_fitness_function(chromosome):
-    pass
+print(ga.population)
 
-# The user defined initialization function
-def user_initialization_function():
-    pass
-
-# User sets the gene function
-ga.gene = user_gene_function
-# Set the fitness functions
-ga.fitness =  user_fitness_function
-# Changing the initialization function.
-ga.initialization = user_initialization_function
-# Run the customized genetic algorithm
-ga.eveolve()
+for chromosome in ga.population.chromosomes:
+    print(chromosome.genes[0].__dict__)
 ```
 
 ### Output:
 ```python
-Put the out here
+<initialization.population_structure.population.population object at 0x7f993002fdf0>
+{'fitness': None, 'value': 47}
+{'fitness': None, 'value': 4}
+{'fitness': None, 'value': 68}
+{'fitness': None, 'value': 57}
 ```
 
 # How Testing works
