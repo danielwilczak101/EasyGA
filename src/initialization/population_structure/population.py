@@ -32,7 +32,15 @@ class population:
         self.fitness = fitness
 
     def __repr__(self):
-        return f"population({self.chromosomes.__repr__()})"
+        pass
+
+    def print_all(self):
+        # Ex .Current population
+        #     Chromosome 1 - [gene][gene][gene][.etc] /  Chromosome fitness - #
+        print("Current population:")
+        for index in range(len(self.chromosomes)):
+            print(f'Chromosome - {index} {self.chromosomes[index]}', end = "")
+            print(f' / Fitness = {self.chromosomes[index].fitness}')
 
     def generate_first_chromosomes(self, chromosome_count, chromosome_length, gene_lower_bound, gene_upper_bound):
         #Creating the chromosomes with Genes of random size

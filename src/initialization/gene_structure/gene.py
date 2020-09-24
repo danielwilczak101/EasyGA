@@ -21,4 +21,4 @@ class gene:
         self.value = value
 
     def __repr__(self):
-        return f"Gene({self.value} - Fitness{self.fitness})"
+        return f'[{self.value}]'

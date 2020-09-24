@@ -28,4 +28,7 @@ class chromosome:
         self.fitness = fitness
 
     def __repr__(self):
-        return f"chromosome({self.genes.__repr__()})"
+        output_str = ''
+        for gene in self.genes:
+            output_str += gene.__repr__()
+        return output_str
