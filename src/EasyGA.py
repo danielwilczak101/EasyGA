@@ -4,7 +4,7 @@ from initialization.chromosome_structure.chromosome import chromosome as create_
 from initialization.gene_structure.gene import gene as create_gene
 
 # Import functions for defaults
-from initialization.gene_creation.gene_random import random_gene
+from initialization.gene_function.gene_random import random_gene
 # Import functionality defaults
 from initialization.random_initialization import random_initialization
 

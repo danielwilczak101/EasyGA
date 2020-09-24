@@ -4,10 +4,6 @@ from .chromosome_structure.chromosome import chromosome as create_chromosome
 from .gene_structure.gene import gene as create_gene
 
 def random_initialization(chromosome_length,population_size,gene_function):
-    # I dont understand why python needs this in its scope but it does.
-    global population
-    global chromosome
-    global gene
     # Create the population object
     population = create_population()
     # Fill the population with chromosomes
