@@ -25,7 +25,7 @@ class GA:
         # Defualt EastGA implimentation structure
         self.gene_function_impl = random_gene
         # Set the GA Configuration
-        self.initialization_impl = random_initialization()
+        self.initialization_impl = random_initialization
         #self.mutation_impl = PerGeneMutation(Mutation_rate)
         #self.selection_impl = TournamentSelection()
         #self.crossover_impl = FastSinglePointCrossover()
@@ -35,7 +35,7 @@ class GA:
 
     def initialize(self):
         # Create the first population
-        self.population = self.initialization_impl.initialize(
+        self.population = self.initialization_impl(
         self.population_size,
         self.chromosome_length,
         self.gene_function_impl)
