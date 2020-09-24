@@ -1,12 +1,16 @@
 class chromosome:
-    # fitness = Empty, genes = [gene,gene,gene,etc]
-    def __init__(self, genes = []):
-        self.genes = genes
+    
+    # fitness = Empty; genes = [gene, gene, gene, etc.]
+    def __init__(self, genes = None):
+        if genes is None:
+            self.genes = []
+        else:
+            self.genes = genes
         self.fitness = None
 
     def add_gene(self, gene, index = -1):
         if index == -1:
-            index = len(self.genes) - 1
+            index = len(self.genes)
         self.genes.insert(index, gene)
 
     def remove_gene(self, index):

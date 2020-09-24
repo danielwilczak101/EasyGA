@@ -1,7 +1,11 @@
 class population:
-    # population = [chromosome,chromosome,etc]
-    def __init__(self, chromosomes = []):
-        self.chromosomes = chromosomes
+    
+    # fitness = Empty; population = [chromosome, chromosome, etc.]
+    def __init__(self, chromosomes = None):
+        if chromosomes is None:
+          self.chromosomes = []
+        else:
+          self.chromosomes = chromosomes
         self.fitness = None
 
     def get_closet_fitness(self,value):
@@ -10,7 +14,7 @@ class population:
 
     def add_chromosome(self, chromosome, index = -1):
         if index == -1:
-            index = len(self.chromosomes) - 1
+            index = len(self.chromosomes)
         self.chromosomes.insert(index, chromosome)
 
     def remove_chromosome(self, index):
