@@ -11,7 +11,7 @@ def check_values(low,high):
 
 def random_gene(gene_input, gene_input_type, gene_index):
     created_gene = None
-    #Determining if single range/domain or index-dependent
+
     if gene_input_type[gene_index] == "range":
         created_gene = random.randint(gene_input[gene_index][0], gene_input[gene_index][1])
     elif gene_input_type[gene_index] == "domain":

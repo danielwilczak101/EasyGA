@@ -13,7 +13,7 @@ def random_initialization(chromosome_length,population_size,gene_function,gene_i
         for i in range(population_size):
             chromosome = create_chromosome()
             #Fill the Chromosome with genes
-            for j in range(chromosome_length-1):
+            for j in range(chromosome_length):
                 chromosome.add_gene(create_gene(gene_function(gene_input, gene_input_type, j)))
             population.add_chromosome(chromosome)
         return population
