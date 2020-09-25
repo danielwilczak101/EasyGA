@@ -21,6 +21,9 @@ class GA:
         self.gene_function_impl = random_gene
         self.gene_input = []
         self.gene_input_type = [] #What if user gives two numbers (i.e. [1,100]) but wants to pick between the two (domain)?
+        while len(self.gene_input_type) != self.chromosome_length:
+            self.gene_input_type.append(None)
+
         # Set the GA Configuration
         self.initialization_impl = random_initialization
         #self.mutation_impl = PerGeneMutation(Mutation_rate)
@@ -34,26 +37,24 @@ class GA:
         self.gene_input = gene_input
 
         #assuming domain if string (strings can never be range)
-        if self.gene_input_type == []:
-            for x in range(len(self.gene_input)):
+        for x in range(len(self.gene_input)):
+            if self.gene_input_type[x] == None:
                 if (isinstance(self.gene_input[x], list)):
                     for y in range(len(self.gene_input[x])):
                         if isinstance(gene_input[x][y], str):
-                            self.gene_input_type.append("domain")
+                            self.gene_input_type[x] = "domain"
                             break
                         elif y == (len(self.gene_input[x]) -1):
-                            self.gene_input_type.append("range")
+                            self.gene_input_type[x] = "range"
                 else:
                     if isinstance(gene_input[x], str):
-                        self.gene_input_type.append("domain")
+                        self.gene_input_type[x] = "domain"
                     else:
                         if isinstance(gene_input[x], int):
                             self.gene_input[x] = [self.gene_input[x], self.gene_input[x]]
-                        self.gene_input_type.append("range")
+                        self.gene_input_type[x] = "range"
                         
-        #If length doesn't correspond to chromosome, update here
-        while len(self.gene_input_type) != self.chromosome_length:
-            self.gene_input_type.append(self.gene_input_type[len(self.gene_input_type)-1])
+
 
         # Create the first population
         self.population = self.initialization_impl(

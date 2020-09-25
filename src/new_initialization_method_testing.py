@@ -3,9 +3,10 @@ import random
 
 # Create the Genetic algorithm
 ga = EasyGA.GA()
-test_range_two = [["left", "right"],[22,88],5,[22,"up"]]
+test_range_two = [["left", "right"],[22,35],5,[22,"up"]]
+ga.gene_input_type[1] = "domain"
 ga.initialize(test_range_two)
-ga.population.print_all()
+ga.population.print_all() 
 
 
 
