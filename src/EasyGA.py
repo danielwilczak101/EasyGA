@@ -10,11 +10,6 @@ from initialization.random_initialization import random_initialization
 
 
 class GA:
-
-    global population
-    global chromosome
-    global gene
-
     def __init__(self):
         # Default variables
         self.population = None
