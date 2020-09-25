@@ -1,5 +1,6 @@
 import EasyGA
 import random
+
 # Create the Genetic algorithm
 ga = EasyGA.GA()
 
@@ -22,3 +23,4 @@ ga.domain = user_gene_domain
 ga.initialize()
 
 #ga.population.print_all()
+
