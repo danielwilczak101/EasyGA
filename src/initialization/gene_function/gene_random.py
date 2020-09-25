@@ -10,18 +10,13 @@ def check_values(low,high):
     assert high != 0, "High value can not be zero"
 
 def random_gene(gene_input, gene_input_type, gene_index):
-    
     created_gene = None
     #Determining if single range/domain or index-dependent
-    if isinstance(gene_input[0], list):
-        if gene_input_type[gene_index] == "range":
-            created_gene = random.randint(gene_input[gene_index][0], gene_input[gene_index][1])
-        elif gene_input_type[gene_index] == "domain":
-            created_gene = random.choice(gene_input[gene_index])
-    else:
-        if gene_input_type[gene_index] == "range":
-            created_gene = random.randint(gene_input[0], gene_input[1])
-        elif gene_input_type[gene_index] == "domain":
-            created_gene = random.choice(gene_input)
+    if gene_input_type[gene_index] == "range":
+        created_gene = random.randint(gene_input[gene_index][0], gene_input[gene_index][1])
+    elif gene_input_type[gene_index] == "domain":
+        created_gene = random.choice(gene_input[gene_index])
+    elif gene_input_type[gene_index] == "float-range":
+        created_gene = random.uniform(gene_input[gene_index][0], gene_input[gene_index][1])
 
     return created_gene

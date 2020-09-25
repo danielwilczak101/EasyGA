@@ -1,11 +1,19 @@
 import EasyGA
 import random
 
+#1. GA should take in range for gene input
+#2. GA should take in index-dependent range for gene input
+#3. GA should take in domain input
+#4. GA should take in index-dependent domain for gene input
+#5. GA should accept mix of range and domain for gene input
+
+
 # Create the Genetic algorithm
 ga = EasyGA.GA()
-test_range_two = [["left", "right"],[22,35],5,[22,"up"]]
-ga.gene_input_type[2] = "domain"
-ga.initialize(test_range_two)
+test_gene_input = [["left", "right"],[1,100],[5.0,10],[22,"up"]]
+#ga.gene_input_type[1] = "domain"
+#ga.gene_input_type[1] = "float-range"
+ga.initialize(test_gene_input)
 ga.population.print_all() 
 
 

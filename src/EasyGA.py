@@ -38,21 +38,17 @@ class GA:
 
         #assuming domain if string (strings can never be range)
         for x in range(len(self.gene_input)):
-            if isinstance(gene_input[x], int):
+            if isinstance(gene_input[x], list) == False:
                 self.gene_input[x] = [self.gene_input[x], self.gene_input[x]]
 
-            if self.gene_input_type[x] == None:
-                if (isinstance(self.gene_input[x], list)):
-                    for y in range(len(self.gene_input[x])):
-                        if isinstance(gene_input[x][y], str):
-                            self.gene_input_type[x] = "domain"
-                            break
-                        elif y == (len(self.gene_input[x]) -1):
-                            self.gene_input_type[x] = "range"
-                else:
-                    if isinstance(gene_input[x], str):
+            if self.gene_input_type[x] == None: #If it hasn't been hard-set by the user
+                for y in range(len(self.gene_input[x])):
+                    if isinstance(gene_input[x][y], str):
                         self.gene_input_type[x] = "domain"
-                    else:
+                        break
+                    elif isinstance(gene_input[x][y], float):
+                        self.gene_input_type[x] = "float-range"
+                    elif y == (len(self.gene_input[x]) -1 and self.gene_input_type[x] != "float-range"):
                         self.gene_input_type[x] = "range"
                         
 
