@@ -2,4 +2,4 @@
 import random
 
 def random_gene(domain):
-    return domain[random.randint(0, len(domain)-1)]
+    return random.choice(domain)
