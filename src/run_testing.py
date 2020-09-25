@@ -11,9 +11,9 @@ new_chromosome = ga.make_chromosome()
 # Makes a Population to store chromosomes in
 new_population = ga.make_population()
 
+# Creating population
 ga.initialize()
 
-print(ga.population)
-
-for chromosome in ga.population.chromosomes:
-    print(chromosome.genes[0].__dict__)
+ga.population.print_all()
+print("")
+print(ga.population.chromosomes[0].__repr__())

@@ -4,7 +4,7 @@ from initialization.chromosome_structure.chromosome import chromosome as create_
 from initialization.gene_structure.gene import gene as create_gene
 
 # Import functions for defaults
-from initialization.gene_creation.gene_random import random_gene
+from initialization.gene_function.gene_random import random_gene
 # Import functionality defaults
 from initialization.random_initialization import random_initialization
 
@@ -25,7 +25,7 @@ class GA:
         # Defualt EastGA implimentation structure
         self.gene_function_impl = random_gene
         # Set the GA Configuration
-        self.initialization_impl = random_initialization()
+        self.initialization_impl = random_initialization
         #self.mutation_impl = PerGeneMutation(Mutation_rate)
         #self.selection_impl = TournamentSelection()
         #self.crossover_impl = FastSinglePointCrossover()
@@ -35,7 +35,7 @@ class GA:
 
     def initialize(self):
         # Create the first population
-        self.population = self.initialization_impl.initialize(
+        self.population = self.initialization_impl(
         self.population_size,
         self.chromosome_length,
         self.gene_function_impl)

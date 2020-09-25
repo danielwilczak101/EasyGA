@@ -1,22 +1,38 @@
 class chromosome:
-    # fitness = Empty, genes = [gene,gene,gene,etc]
-    def __init__(self):
+    
+    # fitness = Empty; genes = [gene, gene, gene, etc.]
+    def __init__(self, genes = None):
+        if genes is None:
+            self.genes = []
+        else:
+            self.genes = genes
         self.fitness = None
-        self.genes = []
 
-    def add_gene(self,gene):
-        self.genes.append(gene)
+    def add_gene(self, gene, index = -1):
+        if index == -1:
+            index = len(self.genes)
+        self.genes.insert(index, gene)
+
+    def remove_gene(self, index):
+        del self.genes[index]
+
+    def get_genes(self):
+        return self.genes
 
     def get_fitness(self):
         return self.fitness
 
-    def get_chromosome(self):
-        return self.genes
+    def set_gene(self, gene, index):
+        self.genes[index] = gene
 
-    def print_chromosome(self):
-        for i in range(len(self.genes)):
-            # Print the gene one by one.
-            if(i == len(self.genes) - 1):
-                print(f"[{self.genes[i].get_value()}]")
-            else:
-                print(f"[{self.genes[i].get_value()}],", end = '')
+    def set_genes(self, genes):
+        self.genes = genes
+
+    def set_fitness(self, fitness):
+        self.fitness = fitness
+
+    def __repr__(self):
+        output_str = ''
+        for gene in self.genes:
+            output_str += gene.__repr__()
+        return output_str
