@@ -38,6 +38,9 @@ class GA:
 
         #assuming domain if string (strings can never be range)
         for x in range(len(self.gene_input)):
+            if isinstance(gene_input[x], int):
+                self.gene_input[x] = [self.gene_input[x], self.gene_input[x]]
+
             if self.gene_input_type[x] == None:
                 if (isinstance(self.gene_input[x], list)):
                     for y in range(len(self.gene_input[x])):
@@ -50,8 +53,6 @@ class GA:
                     if isinstance(gene_input[x], str):
                         self.gene_input_type[x] = "domain"
                     else:
-                        if isinstance(gene_input[x], int):
-                            self.gene_input[x] = [self.gene_input[x], self.gene_input[x]]
                         self.gene_input_type[x] = "range"
                         
 
