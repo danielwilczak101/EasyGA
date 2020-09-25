@@ -1,5 +1,5 @@
 class population:
-    
+
     # fitness = Empty; population = [chromosome, chromosome, etc.]
     def __init__(self, chromosomes = None):
         if chromosomes is None:
@@ -36,7 +36,8 @@ class population:
         self.fitness = fitness
 
     def __repr__(self):
-        pass
+        for index in range(len(self.chromosomes)):
+            return f'{self.chromosomes[index]}'
 
     def print_all(self):
         # Ex .Current population
