@@ -12,6 +12,7 @@ from initialization.random_initialization import random_initialization
 class GA:
     def __init__(self):
         # Default variables
+        self.domain = range(1, 100)
         self.population = None
         self.generations = 3
         self.chromosome_length = 4
@@ -27,13 +28,15 @@ class GA:
         #self.termination_impl = GenerationTermination(Total_generations)
         #self.evaluation_impl = TestEvaluation()
 
-
     def initialize(self):
+        if isinstance(self.domain, range):
+            self.domain = [x/float(100) for x in range(int(min(self.domain)*100), int(max(self.domain)*100))]
         # Create the first population
         self.population = self.initialization_impl(
         self.population_size,
         self.chromosome_length,
-        self.gene_function_impl)
+        self.gene_function_impl,
+        self.domain)
 
     def evolve():
         # If you just want to evolve through all generations
