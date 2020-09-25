@@ -19,6 +19,8 @@ class GA:
         self.mutation_rate = 0.03
         # Defualt EastGA implimentation structure
         self.gene_function_impl = random_gene
+        self.gene_input = []
+        self.gene_input_type = [] #What if user gives two numbers (i.e. [1,100]) but wants to pick between the two (domain)?
         # Set the GA Configuration
         self.initialization_impl = random_initialization
         #self.mutation_impl = PerGeneMutation(Mutation_rate)
@@ -28,12 +30,39 @@ class GA:
         #self.evaluation_impl = TestEvaluation()
 
 
-    def initialize(self):
+    def initialize(self, gene_input):
+        self.gene_input = gene_input
+
+        #assuming domain if string (strings can never be range)
+        if self.gene_input_type == []:
+            for x in range(len(self.gene_input)):
+                if (isinstance(self.gene_input[x], list)):
+                    for y in range(len(self.gene_input[x])):
+                        if isinstance(gene_input[x][y], str):
+                            self.gene_input_type.append("domain")
+                            break
+                        elif y == (len(self.gene_input[x]) -1):
+                            self.gene_input_type.append("range")
+                else:
+                    if isinstance(gene_input[x], str):
+                        self.gene_input_type.append("domain")
+                    else:
+                        if isinstance(gene_input[x], int):
+                            self.gene_input[x] = [self.gene_input[x], self.gene_input[x]]
+                        self.gene_input_type.append("range")
+                        
+        #If length doesn't correspond to chromosome, update here
+        while len(self.gene_input_type) != self.chromosome_length:
+            self.gene_input_type.append(self.gene_input_type[len(self.gene_input_type)-1])
+
         # Create the first population
         self.population = self.initialization_impl(
         self.population_size,
         self.chromosome_length,
-        self.gene_function_impl)
+        self.gene_function_impl,
+        self.gene_input,
+        self.gene_input_type)
+
 
     def evolve():
         # If you just want to evolve through all generations
