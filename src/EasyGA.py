@@ -4,8 +4,6 @@ from initialization.population_structure.population import population as create_
 from initialization.chromosome_structure.chromosome import chromosome as create_chromosome
 from initialization.gene_structure.gene import gene as create_gene
 
-# Import functions for defaults
-from initialization.gene_function.gene_random import random_gene
 # Import functionality defaults
 from initialization.random_initialization import random_initialization
 
@@ -21,8 +19,6 @@ class GA:
         self.population_size = 5
         self.mutation_rate = 0.03
         # Defualt EastGA implimentation structure
-        
-        # Set the GA Configuration
         self.initialization_impl = random_initialization
         #self.mutation_impl = PerGeneMutation(Mutation_rate)
         #self.selection_impl = TournamentSelection()
