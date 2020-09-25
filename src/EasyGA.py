@@ -1,10 +1,9 @@
+import random
 # Import all the data prebuilt modules
 from initialization.population_structure.population import population as create_population
 from initialization.chromosome_structure.chromosome import chromosome as create_chromosome
 from initialization.gene_structure.gene import gene as create_gene
 
-# Import functions for defaults
-from initialization.gene_function.gene_random import random_gene
 # Import functionality defaults
 from initialization.random_initialization import random_initialization
 
@@ -12,14 +11,14 @@ from initialization.random_initialization import random_initialization
 class GA:
     def __init__(self):
         # Default variables
+        self.domain = None
+        self.new_range = None
         self.population = None
         self.generations = 3
-        self.chromosome_length = 4
+        self.chromosome_length = 3
         self.population_size = 5
         self.mutation_rate = 0.03
         # Defualt EastGA implimentation structure
-        self.gene_function_impl = random_gene
-        # Set the GA Configuration
         self.initialization_impl = random_initialization
         #self.mutation_impl = PerGeneMutation(Mutation_rate)
         #self.selection_impl = TournamentSelection()
@@ -27,13 +26,12 @@ class GA:
         #self.termination_impl = GenerationTermination(Total_generations)
         #self.evaluation_impl = TestEvaluation()
 
-
     def initialize(self):
-        # Create the first population
         self.population = self.initialization_impl(
         self.population_size,
         self.chromosome_length,
-        self.gene_function_impl)
+        self.domain,
+        self.new_range)
 
     def evolve():
         # If you just want to evolve through all generations
