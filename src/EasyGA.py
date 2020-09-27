@@ -44,25 +44,32 @@ class GA:
         pass
     
     def evolve(self):
-        """Updates the ga to the next generation.
-        If update_fitness is set then all fitness values are updated.
-        Otherwise only fitness values set to None (i.e. uninitialized fitness values) are updated."""
+        """Runs the ga until the ga is no longer active."""
         
-        # for each chromosome in the population
-        for chromosome in self.population.get_all_chromosomes():
-            
-            # if the fitness should be updated, update it
-            if self.update_fitness or chromosome.get_fitness() is None:
-                chromosome.set_fitness(self.fitness_impl(chromosome))
+        # run one iteration while the ga is active
+        while self.active():
+            self.evolve_generation(1)
     
     def active(self):
         """Returns if the ga should terminate or not"""
         return self.current_generation < self.generations
 
     def evolve_generation(self, number_of_generations):
-        """Evolves the ga the specified number of generations."""
+        """Evolves the ga the specified number of generations.
+        If update_fitness is set then all fitness values are updated.
+        Otherwise only fitness values set to None (i.e. uninitialized fitness values) are updated."""
+        
+        # run the specified number of times
         for n in range(number_of_generations):
-            self.evolve()
+        
+            # for each chromosome in the population
+            for chromosome in self.population.get_all_chromosomes():
+                
+                # if the fitness should be updated, update it
+                if self.update_fitness or chromosome.get_fitness() is None:
+                    chromosome.set_fitness(self.fitness_impl(chromosome))
+            
+            # apply selection, crossover, and mutation
 
     def make_gene(self,value):
         """Let's the user create a gene."""
