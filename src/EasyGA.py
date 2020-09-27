@@ -14,12 +14,14 @@ class GA:
         self.chromosome_impl = None
         self.gene_impl = None
         self.population = None
+        self.current_generation = 0
         self.generations = 3
         self.chromosome_length = 3
         self.population_size = 5
         self.mutation_rate = 0.03
         # Defualt EastGA implimentation structure
         self.initialization_impl = random_initialization
+        self.update_fitness = True
         #self.mutation_impl = PerGeneMutation(Mutation_rate)
         #self.selection_impl = TournamentSelection()
         #self.crossover_impl = FastSinglePointCrossover()
@@ -32,10 +34,22 @@ class GA:
         self.chromosome_length,
         self.chromosome_impl,
         self.gene_impl)
-
-    def evolve():
-        # If you just want to evolve through all generations
+    
+    def fitness_impl(self, chromosome):
+        """Returns the fitness of a chromosome"""
         pass
+    
+    def evolve(self):
+        """Updates the ga to the next generation.
+        If update_fitness is set then all fitness values are updated.
+        Otherwise only fitness values set to None (i.e. uninitialized fitness values) are updated."""
+        for chromosome in self.population.get_all_chromosomes():
+            if self.update_fitness or chromosome.get_fitness() is None:
+                chromosome.set_fitness(self.fitness_impl(chromosome))
+    
+    def active(self):
+        """Returns if the ga should terminate or not"""
+        return self.current_generation < self.generations
 
     def evolve_generation(self, number_of_generations):
         # If you want to evolve through a number of generations
