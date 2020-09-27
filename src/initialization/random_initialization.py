@@ -13,6 +13,7 @@ def random_initialization(population_size, chromosome_length, chromosome_impl, g
         chromosome = create_chromosome()
         #Fill the Chromosome with genes
         for j in range(chromosome_length):
+            # Using the chromosome_impl to set every index inside of the chromosome
             if chromosome_impl != None:
                 # Each chromosome location is specified with its own function
                 chromosome.add_gene(create_gene(chromosome_impl(j)))
