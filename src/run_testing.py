@@ -1,20 +1,26 @@
 import EasyGA
+import random
 
 # Create the Genetic algorithm
 ga = EasyGA.GA()
 
-#Creating a gene with no fitness
-gene1 = ga.make_gene("Im a gene")
-gene2 = ga.make_gene("Im also a gene")
-#Creating a Chromosome with no genes
-chromosome = ga.make_chromosome()
-chromosome.add_gene(gene1)
-chromosome.add_gene(gene2)
-# Creating a populaiton
-populaiton = ga.make_population()
-populaiton.add_chromosome(chromosome)
+def user_gene_domain(gene_index):
+    """Each gene index is assosiated to its index in the chromosome"""
+    domain = [
+    random.randrange(1,100,5),
+    random.uniform(10,5),
+    random.choice(["up","down"])
+    ]
+    return domain[gene_index]
 
-print(gene1)
-print(chromosome)
-print(populaiton)
-populaiton.print_all()
+print(user_gene_domain(0))
+
+# If the user wants to use a domain
+ga.domain = user_gene_domain
+# If the user wants to use a custom range
+#ga.new_range = [random.randrange,1,100,None]
+
+ga.initialize()
+
+#ga.population.print_all()
+

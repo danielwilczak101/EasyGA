@@ -36,8 +36,7 @@ class population:
         self.fitness = fitness
 
     def __repr__(self):
-        for index in range(len(self.chromosomes)):
-            return f'{self.chromosomes[index]}'
+        return ''.join([chromosome.__repr__() for chromosome in self.chromosomes])
 
     def print_all(self):
         # Ex .Current population
