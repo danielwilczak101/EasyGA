@@ -1,3 +1,3 @@
 import EasyGA
-import running_test
+import run_testing
 import test_EasyGA
