@@ -1,12 +1,12 @@
 import random
 
 # Import all the data prebuilt modules
-from initialization.population_structure.population import population as create_population
-from initialization.chromosome_structure.chromosome import chromosome as create_chromosome
-from initialization.gene_structure.gene import gene as create_gene
+from initialization import population as create_population
+from initialization import chromosome as create_chromosome
+from initialization import gene as create_gene
 
 # Import functionality defaults
-from initialization.random_initialization import random_initialization
+from initialization import random_initialization
 
 class GA:
     def __init__(self):
