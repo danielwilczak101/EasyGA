@@ -1,4 +1,4 @@
-from setuptools import find_packages, setup
+from setuptools import setup, find_packages
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
@@ -7,8 +7,8 @@ setup(
     name='EasyGA',
     version='0.0.11',
     description='A ubiquitous or general purpuse GA',
-    py_modules=["EasyGA"],
-    package_dir={'':'src'},
+    #py_modules=["EasyGA"],
+    #package_dir={'':'src'},
     packages=find_packages(),
     python_requires='>=3.6',
     url="https://github.com/danielwilczak101/EasyGA",
