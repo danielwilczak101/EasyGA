@@ -6,10 +6,13 @@ with open("README.md", "r") as fh:
 
 setup(
     name='EasyGA',
-    version='0.0.18',
+    version='0.0.25',
     description='A ubiquitous or general purpuse GA',
     py_modules=["EasyGA"],
-    packages=find_packages(),
+    packages=find_packages(where='EasyGA'),
+    package_dir={
+        '': 'EasyGA',
+    },
     python_requires='>=3.6',
     url="https://github.com/danielwilczak101/EasyGA",
     author="Daniel Wilczak, Jack RyanNguyen, Ryley Griffith, Jared Curtis, Matthew Chase Oxamendi",
