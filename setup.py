@@ -8,9 +8,10 @@ setup(
     version='0.0.14',
     description='A ubiquitous or general purpuse GA',
     #py_modules=["EasyGA"],
-    #package_dir={'':'src'},
-    packages=find_packages(),
-    py_modules=['src'],
+    packages=find_packages(where='src'),
+    package_dir={
+        '': 'src',
+    },
     python_requires='>=3.6',
     url="https://github.com/danielwilczak101/EasyGA",
     author="Daniel Wilczak",
