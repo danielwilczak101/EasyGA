@@ -11,7 +11,7 @@ from initialization.random_initialization import random_initialization
 class GA:
     def __init__(self):
         """Initialize the GA."""
-        
+
         # Default variables
         self.chromosome_impl = None
         self.gene_impl = None
@@ -21,7 +21,7 @@ class GA:
         self.chromosome_length = 3
         self.population_size = 5
         self.mutation_rate = 0.03
-        
+
         # Defualt EastGA implimentation structure
         self.initialization_impl = random_initialization
         self.update_fitness = True
@@ -38,18 +38,18 @@ class GA:
         self.chromosome_length,
         self.chromosome_impl,
         self.gene_impl)
-    
+
     def fitness_impl(self, chromosome):
         """Returns the fitness of a chromosome"""
         pass
-    
+
     def evolve(self):
         """Runs the ga until the ga is no longer active."""
-        
+
         # run one iteration while the ga is active
         while self.active():
             self.evolve_generation(1)
-    
+
     def active(self):
         """Returns if the ga should terminate or not"""
         return self.current_generation < self.generations
@@ -58,17 +58,17 @@ class GA:
         """Evolves the ga the specified number of generations.
         If update_fitness is set then all fitness values are updated.
         Otherwise only fitness values set to None (i.e. uninitialized fitness values) are updated."""
-        
+
         # run the specified number of times
         for n in range(number_of_generations):
-        
+
             # for each chromosome in the population
             for chromosome in self.population.get_all_chromosomes():
-                
+
                 # if the fitness should be updated, update it
                 if self.update_fitness or chromosome.get_fitness() is None:
                     chromosome.set_fitness(self.fitness_impl(chromosome))
-            
+
             # apply selection, crossover, and mutation
 
     def make_gene(self,value):
