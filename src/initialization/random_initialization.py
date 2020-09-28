@@ -8,6 +8,7 @@ def random_initialization(population_size, chromosome_length, chromosome_impl, g
     with the given parameters."""
     # Create the population object
     population = create_population()
+    
     # Fill the population with chromosomes
     for i in range(population_size):
         chromosome = create_chromosome()
@@ -21,7 +22,7 @@ def random_initialization(population_size, chromosome_length, chromosome_impl, g
             elif gene_impl != None:
                 # gene_impl = [range function,lowerbound,upperbound]
                 function = gene_impl[0]
-                chromosome.add_gene(create_gene(function(gene_impl[1],gene_impl[2])))
+                chromosome.add_gene(create_gene(function(*gene_impl[1:])))
             else:
                 #Exit because either were not specified
                 print("Your domain or range were not specified")
