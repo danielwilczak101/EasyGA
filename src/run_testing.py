@@ -18,6 +18,6 @@ def user_gene_domain(gene_index):
 # If the user wants to use a domain
 ga.chromosome_impl = user_gene_domain
 
-ga.initialize_population()
+ga.evolve()
 
 ga.population.print_all()

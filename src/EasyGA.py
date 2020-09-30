@@ -4,7 +4,7 @@ import random
 from initialization import population as create_population
 from initialization import chromosome as create_chromosome
 from initialization import gene as create_gene
-
+from fitness_function import default_fitness_example as default_fitness_example
 # Import functionality defaults
 from initialization import random_initialization
 
@@ -24,12 +24,15 @@ class GA:
 
         # Defualt EastGA implimentation structure
         self.initialization_impl = random_initialization
-        self.update_fitness = True
+        self.fitness_funciton_impl = default_fitness_example
         #self.mutation_impl = PerGeneMutation(Mutation_rate)
         #self.selection_impl = TournamentSelection()
         #self.crossover_impl = FastSinglePointCrossover()
         #self.termination_impl = GenerationTermination(Total_generations)
         #self.evaluation_impl = TestEvaluation()
+
+        # If we want the fitnesses to be updated by the computer
+        self.update_fitness = True
 
     def initialize_population(self):
         """Initialize the population"""
@@ -39,12 +42,13 @@ class GA:
         self.chromosome_impl,
         self.gene_impl)
 
-    def fitness_impl(self, chromosome):
-        """Returns the fitness of a chromosome"""
-        pass
-
     def evolve(self):
         """Runs the ga until the ga is no longer active."""
+        while(ga.active())
+            if(self.current_generation == 0):
+                initialize_population()
+
+            get_fitness(population)
 
         # run one iteration while the ga is active
         while self.active():
@@ -52,7 +56,8 @@ class GA:
 
     def active(self):
         """Returns if the ga should terminate or not"""
-        return self.current_generation < self.generations
+        return self.termination_impl.active(self)
+
 
     def evolve_generation(self, number_of_generations):
         """Evolves the ga the specified number of generations.
