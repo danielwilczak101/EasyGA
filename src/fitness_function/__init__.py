@@ -1,2 +1,2 @@
 # FROM (. means local) file_name IMPORT function_name
-from .is_the_value_5 import is_the_value_5
+from .example_is_it_5 import example_is_it_5

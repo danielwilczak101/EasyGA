@@ -1,7 +1,6 @@
-def is_the_value_5(chromosome):
+def example_is_it_5(chromosome):
     """A very simple case test function - If the chromosomes gene value is a 5 add one
      to the chromosomes overall fitness value."""
-
     # Overall fitness value
     fitness = 0
     # For each gene in the chromosome

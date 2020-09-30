@@ -5,7 +5,7 @@ from initialization import population as create_population
 from initialization import chromosome as create_chromosome
 from initialization import gene as create_gene
 # Import the default fitness function
-from fitness_function import is_the_value_5
+from fitness_function import example_is_it_5
 # Import default termination points
 from termination_point import generation_based
 from termination_point import fitness_based
@@ -29,14 +29,14 @@ class GA:
         # Mutation variables
         self.mutation_rate = 0.03
 
+
         # Defualt EastGA implimentation structure
         self.initialization_impl = random_initialization
-        self.fitness_funciton_impl = is_the_value_5
+        self.fitness_funciton_impl = example_is_it_5
         #self.mutation_impl = PerGeneMutation(Mutation_rate)
         #self.selection_impl = TournamentSelection()
         #self.crossover_impl = FastSinglePointCrossover()
         self.termination_impl = generation_based
-        #self.evaluation_impl = TestEvaluation()
 
         # If we want the fitnesses to be updated by the computer
         self.update_fitness = True
@@ -61,17 +61,7 @@ class GA:
         """Runs the ga until the termination point has been satisfied."""
         # While the termination point hasnt been reached keep running
         while(self.active()):
-            # If its the first generation then initialize the population
-            if(self.current_generation == 0):
-                # Initialize the population
-                self.initialize_population()
-            # First get the fitness of the population
-            self.get_population_fitness(self.population.chromosomes)
-
-            print(f"Ive completed generation - {self.current_generation}")
-
-            self.current_generation += 1
-
+            self.evolve_generation()
 
 
     def active(self):
@@ -80,17 +70,30 @@ class GA:
         return self.termination_impl(self)
 
 
-    def evolve_generation(self, number_of_generations):
+    def evolve_generation(self, number_of_generations = 1):
         """Evolves the ga the specified number of generations.
         If update_fitness is set then all fitness values are updated.
         Otherwise only fitness values set to None (i.e. uninitialized
         fitness values) are updated."""
+        while(number_of_generations > 0):
+            # If its the first generation then initialize the population
+            if(self.current_generation == 0):
+                # Initialize the population
+                self.initialize_population()
+            # First get the fitness of the population
+            self.get_population_fitness(self.population.chromosomes)
 
-        # run the specified number of times
-        #for n in range(number_of_generations):
+            #selecion -> crossover -> mutation
+            #self.selection_impl(self)
+            #self.crossover_impl(self)
+            #self.mutation_impl(self)
 
+            #next_population.append(mutated_offspring)
 
-            # apply selection, crossover, and mutation
+            # Counter for the local number of generations in evolve_generation
+            number_of_generations -= 1
+            # Add one to the current overall generation
+            self.current_generation += 1
 
     def make_gene(self,value):
         """Let's the user create a gene."""

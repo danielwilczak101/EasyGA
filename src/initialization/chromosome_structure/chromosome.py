@@ -1,12 +1,15 @@
 class chromosome:
-    
+
     def __init__(self, genes = None):
         """Initialize the chromosome based on input gene list, defaulted to an empty list"""
         if genes is None:
             self.genes = []
         else:
             self.genes = genes
+        # The fitness of the overal chromosome
         self.fitness = None
+        # If the chromosome has been selected then the flag would switch to true
+        self.selected = False
 
     def add_gene(self, gene, index = -1):
         """Add a gene to the chromosome at the specified index, defaulted to end of the chromosome"""
