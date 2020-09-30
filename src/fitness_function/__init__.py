@@ -1,1 +1,2 @@
-from .default_fitness_example import default_fitness_example
+# FROM (. means local) file_name IMPORT function_name
+from .is_the_value_5 import is_the_value_5
