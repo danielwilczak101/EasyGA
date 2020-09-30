@@ -44,7 +44,7 @@ class GA:
 
     def evolve(self):
         """Runs the ga until the ga is no longer active."""
-        while(ga.active())
+        while(self.active()):
             if(self.current_generation == 0):
                 initialize_population()
 
