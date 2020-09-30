@@ -4,14 +4,13 @@ import random
 from initialization import population as create_population
 from initialization import chromosome as create_chromosome
 from initialization import gene as create_gene
-from fitness_function import default_fitness_example as default_fitness_example
+from fitness_function import default_fitness_example
 # Import functionality defaults
 from initialization import random_initialization
 
 class GA:
     def __init__(self):
         """Initialize the GA."""
-
         # Default variables
         self.chromosome_impl = None
         self.gene_impl = None
@@ -43,20 +42,21 @@ class GA:
         self.gene_impl)
 
     def evolve(self):
-        """Runs the ga until the ga is no longer active."""
-        while(self.active()):
-            if(self.current_generation == 0):
-                initialize_population()
+        """Runs the ga until the termination point has been satisfied."""
+        self.initialize_population()
+        #while(self.active()):
+            #if(self.current_generation == 0):
+                #initialize_population()
 
-            get_fitness(population)
+            #get_fitness(population)
 
         # run one iteration while the ga is active
-        while self.active():
-            self.evolve_generation(1)
+        #while self.active():
+            #self.evolve_generation(1)
 
     def active(self):
-        """Returns if the ga should terminate or not"""
-        return self.termination_impl.active(self)
+        """Returns if the ga should terminate base on the termination implimented"""
+        return self.termination_impl(self)
 
 
     def evolve_generation(self, number_of_generations):
