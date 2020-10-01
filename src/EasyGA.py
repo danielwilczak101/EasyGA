@@ -84,14 +84,14 @@ class GA:
             # First get the fitness of the population
             self.get_population_fitness(self.population.chromosomes)
             # Selection - Triggers flags in the chromosome if its been selected
-            #self.selection_impl(self)
+            # self.selection_impl(self)
             # Crossover - Takes the flagged chromosomes and crosses there genetic
             # makup to make new offsprings.
-            #self.crossover_impl(self)
+            # self.crossover_impl(self)
             # Repopulate - Manipulates the population to some desired way
-            #self.repopulate_impl(self)
+            # self.repopulate_impl(self)
             # Mutation - Manipulates the population very slightly
-            #self.mutation_impl(self)
+            # self.mutation_impl(self)
 
             # Counter for the local number of generations in evolve_generation
             number_of_generations -= 1
