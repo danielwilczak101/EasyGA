@@ -23,7 +23,7 @@ class GA:
         # Termination varibles
         self.current_generation = 0
         self.current_fitness = 0
-        self.generation_goal = 3
+        self.generation_goal = 1
         self.fitness_goal = 3
         # Mutation variables
         self.mutation_rate = 0.03
@@ -84,7 +84,7 @@ class GA:
             # First get the fitness of the population
             self.get_population_fitness(self.population.chromosomes)
             # Selection - Triggers flags in the chromosome if its been selected
-            # self.selection_impl(self)
+            self.selection_impl(self)
             # Crossover - Takes the flagged chromosomes and crosses there genetic
             # makup to make new offsprings.
             # self.crossover_impl(self)

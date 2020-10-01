@@ -39,7 +39,7 @@ class population:
         self.chromosomes[index] = chromosome
 
     def set_fitness(self, fitness):
-        """Sets the fitness value of the population""" 
+        """Sets the fitness value of the population"""
         self.fitness = fitness
 
     def __repr__(self):
@@ -53,4 +53,5 @@ class population:
         print("Current population:")
         for index in range(len(self.chromosomes)):
             print(f'Chromosome - {index} {self.chromosomes[index]}', end = "")
-            print(f' / Fitness = {self.chromosomes[index].fitness}')
+            print(f' / Fitness = {self.chromosomes[index].fitness}', end = "")
+            print(f' / Selected = {self.chromosomes[index].selected}')
