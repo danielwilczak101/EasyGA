@@ -25,45 +25,7 @@ ga.evolve()
 Put the out here
 ```
 
-## Customized:
-```python
-import random
-import EasyGA
 
-# Setup the default genetic algorithm
-ga = EasyGA.GA()
-
-# User set sizes
-ga.population_size = 10
-ga.chromosome_length = 10
-ga.generations = 10
-
-# The user defined gene function
-def user_gene_function():
-    pass
-
-# The user defined Fitness function that gives the chromosome some kind of fitness
-def user_fitness_function(chromosome):
-    pass
-
-# The user defined initialization function
-def user_initialization_function():
-    pass
-
-# User sets the gene function
-ga.gene = user_gene_function
-# Set the fitness functions
-ga.fitness =  user_fitness_function
-# Changing the initialization function.
-ga.initialization = user_initialization_function
-# Run the customized genetic algorithm
-ga.eveolve()
-```
-
-### Output:
-```python
-Put the out here
-```
 
 # How Testing works
 

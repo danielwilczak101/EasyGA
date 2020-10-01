@@ -1,17 +1,21 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
+
 setup(
     name='EasyGA',
-    version='0.0.8',
+    version='0.0.25',
     description='A ubiquitous or general purpuse GA',
     py_modules=["EasyGA"],
-    package_dir={'':'src'},
+    packages=find_packages(where='EasyGA'),
+    package_dir={
+        '': 'EasyGA',
+    },
     python_requires='>=3.6',
     url="https://github.com/danielwilczak101/EasyGA",
-    author="Daniel Wilczak",
+    author="Daniel Wilczak, Jack RyanNguyen, Ryley Griffith, Jared Curtis, Matthew Chase Oxamendi",
     author_email="danielwilczak101@gmail.com",
     long_description = long_description,
     long_description_content_type = "text/markdown",
