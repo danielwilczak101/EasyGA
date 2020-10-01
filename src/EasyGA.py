@@ -1,12 +1,10 @@
 import random
-
-# Import all the data prebuilt modules
+# Import all the data structure prebuilt modules
 from initialization import population as create_population
 from initialization import chromosome as create_chromosome
 from initialization import gene as create_gene
-#
-from fitness_function import fitness_examples
 # Import example classes
+from fitness_function import fitness_examples
 from initialization import initialization_examples
 from termination_point import termination_examples
 from selection import selection_examples
@@ -24,12 +22,11 @@ class GA:
         self.population = None
         # Termination varibles
         self.current_generation = 0
-        self.max_generations = 3
         self.current_fitness = 0
-        self.goal_fitness = 3
+        self.generation_goal = 3
+        self.fitness_goal = 3
         # Mutation variables
         self.mutation_rate = 0.03
-
 
         # Defualt EastGA implimentation structure
         self.initialization_impl = initialization_examples.random_initialization
@@ -38,9 +35,6 @@ class GA:
         #self.selection_impl = TournamentSelection()
         #self.crossover_impl = FastSinglePointCrossover()
         self.termination_impl = termination_examples.generation_based
-
-        # If we want the fitnesses to be updated by the computer
-        self.update_fitness = True
 
     def initialize_population(self):
         """Initialize the population using the initialization
