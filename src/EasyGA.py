@@ -4,13 +4,14 @@ import random
 from initialization import population as create_population
 from initialization import chromosome as create_chromosome
 from initialization import gene as create_gene
-# Import the default fitness function
-from fitness_function import example_is_it_5
-# Import default termination points
-from termination_point import generation_based
-from termination_point import fitness_based
-# Import functionality defaults
-from initialization import random_initialization
+#
+from fitness_function import fitness_examples
+# Import example classes
+from initialization import initialization_examples
+from termination_point import termination_examples
+from selection import selection_examples
+from crossover import crossover_examples
+from mutation import mutation_examples
 
 class GA:
     def __init__(self):
@@ -31,12 +32,12 @@ class GA:
 
 
         # Defualt EastGA implimentation structure
-        self.initialization_impl = random_initialization
-        self.fitness_funciton_impl = example_is_it_5
+        self.initialization_impl = initialization_examples.random_initialization
+        self.fitness_funciton_impl = fitness_examples.is_it_5
         #self.mutation_impl = PerGeneMutation(Mutation_rate)
         #self.selection_impl = TournamentSelection()
         #self.crossover_impl = FastSinglePointCrossover()
-        self.termination_impl = generation_based
+        self.termination_impl = termination_examples.generation_based
 
         # If we want the fitnesses to be updated by the computer
         self.update_fitness = True
