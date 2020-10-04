@@ -1,6 +1,11 @@
+<<<<<<< Updated upstream
 class chromosome:
     
     # fitness = Empty; genes = [gene, gene, gene, etc.]
+=======
+class Chromosome:
+
+>>>>>>> Stashed changes
     def __init__(self, genes = None):
         if genes is None:
             self.genes = []
