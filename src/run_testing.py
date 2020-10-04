@@ -5,9 +5,9 @@ import random
 # Create the Genetic algorithm
 ga = EasyGA.GA()
 
-ga.gene_impl = [random.randrange,1,10]
+ga.gene_impl = [random.randrange,1,25]
 
-# Run Everyhting
+# Run Everything
 ga.evolve()
 
 # Print the current population

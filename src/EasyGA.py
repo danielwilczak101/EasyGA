@@ -23,10 +23,10 @@ class GA:
         # Termination varibles
         self.current_generation = 0
         self.current_fitness = 0
-        self.generation_goal = 35
+        self.generation_goal = 50
         self.fitness_goal = 3
         # Mutation variables
-        self.mutation_rate = 0.075
+        self.mutation_rate = 0.05
 
         # Rerun already computed fitness
         self.update_fitness = True
@@ -35,7 +35,7 @@ class GA:
         self.initialization_impl = Initialization_Types().random_initialization
         self.fitness_function_impl = Fitness_Examples().is_it_5
         self.mutation_impl = Mutation_Types().random_mutation
-        self.selection_impl = Selection_Types().tournament_selection
+        self.selection_impl = Selection_Types().Tournament().with_replacement
         self.crossover_impl = Crossover_Types().single_point_crossover
         self.termination_impl = Termination_Types().generation_based
 

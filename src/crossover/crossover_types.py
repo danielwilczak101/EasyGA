@@ -25,9 +25,10 @@ class Crossover_Types:
                 new_gene_set = []
                 parent_one = crossover_pool[i].get_genes()
                 parent_two = crossover_pool[i+1].get_genes()
-                halfway_point = int(ga.chromosome_length/2)
-                new_gene_set.extend(parent_one[0:halfway_point])
-                new_gene_set.extend(parent_two[halfway_point:])
+                #halfway_point = int(ga.chromosome_length/2)
+                split_point = random.randint(0,ga.chromosome_length)    
+                new_gene_set.extend(parent_one[0:split_point])
+                new_gene_set.extend(parent_two[split_point:])
                 new_chromosome = Chromosome(new_gene_set)
                 new_population.add_chromosome(new_chromosome)
 
