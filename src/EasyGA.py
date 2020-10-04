@@ -16,17 +16,17 @@ class GA:
         """Initialize the GA."""
         # Initilization variables
         self.chromosome_length = 10
-        self.population_size = 100
+        self.population_size = 150
         self.chromosome_impl = None
         self.gene_impl = None
         self.population = None
         # Termination varibles
         self.current_generation = 0
         self.current_fitness = 0
-        self.generation_goal = 50
+        self.generation_goal = 100
         self.fitness_goal = 3
         # Mutation variables
-        self.mutation_rate = 0.05
+        self.mutation_rate = 0.10
 
         # Rerun already computed fitness
         self.update_fitness = True
@@ -34,8 +34,9 @@ class GA:
         # Defualt EastGA implimentation structure
         self.initialization_impl = Initialization_Types().random_initialization
         self.fitness_function_impl = Fitness_Examples().is_it_5
-        self.mutation_impl = Mutation_Types().random_mutation
-        self.selection_impl = Selection_Types().Tournament().with_replacement
+        self.mutation_impl = Mutation_Types().per_gene_mutation
+        self.parent_selection_impl = Selection_Types().Parent_Selection().Tournament().with_replacement
+        self.survivor_selection_impl = Selection_Types().Survivor_Selection().repeated_crossover
         self.crossover_impl = Crossover_Types().single_point_crossover
         self.termination_impl = Termination_Types().generation_based
 
@@ -70,7 +71,11 @@ class GA:
                 self.initialize_population()
                 self.set_all_fitness(self.population.chromosomes)
             
-            next_population = self.selection_impl(self)
+            self.parent_selection_impl(self)
+            next_population = self.crossover_impl(self)
+            next_population = self.survivor_selection_impl(self, next_population)
+            next_population.set_all_chromosomes(self.mutation_impl(self, next_population.get_all_chromosomes()))
+
             self.population = next_population
             self.set_all_fitness(self.population.chromosomes)
 

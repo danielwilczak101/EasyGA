@@ -30,8 +30,10 @@ class Population:
     def set_all_chromosomes(self, chromosomes):
         self.chromosomes = chromosomes
 
-    def set_chromosome(self, chromosomes, index):
-        self.chromosome[index] = chromosome
+    def set_chromosome(self, chromosome, index = -1):
+        if index == -1:
+            index = len(self.chromosomes)-1
+        self.chromosomes[index] = chromosome
 
     def set_fitness(self, fitness):
         self.fitness = fitness
