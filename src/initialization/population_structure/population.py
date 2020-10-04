@@ -21,12 +21,8 @@ class Population:
         del self.chromosomes[index]
 
     def get_all_chromosomes(self):
-<<<<<<< Updated upstream
-        return chromosomes
-=======
         """returns all chromosomes in the population"""
         return self.chromosomes
->>>>>>> Stashed changes
 
     def get_fitness(self):
         return self.fitness
