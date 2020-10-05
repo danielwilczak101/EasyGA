@@ -3,7 +3,7 @@ def check_gene(value):
     assert value != "" , "Gene can not be empty"
     return value
 
-class gene:
+class Gene:
 
     def __init__(self, value):
         """Initialize a gene with fitness of value None and the input value"""

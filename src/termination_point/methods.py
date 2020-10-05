@@ -1,4 +1,4 @@
-class termination_examples:
+class Termination_methods:
     """Example functions that can be used to terminate the the algorithms loop"""
 
     def fitness_based(ga):
