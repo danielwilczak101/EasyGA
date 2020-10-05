@@ -12,6 +12,7 @@ from survivor_selection import Survivor_methods
 # Manipulation Methods
 from parent_selection import Parent_methods
 from mutation import Mutation_methods
+from crossover import Crossover_methods
 
 class GA:
     def __init__(self):
