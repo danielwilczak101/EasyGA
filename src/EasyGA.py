@@ -58,15 +58,15 @@ class GA:
                 self.initialize_population()
                 self.set_all_fitness(self.population.chromosome_list)
                 self.population.set_all_chromosomes(self.sort_by_best_fitness())
-            
-            self.parent_selection_impl(self)
-            next_population = self.crossover_impl(self)
-            next_population = self.survivor_selection_impl(self, next_population)
-            next_population.set_all_chromosomes(self.mutation_impl(self, next_population.get_all_chromosomes()))
+            else:
+                self.parent_selection_impl(self)
+                next_population = self.crossover_impl(self)
+                next_population = self.survivor_selection_impl(self, next_population)
+                next_population.set_all_chromosomes(self.mutation_impl(self, next_population.get_all_chromosomes()))
 
-            self.population = next_population
-            self.set_all_fitness(self.population.chromosome_list)
-            self.population.set_all_chromosomes(self.sort_by_best_fitness())
+                self.population = next_population
+                self.set_all_fitness(self.population.chromosome_list)
+                self.population.set_all_chromosomes(self.sort_by_best_fitness())
 
             number_of_generations -= 1
             self.current_generation += 1
