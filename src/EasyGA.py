@@ -23,28 +23,29 @@ class GA:
         self.gene_impl = None
         self.population = None
         self.target_fitness_type = 'maximum'
+        self.update_fitness = True
 
+        # Selection variables
         self.parent_ratio = 0.1
-        # Termination varibles
+
+        # Termination variables
         self.current_generation = 0
         self.generation_goal = 50
 
         self.current_fitness = 0
         self.generation_goal = 250
         self.fitness_goal = 9
+
         # Mutation variables
-        self.mutation_rate = 0.10
+        self.mutation_rate = 0.10        
 
-        # Rerun already computed fitness
-        self.update_fitness = True
-
-        # Defualt EastGA implimentation structure
+        # Default EasyGA implimentation structure
         self.initialization_impl = Initialization_Methods().random_initialization
         self.fitness_function_impl = Fitness_Examples().index_dependent_values
         # Selects which chromosomes should be automaticly moved to the next population
         self.survivor_selection_impl = Selection_Methods().Survivor_Selection().remove_two_worst
         # Methods for accomplishing parent-selection -> Crossover -> Mutation
-        self.parent_selection_impl = Selection_Methods().Parent_Selection().Tournament().with_replacement
+        self.parent_selection_impl = Selection_Methods().Parent_Selection().Roulette().roulette_selection
         self.crossover_impl = Crossover_Methods().single_point_crossover
         self.mutation_impl = Mutation_Methods().per_gene_mutation
         # The type of termination to impliment

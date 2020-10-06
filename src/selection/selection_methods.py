@@ -35,6 +35,34 @@ class Selection_Methods:
                         if random.uniform(0, 1) < selection_probability * pow(1-selection_probability, index+1):
                             ga.population.mating_pool.append(tournament_group[index])
 
+        class Roulette:
+            def roulette_selection(self, ga):
+                """Roulette selection works based off of how strong the fitness is of the
+                chromosomes in the population. The stronger the fitness the higher the probability
+                that it will be selected. Using the example of a casino roulette wheel.
+                Where the chromosomes are the numbers to be selected and the board size for
+                those numbers are directly proportional to the chromosome's current fitness. Where
+                the ball falls is a randomly generated number between 0 and 1"""
+                total_fitness = sum(ga.population.chromosome_list[i].get_fitness() for i in range(len(ga.population.chromosome_list)))
+                rel_fitnesses = []
+        
+                for chromosome in ga.population.chromosome_list:
+                    if (total_fitness != 0):
+                        rel_fitnesses.append(float(chromosome.fitness)/total_fitness)
+                
+                probability = [sum(rel_fitnesses[:i+1]) for i in range(len(rel_fitnesses))]
+        
+                while (len(ga.population.mating_pool) < len(ga.population.get_all_chromosomes())*ga.parent_ratio):
+                    rand_number = random.random()
+        
+                    # Loop through the list of probabilities
+                    for i in range(len(probability)):
+                        # If the probability is greater than the random_number, then select that chromosome
+                        if (probability[i] >= rand_number):
+                            ga.population.mating_pool.append(ga.population.chromosome_list[i])
+                            # print (f'Selected chromosome : {i}')
+                            break
+
     class Survivor_Selection:
         def repeated_crossover(self, ga, next_population): #Might be cheating? I don't know honestly - RG
             while len(next_population.get_all_chromosomes()) < ga.population_size:
@@ -65,12 +93,3 @@ class Selection_Methods:
                 next_population.add_chromosome(ga.population.get_all_chromosomes()[iterator])
                 iterator += 1
             return next_population
-
-    def roulette_selection(self, ga):
-        """Roulette selection works based off of how strong the fitness is of the
-        chromosomes in the population. The stronger the fitness the higher the probability
-        that it will be selected. Using the example of a casino roulette wheel.
-        Where the chromosomes are the numbers to be selected and the board size for
-        those numbers are directly proportional to the chromosome's current fitness. Where
-        the ball falls is a randomly generated number between 0 and 1"""
-        pass
