@@ -6,7 +6,6 @@ class Chromosome:
         else:
             self.gene_list = genes
         self.fitness = None
-        self.selected = False
 
     def add_gene(self, gene, index = -1):
         if index == -1:

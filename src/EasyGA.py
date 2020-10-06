@@ -18,17 +18,20 @@ class GA:
         """Initialize the GA."""
         # Initilization variables
         self.chromosome_length = 10
-        self.population_size = 100
+        self.population_size = 150
         self.chromosome_impl = None
         self.gene_impl = None
         self.population = None
+        self.target_fitness_type = 'maximum'
+
+        self.parent_ratio = 0.1
         # Termination varibles
         self.current_generation = 0
         self.generation_goal = 50
 
         self.current_fitness = 0
-        self.generation_goal = 100
-        self.fitness_goal = 3
+        self.generation_goal = 250
+        self.fitness_goal = 9
         # Mutation variables
         self.mutation_rate = 0.10
 
@@ -37,7 +40,7 @@ class GA:
 
         # Defualt EastGA implimentation structure
         self.initialization_impl = Initialization_Methods().random_initialization
-        self.fitness_function_impl = Fitness_Examples().is_it_5
+        self.fitness_function_impl = Fitness_Examples().index_dependent_values
         # Selects which chromosomes should be automaticly moved to the next population
         self.survivor_selection_impl = Selection_Methods().Survivor_Selection().remove_two_worst
         # Methods for accomplishing parent-selection -> Crossover -> Mutation
@@ -54,6 +57,7 @@ class GA:
             if self.current_generation == 0:
                 self.initialize_population()
                 self.set_all_fitness(self.population.chromosome_list)
+                self.population.set_all_chromosomes(self.sort_by_best_fitness())
             
             self.parent_selection_impl(self)
             next_population = self.crossover_impl(self)
@@ -62,6 +66,7 @@ class GA:
 
             self.population = next_population
             self.set_all_fitness(self.population.chromosome_list)
+            self.population.set_all_chromosomes(self.sort_by_best_fitness())
 
             number_of_generations -= 1
             self.current_generation += 1
@@ -94,34 +99,26 @@ class GA:
                 # Set the chromosomes fitness using the fitness function
                 chromosome.set_fitness(self.fitness_function_impl(chromosome))
 
-    def evolve(self):
-        """Runs the ga until the termination point has been satisfied."""
-        # While the termination point hasnt been reached keep running
-        while(self.active()):
-            self.evolve_generation()
+    def sort_by_best_fitness(self, chromosome_set = None):
 
-    def evolve_generation(self, number_of_generations = 1, consider_termination = True):
-        """Evolves the ga the specified number of generations."""
-        while(number_of_generations > 0 and (consider_termination == False or self.termination_impl(self))):
-            # If its the first generation then initialize the population
-            if self.current_generation == 0:
-                self.initialize_population()
-                self.set_all_fitness(self.population.chromosome_list)
-            
-            self.parent_selection_impl(self)
-            next_population = self.crossover_impl(self)
-            next_population = self.survivor_selection_impl(self, next_population)
-            next_population.set_all_chromosomes(self.mutation_impl(self, next_population.get_all_chromosomes()))
+        if chromosome_set == None:
+            chromosome_set = self.population.get_all_chromosomes()
 
-            self.population = next_population
-            self.set_all_fitness(self.population.chromosome_list)
+        chromosome_set_temp = chromosome_set
+        not_sorted_check = 0
+        while (not_sorted_check != len(chromosome_set_temp)):
+            not_sorted_check = 0
+            for i in range(len(chromosome_set_temp)):
+                if ((i + 1 < len(chromosome_set_temp)) and (chromosome_set_temp[i + 1].fitness > chromosome_set_temp[i].fitness)):
+                    temp = chromosome_set[i]
+                    chromosome_set_temp[i] = chromosome_set[i + 1]
+                    chromosome_set_temp[i + 1] = temp
+                else:
+                    not_sorted_check += 1
 
-            number_of_generations -= 1
-            self.current_generation += 1
+        chromosome_set = chromosome_set_temp 
 
-    def active(self):
-        """Returns if the ga should terminate base on the termination implimented"""
-        return self.termination_impl(self)
+        return chromosome_set
 
     def make_gene(self,value):
         return create_gene(value)

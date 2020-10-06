@@ -14,10 +14,7 @@ class Crossover_Methods:
         """Single  point crossover is when a "point" is selected and the genetic
         make up of the two parent chromosomes are "Crossed" or better known as swapped"""
 
-        crossover_pool = []
-        for i in range(ga.population_size):
-            if ga.population.get_all_chromosomes()[i].selected:
-                crossover_pool.append(ga.population.get_all_chromosomes()[i])
+        crossover_pool = ga.population.mating_pool
         
         new_population = Population()
         for i in range(len(crossover_pool)):

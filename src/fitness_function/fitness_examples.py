@@ -14,3 +14,15 @@ class Fitness_Examples:
                 fitness += 1
                 
         return fitness
+
+    def index_dependent_values(self, chromosome):
+        """A very simple case test function - If the chromosomes gene value is a 5 add one
+         to the chromosomes overall fitness value."""
+        # Overall fitness value
+        fitness = 0
+        # For each gene in the chromosome
+        for i in range(len(chromosome.gene_list)):
+            if (chromosome.gene_list[i].value == i+1):
+                fitness += 1
+                
+        return fitness

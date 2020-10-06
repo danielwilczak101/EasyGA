@@ -12,68 +12,33 @@ class Selection_Methods:
     class Parent_Selection:
         class Tournament:
             def with_replacement(self, ga):
-                tournament_size = int(len(ga.population.get_all_chromosomes())/10) #currently hard-coded for purposes of the example.
+                tournament_size = int(len(ga.population.get_all_chromosomes())*ga.parent_ratio/10)
                 if tournament_size < 3:
-                    tournament_size = int(len(ga.population.get_all_chromosomes())/3)
-                parent_ratio = 0.25
-
-                #selection_probability is the likelihood that a chromosome will be selected.
-                #best chromosome in a tournament is given a selection probablity of selection_probability
-                #2nd best is given probability of selection_probability*(1-selection_probability)
-                #3rd best is given probability of selection_probability*(1-selection_probability)**2
+                    tournament_size = int(len(ga.population.get_all_chromosomes())*ga.parent_ratio/3)
+                
+                # Probability used for determining if a chromosome should enter the mating pool.
                 selection_probability = 0.95
-                total_selected = 0 #Total Chromosomes selected
-
-                while (total_selected < parent_ratio*ga.population_size):
-                    #create & gather tournament group
-                    tournament_group = []
-
-                    for i in range(tournament_size):
-                        tournament_group.append(random.choice(ga.population.get_all_chromosomes()))
+                
+                # Repeat tournaments until the mating pool is large enough.
+                while (len(ga.population.mating_pool) < len(ga.population.get_all_chromosomes())*ga.parent_ratio):
                     
-                    #Sort the tournament contenders based on their fitness
-                    #currently hard-coded to only consider higher fitness = better; can be changed once this impl is agreed on
-                    #also currently uses bubble sort because its easy
-                    tournament_group_temp = tournament_group
-                    not_sorted_check = 0
-                    while (not_sorted_check != len(tournament_group_temp)):
-                        not_sorted_check = 0
-                        for i in range(len(tournament_group_temp)):
-                            if ((i + 1 < len(tournament_group_temp)) and (tournament_group_temp[i + 1].fitness > tournament_group_temp[i].fitness)):
-                                temp = tournament_group[i]
-                                tournament_group_temp[i] = tournament_group[i + 1]
-                                tournament_group_temp[i + 1] = temp
-                            else:
-                                not_sorted_check += 1
-
-                    tournament_group = tournament_group_temp
-
-                    #After sorting by fitness, randomly select a chromosome based on selection_probability
-                    selected_chromosome_tournament_index = 0
-                    for i in range(tournament_size):
-                        random_num = random.uniform(0,1)
-
-                        #ugly implementation but its functional
-                        if i == 0:
-                            if random_num <= selection_probability:
-                                tournament_group[i].selected = True
-                                total_selected += 1
-                                selected_chromosome_tournament_index = i
-                                break
-                        else:
-                            if random_num <= selection_probability*((1-selection_probability)**(i-1)):
-                                tournament_group[i].selected = True
-                                total_selected += 1
-                                selected_chromosome_tournament_index = i
-                                break
+                    # Generate a random tournament group and sort by fitness.
+                    tournament_group = ga.sort_by_best_fitness([random.choice(ga.population.get_all_chromosomes()) for n in range(tournament_size)])
+                    
+                    # For each chromosome, add it to the mating pool based on its rank in the tournament.
+                    for index in range(tournament_size):
+                        # Probability required is selection_probability * (1-selection_probability) ^ (tournament_size-index+1)
+                        # e.g. top ranked fitness has probability: selection_probability
+                        #   second ranked fitness has probability: selection_probability * (1-selection_probability)
+                        #   third  ranked fitness has probability: selection_probability * (1-selection_probability)^2
+                        # etc.
+                        if random.uniform(0, 1) < selection_probability * pow(1-selection_probability, index+1):
+                            ga.population.mating_pool.append(tournament_group[index])
 
     class Survivor_Selection:
         def repeated_crossover(self, ga, next_population): #Might be cheating? I don't know honestly - RG
             while len(next_population.get_all_chromosomes()) < ga.population_size:
-                crossover_pool = []
-                for i in range(ga.population_size):
-                    if ga.population.get_all_chromosomes()[i].selected:
-                        crossover_pool.append(ga.population.get_all_chromosomes()[i])
+                crossover_pool = ga.population.mating_pool
 
                 split_point = random.randint(0,ga.chromosome_length)    
                 chromosome_list = []
@@ -95,23 +60,9 @@ class Selection_Methods:
             return next_population
     
         def remove_two_worst(self, ga, next_population):
-
-            #Bubble sorting by highest fitness
-            temp_population = ga.population
-            not_sorted_check = 0
-            while (not_sorted_check != len(temp_population.get_all_chromosomes())):
-                not_sorted_check = 0
-                for i in range(len(temp_population.get_all_chromosomes())):
-                    if ((i + 1 < len(temp_population.get_all_chromosomes())) and (temp_population.get_all_chromosomes()[i + 1].fitness > temp_population.get_all_chromosomes()[i].fitness)):
-                        temp = temp_population.get_all_chromosomes()[i]
-                        temp_population.get_all_chromosomes()[i] = ga.population.get_all_chromosomes()[i + 1]
-                        temp_population.get_all_chromosomes()[i + 1] = temp
-                    else:
-                        not_sorted_check += 1
-
             iterator = 0
             while len(next_population.get_all_chromosomes()) < ga.population_size:
-                next_population.add_chromosome(temp_population.get_all_chromosomes()[iterator])
+                next_population.add_chromosome(ga.population.get_all_chromosomes()[iterator])
                 iterator += 1
             return next_population
 
