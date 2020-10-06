@@ -1,2 +1,2 @@
 # FROM (. means local) file_name IMPORT class name
-from .examples import Fitness_Examples
+from .fitness_examples import Fitness_Examples

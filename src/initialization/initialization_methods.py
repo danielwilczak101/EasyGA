@@ -3,12 +3,12 @@ from .population_structure.population import Population as create_population
 from .chromosome_structure.chromosome import Chromosome as create_chromosome
 from .gene_structure.gene import Gene as create_gene
 
-class Initialization_Types:
+class Initialization_Methods:
     """Initialization examples that are used as defaults and examples"""
-
+    
     def random_initialization(self, ga):
-        """Takes the initialization inputs and choregraphs them to output the type of population
-        with the given parameters."""
+        """Takes the initialization inputs and choregraphs them to output the type of population with the given parameters."""
+
         # Create the population object
         population = create_population()
 

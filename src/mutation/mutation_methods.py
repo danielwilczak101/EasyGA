@@ -1,6 +1,6 @@
 import random
 
-class Mutation_Types:
+class Mutation_Methods:
     
     def __init__(self):
         pass

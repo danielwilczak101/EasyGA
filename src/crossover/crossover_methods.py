@@ -2,7 +2,7 @@ import random
 from initialization.chromosome_structure.chromosome import Chromosome
 from initialization.population_structure.population import Population
 
-class Crossover_Types:
+class Crossover_Methods:
     """ Crossover explination goes here.
 
     Points - Defined as sections between the chromosomes genetic makeup
