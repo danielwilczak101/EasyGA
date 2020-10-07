@@ -3,7 +3,7 @@ class Chromosome:
         if gene_list is None:
             self.gene_list = []
         else:
-            self.gene_list = genes
+            self.gene_list = gene_list
 
         self.fitness = None
         # If the chromosome has been selected then the flag would switch to true
