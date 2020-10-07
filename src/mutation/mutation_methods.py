@@ -5,7 +5,7 @@ class Mutation_Methods:
     def __init__(self):
         pass
 
-    def random_mutation(self, ga, chromosome_set = None):
+    def random_mutation(ga, chromosome_set = None):
         
         if chromosome_set == None:
             chromosome_set = ga.population.get_all_chromosomes()
@@ -19,7 +19,7 @@ class Mutation_Methods:
         
         return chromosome_set
     
-    def per_gene_mutation(self, ga, chromosome_set = None, gene_mutate_count = 1):
+    def per_gene_mutation(ga, chromosome_set = None, gene_mutate_count = 1):
         
         gene_mutate_count_static = int(gene_mutate_count)
 

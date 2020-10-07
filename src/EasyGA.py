@@ -8,7 +8,8 @@ from fitness_function import Fitness_Examples
 from initialization import Initialization_Methods
 from termination_point import Termination_Methods
 # Population Methods
-from selection import Selection_Methods
+from survivor_selection import Survivor_Selection
+from parent_selection import Parent_Selection
 # Manipulation Methods
 from mutation import Mutation_Methods
 from crossover import Crossover_Methods
@@ -27,7 +28,7 @@ class GA:
 
         # Selection variables
         self.parent_ratio = 0.1
-        self.selection_probablity = 0.95
+        self.selection_probability = 0.95
 
         # Termination variables
         self.current_generation = 0
@@ -41,16 +42,16 @@ class GA:
         self.mutation_rate = 0.10        
 
         # Default EasyGA implimentation structure
-        self.initialization_impl = Initialization_Methods().random_initialization
-        self.fitness_function_impl = Fitness_Examples().index_dependent_values
+        self.initialization_impl = Initialization_Methods.random_initialization
+        self.fitness_function_impl = Fitness_Examples.index_dependent_values
         # Selects which chromosomes should be automaticly moved to the next population
-        self.survivor_selection_impl = Selection_Methods().Survivor_Selection().remove_two_worst
+        self.survivor_selection_impl = Survivor_Selection.remove_two_worst
         # Methods for accomplishing parent-selection -> Crossover -> Mutation
-        self.parent_selection_impl = Selection_Methods().Parent_Selection().Roulette().roulette_selection
-        self.crossover_impl = Crossover_Methods().single_point_crossover
-        self.mutation_impl = Mutation_Methods().per_gene_mutation
+        self.parent_selection_impl = Parent_Selection.Tournament.with_replacement
+        self.crossover_impl = Crossover_Methods.single_point_crossover
+        self.mutation_impl = Mutation_Methods.per_gene_mutation
         # The type of termination to impliment
-        self.termination_impl = Termination_Methods().generation_based
+        self.termination_impl = Termination_Methods.generation_based
         
 
     def evolve_generation(self, number_of_generations = 1, consider_termination = True):

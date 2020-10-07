@@ -6,7 +6,7 @@ from .gene_structure.gene import Gene as create_gene
 class Initialization_Methods:
     """Initialization examples that are used as defaults and examples"""
     
-    def random_initialization(self, ga):
+    def random_initialization(ga):
         """Takes the initialization inputs and choregraphs them to output the type of population with the given parameters."""
 
         # Create the population object
