@@ -1,5 +1,4 @@
 class Population:
-
     def __init__(self, chromosome_list = None):
         """Intiialize the population with fitness of value None, and a set of chromosomes dependant on user-passed parameter"""
         if chromosome_list is None:
@@ -7,6 +6,7 @@ class Population:
         else:
           self.chromosome_list = chromosome_list
         self.fitness = None
+        self.mating_pool = []
 
     def get_closet_fitness(self,value):
         """Get the chomosome that has the closets fitness to the value defined"""
@@ -24,18 +24,18 @@ class Population:
 
     def get_all_chromosomes(self):
         """returns all chromosomes in the population"""
-        return chromosome_list
+        return self.chromosome_list
 
     def get_fitness(self):
         """returns the population's fitness"""
         return self.fitness
 
-    def set_all_chromosomes(self, chromosome_list):
-        """sets the chromosome set of the population"""
-        self.chromosome_list = chromosome_list
+    def set_all_chromosomes(self, chromosomes):
+        self.chromosome_list = chromosomes
 
-    def set_chromosome(self, chromosome, index):
-        """sets a specific chromosome at a specific index"""
+    def set_chromosome(self, chromosome, index = -1):
+        if index == -1:
+            index = len(self.chromosomes)-1
         self.chromosome_list[index] = chromosome
 
     def set_fitness(self, fitness):
@@ -43,8 +43,8 @@ class Population:
         self.fitness = fitness
 
     def __repr__(self):
-        """Sets the repr() output format"""
-        return ''.join([chromosome.__repr__() for chromosome in self.chromosome_list])
+        for index in range(len(self.chromosomes)):
+            return f'{self.chromosome_list[index]}'
 
     def print_all(self):
         """Prints information about the population in the following format:"""

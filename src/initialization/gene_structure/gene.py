@@ -22,7 +22,7 @@ class Gene:
         """Set fitness of the gene"""
         self.fitness = fitness
 
-    def set_value(self):
+    def set_value(self, value):
         """Set value of the gene"""
         self.value = value
 

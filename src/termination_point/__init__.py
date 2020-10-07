@@ -1,2 +1,2 @@
 # FROM (. means local) file_name IMPORT class name
-from .methods import Termination_methods
+from .termination_methods import Termination_Methods
