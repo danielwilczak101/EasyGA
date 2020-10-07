@@ -17,7 +17,7 @@ class Selection_Methods:
                     tournament_size = int(len(ga.population.get_all_chromosomes())*ga.parent_ratio/3)
                 
                 # Probability used for determining if a chromosome should enter the mating pool.
-                selection_probability = 0.95
+                selection_probability = ga.selection_probability
                 
                 # Repeat tournaments until the mating pool is large enough.
                 while (len(ga.population.mating_pool) < len(ga.population.get_all_chromosomes())*ga.parent_ratio):

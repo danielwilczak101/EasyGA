@@ -27,6 +27,7 @@ class GA:
 
         # Selection variables
         self.parent_ratio = 0.1
+        self.selection_probablity = 0.95
 
         # Termination variables
         self.current_generation = 0
@@ -50,6 +51,7 @@ class GA:
         self.mutation_impl = Mutation_Methods().per_gene_mutation
         # The type of termination to impliment
         self.termination_impl = Termination_Methods().generation_based
+        
 
     def evolve_generation(self, number_of_generations = 1, consider_termination = True):
         """Evolves the ga the specified number of generations."""
