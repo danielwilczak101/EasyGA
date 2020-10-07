@@ -25,37 +25,7 @@ ga.evolve()
 Put the out here
 ```
 
-## Customized:
-```python
-import random
-import EasyGA
 
-# Create the Genetic algorithm
-ga = EasyGA.GA()
-
-# Makes a new gene
-new_gene = ga.make_gene("HelloWorld")
-# Makes a chromosome to store genes in
-new_chromosome = ga.make_chromosome()
-# Makes a Population to store chromosomes in
-new_population = ga.make_population()
-
-ga.initialize()
-
-print(ga.population)
-
-for chromosome in ga.population.chromosomes:
-    print(chromosome.genes[0].__dict__)
-```
-
-### Output:
-```python
-<initialization.population_structure.population.population object at 0x7f993002fdf0>
-{'fitness': None, 'value': 47}
-{'fitness': None, 'value': 4}
-{'fitness': None, 'value': 68}
-{'fitness': None, 'value': 57}
-```
 
 # How Testing works
 

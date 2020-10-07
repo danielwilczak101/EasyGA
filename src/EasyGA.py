@@ -72,6 +72,7 @@ class GA:
                 self.population.set_all_chromosomes(self.sort_by_best_fitness())
 
             number_of_generations -= 1
+
             self.current_generation += 1
 
     def evolve(self):
@@ -124,10 +125,13 @@ class GA:
         return chromosome_set
 
     def make_gene(self,value):
+        """Let's the user create a gene."""
         return create_gene(value)
 
     def make_chromosome(self):
+        """Let's the user create a chromosome."""
         return create_chromosome()
 
     def make_population(self):
+        """Let's the user create a population."""
         return create_population()
