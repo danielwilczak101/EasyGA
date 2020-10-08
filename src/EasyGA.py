@@ -32,14 +32,13 @@ class GA:
 
         # Termination variables
         self.current_generation = 0
-        self.generation_goal = 50
-
         self.current_fitness = 0
+
         self.generation_goal = 250
         self.fitness_goal = 9
 
         # Mutation variables
-        self.mutation_rate = 0.10        
+        self.mutation_rate = 0.10
 
         # Default EasyGA implimentation structure
         self.initialization_impl = Initialization_Methods.random_initialization
@@ -52,7 +51,7 @@ class GA:
         self.mutation_impl = Mutation_Methods.per_gene_mutation
         # The type of termination to impliment
         self.termination_impl = Termination_Methods.generation_based
-        
+
 
     def evolve_generation(self, number_of_generations = 1, consider_termination = True):
         """Evolves the ga the specified number of generations."""
@@ -121,7 +120,7 @@ class GA:
                 else:
                     not_sorted_check += 1
 
-        chromosome_set = chromosome_set_temp 
+        chromosome_set = chromosome_set_temp
 
         return chromosome_set
 

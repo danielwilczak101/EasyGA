@@ -13,4 +13,5 @@ ga.gene_impl = [random.randrange,1,100]
 ga.evolve()
 
 # Print the current population
+print(f"Current Generation: {ga.current_generation}")
 ga.population.print_all()
