@@ -61,7 +61,7 @@ class GA:
             if self.current_generation == 0:
                 self.initialize_population()
                 self.set_all_fitness(self.population.chromosome_list)
-                self.population.set_all_chromosomes(self.sort_by_best_fitness())
+                self.population.set_all_chromosomes(self.sort_by_best_fitness(self.population.get_all_chromosomes()))
             else:
                 self.parent_selection_impl(self)
                 next_population = self.crossover_impl(self)
@@ -70,7 +70,7 @@ class GA:
 
                 self.population = next_population
                 self.set_all_fitness(self.population.chromosome_list)
-                self.population.set_all_chromosomes(self.sort_by_best_fitness())
+                self.population.set_all_chromosomes(self.sort_by_best_fitness(self.population.get_all_chromosomes()))
 
             number_of_generations -= 1
 
@@ -104,10 +104,7 @@ class GA:
                 # Set the chromosomes fitness using the fitness function
                 chromosome.set_fitness(self.fitness_function_impl(chromosome))
 
-    def sort_by_best_fitness(self, chromosome_set = None):
-
-        if chromosome_set == None:
-            chromosome_set = self.population.get_all_chromosomes()
+    def sort_by_best_fitness(self, chromosome_set):
 
         chromosome_set_temp = chromosome_set
         not_sorted_check = 0
@@ -115,9 +112,7 @@ class GA:
             not_sorted_check = 0
             for i in range(len(chromosome_set_temp)):
                 if ((i + 1 < len(chromosome_set_temp)) and (chromosome_set_temp[i + 1].fitness > chromosome_set_temp[i].fitness)):
-                    temp = chromosome_set[i]
-                    chromosome_set_temp[i] = chromosome_set[i + 1]
-                    chromosome_set_temp[i + 1] = temp
+                    chromosome_set[i], chromosome_set_temp[i + 1] = chromosome_set_temp[i + 1], chromosome_set[i]
                 else:
                     not_sorted_check += 1
 
