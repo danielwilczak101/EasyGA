@@ -29,12 +29,13 @@ class GA:
         # Selection variables
         self.parent_ratio = 0.1
         self.selection_probability = 0.95
+        self.tournament_size_ratio = 0.1
 
         # Termination variables
         self.current_generation = 0
         self.current_fitness = 0
 
-        self.generation_goal = 250
+        self.generation_goal = 15
         self.fitness_goal = 9
 
         # Mutation variables

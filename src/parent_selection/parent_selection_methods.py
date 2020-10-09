@@ -7,16 +7,14 @@ from initialization.chromosome_structure.chromosome import Chromosome
 class Parent_Selection:
     class Tournament:
         def with_replacement(ga):
-            tournament_size = int(len(ga.population.get_all_chromosomes())*ga.parent_ratio/10)
-            if tournament_size < 3:
-                tournament_size = int(len(ga.population.get_all_chromosomes())*ga.parent_ratio/3)
-            
+            tournament_size = int(len(ga.population.get_all_chromosomes())*ga.parent_ratio*ga.tournament_size_ratio)
+            if tournament_size < 5:
+                tournament_size = 5
             # Probability used for determining if a chromosome should enter the mating pool.
             selection_probability = ga.selection_probability
             
             # Repeat tournaments until the mating pool is large enough.
             while (len(ga.population.mating_pool) < len(ga.population.get_all_chromosomes())*ga.parent_ratio):
-                
                 # Generate a random tournament group and sort by fitness.
                 tournament_group = ga.sort_by_best_fitness([random.choice(ga.population.get_all_chromosomes()) for n in range(tournament_size)])
                 
@@ -27,7 +25,7 @@ class Parent_Selection:
                     #   second ranked fitness has probability: selection_probability * (1-selection_probability)
                     #   third  ranked fitness has probability: selection_probability * (1-selection_probability)^2
                     # etc.
-                    if random.uniform(0, 1) < selection_probability * pow(1-selection_probability, index+1):
+                    if random.uniform(0, 1) < selection_probability * pow(1-selection_probability, index):
                         ga.population.mating_pool.append(tournament_group[index])
 
     class Roulette:
