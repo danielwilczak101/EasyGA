@@ -18,8 +18,9 @@ class Fitness_Examples:
 
 
     def index_dependent_values(chromosome):
-        """Test of the GA's ability to improve fitness when the value is index-dependent"""
-        """If a gene is equal to its index in the chromosome + 1, fitness is incremented"""
+        """Test of the GA's ability to improve fitness when the value is index-dependent.
+        If a gene is equal to its index in the chromosome + 1, fitness is incremented.
+        """
         fitness = 0
         for i in range(chromosome.size()):
             if (chromosome.gene_list[i].value == i+1):
