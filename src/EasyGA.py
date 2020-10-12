@@ -45,7 +45,7 @@ class GA:
         self.initialization_impl = Initialization_Methods.random_initialization
         self.fitness_function_impl = Fitness_Examples.index_dependent_values
         # Selects which chromosomes should be automaticly moved to the next population
-        self.survivor_selection_impl = Survivor_Selection.remove_worst
+        self.survivor_selection_impl = Survivor_Selection.fill_in_best
         # Methods for accomplishing parent-selection -> Crossover -> Mutation
         self.parent_selection_impl = Parent_Selection.Tournament.with_replacement
         self.crossover_impl = Crossover_Methods.single_point_crossover
