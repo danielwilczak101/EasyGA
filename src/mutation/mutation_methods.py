@@ -44,5 +44,3 @@ class Mutation_Methods:
             gene_mutate_count = int(gene_mutate_count_static)
 
         return chromosome_set
-
-        

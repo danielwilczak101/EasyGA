@@ -8,6 +8,10 @@ class Population:
         self.fitness = None
         self.mating_pool = []
 
+    def size(self):
+        """Returns the size of the population"""
+        return len(self.chromosome_list)
+
     def get_closet_fitness(self,value):
         """Get the chomosome that has the closets fitness to the value defined"""
         pass
