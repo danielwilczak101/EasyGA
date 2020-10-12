@@ -1,20 +1,25 @@
 import random
+
 # Import all the data structure prebuilt modules
 from initialization import Population as create_population
 from initialization import Chromosome as create_chromosome
 from initialization import Gene as create_gene
+
 # Structure Methods
 from fitness_function import Fitness_Examples
 from initialization import Initialization_Methods
 from termination_point import Termination_Methods
+
 # Population Methods
 from survivor_selection import Survivor_Selection
 from parent_selection import Parent_Selection
+
 # Manipulation Methods
 from mutation import Mutation_Methods
 from crossover import Crossover_Methods
 
 class GA:
+
     def __init__(self):
         """Initialize the GA."""
         # Initilization variables
@@ -44,12 +49,15 @@ class GA:
         # Default EasyGA implimentation structure
         self.initialization_impl = Initialization_Methods.random_initialization
         self.fitness_function_impl = Fitness_Examples.index_dependent_values
+
         # Selects which chromosomes should be automaticly moved to the next population
         self.survivor_selection_impl = Survivor_Selection.fill_in_best
+
         # Methods for accomplishing parent-selection -> Crossover -> Mutation
         self.parent_selection_impl = Parent_Selection.Tournament.with_replacement
         self.crossover_impl = Crossover_Methods.single_point_crossover
         self.mutation_impl = Mutation_Methods.per_gene_mutation
+
         # The type of termination to impliment
         self.termination_impl = Termination_Methods.generation_based
 
@@ -76,21 +84,25 @@ class GA:
 
             self.current_generation += 1
 
+
     def evolve(self):
         """Runs the ga until the termination point has been satisfied."""
         # While the termination point hasnt been reached keep running
         while(self.active()):
             self.evolve_generation()
 
+
     def active(self):
         """Returns if the ga should terminate base on the termination implimented"""
         # Send termination_impl the whole ga class
         return self.termination_impl(self)
 
+
     def initialize_population(self):
         """Initialize the population using the initialization
          implimentation that is currently set"""
         self.population = self.initialization_impl(self)
+
 
     def set_all_fitness(self,chromosome_set):
         """Will get and set the fitness of each chromosome in the population.
@@ -103,6 +115,7 @@ class GA:
             if(chromosome.fitness == None or self.update_fitness == True):
                 # Set the chromosomes fitness using the fitness function
                 chromosome.set_fitness(self.fitness_function_impl(chromosome))
+
 
     def sort_by_best_fitness(self, chromosome_set):
 
@@ -120,13 +133,16 @@ class GA:
 
         return chromosome_set
 
+
     def make_gene(self,value):
         """Let's the user create a gene."""
         return create_gene(value)
 
+
     def make_chromosome(self):
         """Let's the user create a chromosome."""
         return create_chromosome()
+
 
     def make_population(self):
         """Let's the user create a population."""

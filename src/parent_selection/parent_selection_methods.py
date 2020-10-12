@@ -5,7 +5,9 @@ from initialization.population_structure.population import Population
 from initialization.chromosome_structure.chromosome import Chromosome
 
 class Parent_Selection:
+
     class Tournament:
+
         def with_replacement(ga):
             """
             Will make tournaments of size tournament_size and choose the winner (best fitness) from the tournament and use it as a parent for the next generation
@@ -33,7 +35,9 @@ class Parent_Selection:
                     if random.uniform(0, 1) < selection_probability * pow(1-selection_probability, index):
                         ga.population.mating_pool.append(tournament_group[index])
 
+
     class Roulette:
+
         def roulette_selection(ga):
             """Roulette selection works based off of how strong the fitness is of the
             chromosomes in the population. The stronger the fitness the higher the probability
@@ -41,18 +45,19 @@ class Parent_Selection:
             Where the chromosomes are the numbers to be selected and the board size for
             those numbers are directly proportional to the chromosome's current fitness. Where
             the ball falls is a randomly generated number between 0 and 1"""
+            
             total_fitness = sum(ga.population.chromosome_list[i].get_fitness() for i in range(ga.population.size()))
             rel_fitnesses = []
-    
+            
             for chromosome in ga.population.chromosome_list:
                 if (total_fitness != 0):
                     rel_fitnesses.append(float(chromosome.fitness)/total_fitness)
             
             probability = [sum(rel_fitnesses[:i+1]) for i in range(len(rel_fitnesses))]
-    
+            
             while (len(ga.population.mating_pool) < ga.population.size()*ga.parent_ratio):
                 rand_number = random.random()
-    
+                
                 # Loop through the list of probabilities
                 for i in range(len(probability)):
                     # If the probability is greater than the random_number, then select that chromosome

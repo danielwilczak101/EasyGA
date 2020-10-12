@@ -1,5 +1,6 @@
 class Fitness_Examples:
     """Fitness function examples used"""
+
     def is_it_5(chromosome):
         """A very simple case test function - If the chromosomes gene value is a 5 add one
          to the chromosomes overall fitness value."""
@@ -14,6 +15,7 @@ class Fitness_Examples:
                 fitness += 1
                 
         return fitness
+
 
     def index_dependent_values(chromosome):
         """Test of the GA's ability to improve fitness when the value is index-dependent"""

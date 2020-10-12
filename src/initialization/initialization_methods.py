@@ -5,7 +5,7 @@ from .gene_structure.gene import Gene as create_gene
 
 class Initialization_Methods:
     """Initialization examples that are used as defaults and examples"""
-    
+
     def random_initialization(ga):
         """Takes the initialization inputs and choregraphs them to output the type of population with the given parameters."""
 
@@ -28,5 +28,6 @@ class Initialization_Methods:
                 else:
                     #Exit because either were not specified
                     print("You did not specify any initialization constraints.")
+                    break
             population.add_chromosome(chromosome)
         return population
