@@ -7,6 +7,11 @@ from initialization.chromosome_structure.chromosome import Chromosome
 class Parent_Selection:
     class Tournament:
         def with_replacement(ga):
+            """
+            Will make tournaments of size tournament_size and choose the winner (best fitness) from the tournament and use it as a parent for the next generation
+            The total number of parents selected is determined by parent_ratio, an attribute to the GA object.
+            """
+            
             tournament_size = int(len(ga.population.get_all_chromosomes())*ga.tournament_size_ratio)
             if tournament_size < 5:
                 tournament_size = 5
