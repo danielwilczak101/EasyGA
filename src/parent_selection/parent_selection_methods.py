@@ -7,7 +7,7 @@ from initialization.chromosome_structure.chromosome import Chromosome
 class Parent_Selection:
     class Tournament:
         def with_replacement(ga):
-            tournament_size = int(len(ga.population.get_all_chromosomes())*ga.parent_ratio*ga.tournament_size_ratio)
+            tournament_size = int(len(ga.population.get_all_chromosomes())*ga.tournament_size_ratio)
             if tournament_size < 5:
                 tournament_size = 5
             # Probability used for determining if a chromosome should enter the mating pool.

@@ -3,19 +3,13 @@ from initialization.chromosome_structure.chromosome import Chromosome
 from initialization.population_structure.population import Population
 
 class Crossover_Methods:
-    """ Crossover explination goes here.
-
-    Points - Defined as sections between the chromosomes genetic makeup
-    """
-    def __init__(self):
-        pass
-
     def single_point_crossover(ga):
-        """Single  point crossover is when a "point" is selected and the genetic
-        make up of the two parent chromosomes are "Crossed" or better known as swapped"""
+        """Single point crossover is when a "point" is selected and the genetic
+        make up of the two parent chromosomes are swapped at that point"""
 
         crossover_pool = ga.population.mating_pool
 
+        """The structure of GA requires that the crossover method return a population strictly with offspring chromosomes"""
         new_population = Population()
         for i in range(len(crossover_pool)):
             if i + 1 < len(crossover_pool):
