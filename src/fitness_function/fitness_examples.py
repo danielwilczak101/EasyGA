@@ -19,7 +19,7 @@ class Fitness_Examples:
         """Test of the GA's ability to improve fitness when the value is index-dependent"""
         """If a gene is equal to its index in the chromosome + 1, fitness is incremented"""
         fitness = 0
-        for i in range(len(chromosome.gene_list)):
+        for i in range(chromosome.size()):
             if (chromosome.gene_list[i].value == i+1):
                 fitness += 1
                 

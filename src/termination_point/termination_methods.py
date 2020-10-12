@@ -3,19 +3,15 @@ class Termination_Methods:
 
     def fitness_based(ga):
         """Fitness based approach to terminate when the goal fitness has been reached"""
-            
-        status = True
+        
         if ga.population == None:
-            return status
-        for i in range(len(ga.population.get_all_chromosomes())):
+            return True
+        for i in range(ga.population.size()):
             if(ga.population.get_all_chromosomes()[i].fitness >= ga.fitness_goal):
-                status = False
-                break
-        return status
+                return False
+        return True
 
     def generation_based(ga):
         """Generation based approach to terminate when the goal generation has been reached"""
-        status = True
-        if(ga.current_generation > ga.generation_goal):
-            status = False
-        return status
+        
+        return ga.current_generation < ga.generation_goal

@@ -9,6 +9,10 @@ class Chromosome:
         # If the chromosome has been selected then the flag would switch to true
         self.selected = False
 
+    def size(self):
+        """Returns the number of genes in the chromosome"""
+        return len(self.gene_list)
+
     def add_gene(self, gene, index = -1):
         """Add a gene to the chromosome at the specified index, defaulted to end of the chromosome"""
         if index == -1:
