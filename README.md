@@ -88,4 +88,4 @@ Or download as a zip file.
 ```
 https://github.com/danielwilczak101/EasyGA/archive/master.zip
 ```
-Use the example.py file inside the src folder to run your code and test while we build the package.
+Use the run_testing.py file inside the src folder to run your code and test while we build the package.
