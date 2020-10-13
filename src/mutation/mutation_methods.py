@@ -20,7 +20,9 @@ class Mutation_Methods:
         """Methods for mutating a single chromosome"""
 
         def whole_chromosome(ga, chromosome):
-            """Makes a completely random chromosome"""
+            """Makes a completely random chromosome.
+            Fills chromosome with new genes.
+            """
 
             # Using the chromosome_impl to set every index inside of the chromosome
             if ga.chromosome_impl != None:
@@ -42,7 +44,7 @@ class Mutation_Methods:
 
 
         def single_gene(ga, chromosome):
-            """Makes a completely random chromosome"""
+            """Changes a random gene in the chromosome and resets the fitness."""
             chromosome.set_fitness(None)
 
             # Using the chromosome_impl

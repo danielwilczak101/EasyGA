@@ -7,7 +7,11 @@ class Initialization_Methods:
     """Initialization examples that are used as defaults and examples"""
 
     def random_initialization(ga):
-        """Takes the initialization inputs and returns a population with the given parameters."""
+        """Takes the initialization inputs and
+        - creates a new population
+          - fills population with chromosomes
+            - fills chromosomes with genes
+        """
 
         # Using the chromosome_impl to set every index inside of the chromosome
         if ga.chromosome_impl != None:
