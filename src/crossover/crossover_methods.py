@@ -3,29 +3,34 @@ from initialization.chromosome_structure.chromosome import Chromosome
 from initialization.population_structure.population import Population
 
 class Crossover_Methods:
-    def single_point_crossover(ga):
-        """Single point crossover is when a "point" is selected and the genetic
-        make up of the two parent chromosomes are swapped at that point"""
 
-        crossover_pool = ga.population.mating_pool
+    class Population:
+        """Methods for selecting chromosomes to crossover"""
 
-        """The structure of GA requires that the crossover method return a population strictly with offspring chromosomes"""
-        new_population = Population()
-        for i in range(len(crossover_pool)):
-            if i + 1 < len(crossover_pool):
-                new_gene_set = []
-                parent_one = crossover_pool[i].get_genes()
-                parent_two = crossover_pool[i+1].get_genes()
-                #halfway_point = int(ga.chromosome_length/2)
-                split_point = random.randint(0,ga.chromosome_length)
-                new_gene_set.extend(parent_one[0:split_point])
-                new_gene_set.extend(parent_two[split_point:])
-                new_chromosome = Chromosome(new_gene_set)
-                new_population.add_chromosome(new_chromosome)
+        def sequential_selection(ga):
+            """Select sequential pairs from the mating pool"""
 
-        return new_population
+            mating_pool = ga.population.mating_pool
+            return Population([ga.crossover_individual_impl(mating_pool[index], mating_pool[index+1]) for index in range(len(mating_pool)-1)])
 
-    def multi_point_crossover(ga, number_of_points = 2):
-        """Multi point crossover is when a specific number (More then one) of
-        "points" are created to merge the genetic makup of the chromosomes."""
-        pass
+
+        def random_selection(ga):
+            """Select random pairs from the mating pool"""
+
+            mating_pool = ga.population.mating_pool
+            return Population([ga.crossover_individual_impl(random.choice(mating_pool), random.choice(mating_pool)) for n in mating_pool])
+
+
+    class Individual:
+        """Methods for crossing parents"""
+
+        def single_point_crossover(parent_one, parent_two):
+            """Cross two parents by swapping genes at one random point"""
+
+            index = random.randint(0, parent_one.size()-1)
+            return Chromosome(parent_one.get_gene_list()[:index] + parent_two.get_gene_list()[index:])
+
+
+        def multi_point_crossover(parent_one, parent_two):
+            """Cross two parents by swapping genes at multiple points"""
+            pass

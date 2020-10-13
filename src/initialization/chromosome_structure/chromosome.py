@@ -27,7 +27,7 @@ class Chromosome:
         del self.gene_list[index]
 
 
-    def get_genes(self):
+    def get_gene_list(self):
         return self.gene_list
 
 
@@ -40,7 +40,7 @@ class Chromosome:
         self.gene_list[index] = gene
 
 
-    def set_genes(self, genes):
+    def set_gene_list(self, genes):
         self.gene_list = genes
 
 

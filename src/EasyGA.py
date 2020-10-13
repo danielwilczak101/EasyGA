@@ -47,16 +47,21 @@ class GA:
         self.mutation_rate = 0.10
 
         # Default EasyGA implimentation structure
-        self.initialization_impl = Initialization_Methods.random_initialization
+        self.initialization_impl   = Initialization_Methods.random_initialization
         self.fitness_function_impl = Fitness_Examples.index_dependent_values
+        self.make_population       = create_population
+        self.make_chromosome       = create_chromosome
+        self.make_gene             = create_gene
 
         # Selects which chromosomes should be automaticly moved to the next population
         self.survivor_selection_impl = Survivor_Selection.fill_in_best
 
         # Methods for accomplishing parent-selection -> Crossover -> Mutation
-        self.parent_selection_impl = Parent_Selection.Tournament.with_replacement
-        self.crossover_impl = Crossover_Methods.single_point_crossover
-        self.mutation_impl = Mutation_Methods.per_gene_mutation
+        self.parent_selection_impl     = Parent_Selection.Tournament.with_replacement
+        self.crossover_individual_impl = Crossover_Methods.Individual.single_point_crossover
+        self.crossover_population_impl = Crossover_Methods.Population.random_selection
+        self.mutation_individual_impl  = Mutation_Methods.Individual.single_gene
+        self.mutation_population_impl  = Mutation_Methods.Population.random_selection
 
         # The type of termination to impliment
         self.termination_impl = Termination_Methods.generation_based
@@ -72,11 +77,10 @@ class GA:
                 self.population.set_all_chromosomes(self.sort_by_best_fitness(self.population.get_all_chromosomes()))
             else:
                 self.parent_selection_impl(self)
-                next_population = self.crossover_impl(self)
+                next_population = self.crossover_population_impl(self)
                 next_population = self.survivor_selection_impl(self, next_population)
-                next_population.set_all_chromosomes(self.mutation_impl(self, next_population.get_all_chromosomes()))
-
                 self.population = next_population
+                self.mutation_population_impl(self)
                 self.set_all_fitness(self.population.chromosome_list)
                 self.population.set_all_chromosomes(self.sort_by_best_fitness(self.population.get_all_chromosomes()))
 
@@ -100,7 +104,8 @@ class GA:
 
     def initialize_population(self):
         """Initialize the population using the initialization
-         implimentation that is currently set"""
+        implimentation that is currently set
+        """
         self.population = self.initialization_impl(self)
 
 
@@ -132,18 +137,3 @@ class GA:
         chromosome_set = chromosome_set_temp
 
         return chromosome_set
-
-
-    def make_gene(self,value):
-        """Let's the user create a gene."""
-        return create_gene(value)
-
-
-    def make_chromosome(self):
-        """Let's the user create a chromosome."""
-        return create_chromosome()
-
-
-    def make_population(self):
-        """Let's the user create a population."""
-        return create_population()
