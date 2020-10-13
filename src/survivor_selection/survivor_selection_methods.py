@@ -1,8 +1,4 @@
 import random
-from initialization.chromosome_structure.chromosome import Chromosome as create_chromosome
-from initialization.gene_structure.gene import Gene as create_gene
-from initialization.population_structure.population import Population
-from initialization.chromosome_structure.chromosome import Chromosome
 
 class Survivor_Selection:
     """Survivor selection determines which individuals should be brought to the next generation"""
