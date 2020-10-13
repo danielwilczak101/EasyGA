@@ -24,9 +24,9 @@ class GA:
         """Initialize the GA."""
         # Initilization variables
         self.chromosome_length = 10
-        self.population_size = 150
+        self.population_size = 10
         self.chromosome_impl = None
-        self.gene_impl = None
+        self.gene_impl = [random.randint,1,10]
         self.population = None
         self.target_fitness_type = 'maximum'
         self.update_fitness = True
@@ -48,7 +48,7 @@ class GA:
 
         # Default EasyGA implimentation structure
         self.initialization_impl   = Initialization_Methods.random_initialization
-        self.fitness_function_impl = Fitness_Examples.index_dependent_values
+        self.fitness_function_impl = Fitness_Examples.is_it_5
         self.make_population       = create_population
         self.make_chromosome       = create_chromosome
         self.make_gene             = create_gene
