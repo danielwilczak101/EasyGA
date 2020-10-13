@@ -22,7 +22,17 @@ ga.evolve()
 
 ### Output:
 ```python
-Put the out here
+Current population:
+Chromosome - 0 [8][9][5][5][1][5][7][3][10][8] / Fitness = 3
+Chromosome - 1 [5][9][8][5][1][5][7][3][10][10] / Fitness = 3
+Chromosome - 2 [5][9][5][5][1][6][7][3][10][8] / Fitness = 3
+Chromosome - 3 [5][9][5][5][1][6][7][3][10][8] / Fitness = 3
+Chromosome - 4 [5][9][5][5][1][4][7][3][10][10] / Fitness = 3
+Chromosome - 5 [5][9][6][5][1][5][7][3][10][10] / Fitness = 3
+Chromosome - 6 [5][9][5][5][1][6][7][3][10][8] / Fitness = 3
+Chromosome - 7 [5][9][8][5][1][5][7][3][10][10] / Fitness = 3
+Chromosome - 8 [4][9][5][5][1][6][7][3][10][10] / Fitness = 2
+Chromosome - 9 [5][10][5][7][7][2][2][6][2][9] / Fitness = 2
 ```
 
 
@@ -42,17 +52,14 @@ python3 -m pytest
 
 #### Output
 ```bash
-============================== 1 passed in 0.02s ===============================
-danielwilczak@Daniels-MacBook-Pro EasyGA % pytest
-============================= test session starts ==============================
+============================================= test session starts ==============================================
 platform darwin -- Python 3.8.6rc1, pytest-6.0.2, py-1.9.0, pluggy-0.13.1
 rootdir: /Users/danielwilczak/github/EasyGA
-collected 1 item                                                               
+collected 2 items                                                                                              
 
-src/gene/test_gene.py .                                                  [100%]
+test_EasyGA.py ..                                                                                        [100%]
 
-============================== 1 passed in 0.03s ===============================  
-
+============================================== 2 passed in 0.04s ===============================================
 ```
 
 This is only an example and we will create hundreds of tests so this list will become bigger and bigger.
