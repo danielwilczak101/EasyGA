@@ -1,9 +1,9 @@
 import random
 
 # Import all the data structure prebuilt modules
-from initialization import Population as create_population
-from initialization import Chromosome as create_chromosome
-from initialization import Gene as create_gene
+from structure import Population as create_population
+from structure import Chromosome as create_chromosome
+from structure import Gene as create_gene
 
 # Structure Methods
 from fitness_function import Fitness_Examples
@@ -130,4 +130,4 @@ class GA:
         etc.
         """
 
-        return list(reversed(sorted(chromosome_set, key = lambda chromosome: chromosome.get_fitness())))
+        return sorted(chromosome_set, key = lambda chromosome: chromosome.get_fitness(), reverse = True)
