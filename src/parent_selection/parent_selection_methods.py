@@ -42,16 +42,20 @@ class Parent_Selection:
             those numbers are directly proportional to the chromosome's current fitness. Where
             the ball falls is a randomly generated number between 0 and 1"""
 
-            total_fitness = sum(ga.population.chromosome_list[i].get_fitness() for i in range(ga.population.size()))
+            # The sum of all the fitnessess in a population
+            total_fitness = sum(ga.population.chromosome_list[i].get_fitness() for i in range(len(ga.population.chromosome_list)))
             rel_fitnesses = []
 
+            # A list of each chromosome's relative chance of getting chosen
             for chromosome in ga.population.chromosome_list:
                 if (total_fitness != 0):
                     rel_fitnesses.append(float(chromosome.fitness)/total_fitness)
 
+            # A list of ranges that represent the probability of a chromosome getting chosen
             probability = [sum(rel_fitnesses[:i+1]) for i in range(len(rel_fitnesses))]
 
-            while (len(ga.population.mating_pool) < ga.population.size()*ga.parent_ratio):
+            # Loops until it reaches a desired mating pool size
+            while (len(ga.population.mating_pool) < len(ga.population.get_all_chromosomes())*ga.parent_ratio):
                 rand_number = random.random()
 
                 # Loop through the list of probabilities
@@ -59,5 +63,4 @@ class Parent_Selection:
                     # If the probability is greater than the random_number, then select that chromosome
                     if (probability[i] >= rand_number):
                         ga.population.mating_pool.append(ga.population.chromosome_list[i])
-                        # print (f'Selected chromosome : {i}')
                         break
