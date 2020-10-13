@@ -76,6 +76,7 @@ class GA:
                 self.set_all_fitness(self.population.chromosome_list)
                 self.population.set_all_chromosomes(self.sort_by_best_fitness(self.population.get_all_chromosomes()))
             else:
+                self.set_all_fitness(self.population.chromosome_list)
                 self.parent_selection_impl(self)
                 next_population = self.crossover_population_impl(self)
                 next_population = self.survivor_selection_impl(self, next_population)
@@ -109,7 +110,7 @@ class GA:
         self.population = self.initialization_impl(self)
 
 
-    def set_all_fitness(self,chromosome_set):
+    def set_all_fitness(self, chromosome_set):
         """Will get and set the fitness of each chromosome in the population.
         If update_fitness is set then all fitness values are updated.
         Otherwise only fitness values set to None (i.e. uninitialized
@@ -123,17 +124,10 @@ class GA:
 
 
     def sort_by_best_fitness(self, chromosome_set):
+        """Sorts the array by fitness.
+        1st element has highest fitness.
+        2nd element has second highest fitness.
+        etc.
+        """
 
-        chromosome_set_temp = chromosome_set
-        not_sorted_check = 0
-        while (not_sorted_check != len(chromosome_set_temp)):
-            not_sorted_check = 0
-            for i in range(len(chromosome_set_temp)):
-                if ((i + 1 < len(chromosome_set_temp)) and (chromosome_set_temp[i + 1].fitness > chromosome_set_temp[i].fitness)):
-                    chromosome_set[i], chromosome_set_temp[i + 1] = chromosome_set_temp[i + 1], chromosome_set[i]
-                else:
-                    not_sorted_check += 1
-
-        chromosome_set = chromosome_set_temp
-
-        return chromosome_set
+        return list(reversed([chromosome for chromosome in sorted(chromosome_set, key = lambda chromo: chromo.get_fitness())]))
