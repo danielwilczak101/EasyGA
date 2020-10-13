@@ -3,9 +3,9 @@ class Initialization_Methods:
 
     def random_initialization(ga):
         """Takes the initialization inputs and
-        - creates a new population
-          - fills population with chromosomes
-            - fills chromosomes with genes
+        - return a new population
+          - filled with chromosomes
+            - filled with genes
         """
 
         # Using the chromosome_impl to set every index inside of the chromosome
