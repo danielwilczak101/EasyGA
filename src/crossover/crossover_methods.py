@@ -6,17 +6,22 @@ class Crossover_Methods:
         """Methods for selecting chromosomes to crossover"""
 
         def sequential_selection(ga):
-            """Select sequential pairs from the mating pool"""
+            """Select sequential pairs from the mating pool.
+            Every parent is paired with the previous parent.
+            The first parent is paired with the last parent.
+            """
 
-            mating_pool = ga.population.mating_pool
-            return ga.make_population([ga.crossover_individual_impl(ga, mating_pool[index], mating_pool[index+1]) for index in range(len(mating_pool)-1)])
+            mating_pool = ga.population.get_mating_pool()
+            return ga.make_population([ga.crossover_individual_impl(ga, mating_pool[index], mating_pool[index-1]) for index in range(len(mating_pool))])
 
 
         def random_selection(ga):
-            """Select random pairs from the mating pool"""
+            """Select random pairs from the mating pool.
+            Every parent is paired with a random parent.
+            """
 
-            mating_pool = ga.population.mating_pool
-            return ga.make_population([ga.crossover_individual_impl(ga, random.choice(mating_pool), random.choice(mating_pool)) for n in mating_pool])
+            mating_pool = ga.population.get_mating_pool()
+            return ga.make_population([ga.crossover_individual_impl(ga, parent, random.choice(mating_pool)) for parent in mating_pool])
 
 
     class Individual:

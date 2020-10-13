@@ -13,7 +13,7 @@ class Mutation_Methods:
 
                 # Randomly apply mutations
                 if random.uniform(0, 1) < ga.mutation_rate:
-                    ga.population.set_chromosome(ga.mutation_individual_impl(ga, ga.population.get_all_chromosomes()[index]), index)
+                    ga.population.set_chromosome(ga.mutation_individual_impl(ga, ga.population.get_chromosome(index)), index)
 
 
     class Individual:

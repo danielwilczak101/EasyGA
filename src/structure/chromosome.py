@@ -24,7 +24,13 @@ class Chromosome:
 
 
     def remove_gene(self, index):
+        """Removes the gene at the given index"""
         del self.gene_list[index]
+
+
+    def get_gene(self, index):
+        """Returns the gene at the given index"""
+        return gene_list[index]
 
 
     def get_gene_list(self):

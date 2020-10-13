@@ -12,6 +12,11 @@ class Population:
         self.mating_pool = []
 
 
+    def sort_by_best_fitness(self, ga):
+        """Sorts the population by fitness"""
+        self.set_all_chromosomes(ga.sort_by_best_fitness(self.chromosome_list))
+
+
     def size(self):
         """Returns the size of the population"""
         return len(self.chromosome_list)
@@ -29,28 +34,68 @@ class Population:
         self.chromosome_list.insert(index, chromosome)
 
 
+    def add_parent(self, chromosome):
+        """Adds a chromosome to the mating pool"""
+        self.mating_pool.append(chromosome)
+
+
     def remove_chromosome(self, index):
-        """removes a chromosome from the indicated index"""
+        """Removes a chromosome from the indicated index from the population"""
         del self.chromosome_list[index]
 
 
+    def remove_parent(self, index):
+        """Removes a parent from the indicated index from the mating pool"""
+        del self.mating_pool[index]
+
+
+    def reset_mating_pool(self):
+        """Clears the mating pool"""
+        self.mating_pool = []
+
+
+    def get_chromosome(self, index):
+        """Returns the chromosome at the given index in the population"""
+        return self.chromosome_list[index]
+
+
+    def get_parent(self, index):
+        """Returns the parent at the given index in the mating pool"""
+        return self.mating_pool[index]
+
+
     def get_all_chromosomes(self):
-        """returns all chromosomes in the population"""
+        """Returns all chromosomes in the population"""
         return self.chromosome_list
 
 
+    def get_mating_pool(self):
+        """Returns chromosomes in the mating pool"""
+        return self.mating_pool
+
+
     def get_fitness(self):
-        """returns the population's fitness"""
+        """Returns the population's fitness"""
         return self.fitness
 
 
-    def set_all_chromosomes(self, chromosomes):
-        self.chromosome_list = chromosomes
+    def set_parent(self, index):
+        """Sets the index chromosome from the population as a parent"""
+        self.add_parent(self.get_chromosome(index))
 
 
-    def set_chromosome(self, chromosome, index = -1):
-        if index == -1:
-            index = len(self.chromosomes)-1
+    def set_all_chromosomes(self, chromosome_list):
+        """Sets the chromosome list"""
+        self.chromosome_list = chromosome_list
+
+
+    def set_mating_pool(self, chromosome_list):
+        """Sets entire mating pool"""
+        self.mating_pool = chromosome_list
+
+
+    def set_chromosome(self, chromosome, index):
+        """Sets the chromosome at the given index"""
         self.chromosome_list[index] = chromosome
 
 
