@@ -37,7 +37,7 @@ pip3 install pytest
 
 ### Navigate to your EasyGA folder and run:
 ```bash
-pytest
+python3 -m pytest
 ```
 
 #### Output
