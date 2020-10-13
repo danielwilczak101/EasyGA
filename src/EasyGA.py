@@ -130,4 +130,4 @@ class GA:
         etc.
         """
 
-        return list(reversed([chromosome for chromosome in sorted(chromosome_set, key = lambda chromo: chromo.get_fitness())]))
+        return list(reversed(sorted(chromosome_set, key = lambda chromosome: chromosome.get_fitness())))
