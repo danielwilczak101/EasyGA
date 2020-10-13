@@ -21,7 +21,7 @@ ga.evolve()
 ```
 
 ### Output:
-```python
+```bash
 Current population:
 Chromosome - 0 [8][9][5][5][1][5][7][3][10][8] / Fitness = 3
 Chromosome - 1 [5][9][8][5][1][5][7][3][10][10] / Fitness = 3
