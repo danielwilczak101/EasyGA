@@ -17,6 +17,13 @@ class Fitness_Examples:
         return fitness
 
 
+    def near_5(chromosome):
+        """Test's the GA's ability to handle floats.
+        Computes how close each gene is to 5.
+        """
+        return sum([1-pow(1-gene.get_value()/5, 2) for gene in chromosome.get_gene_list()])
+
+
     def index_dependent_values(chromosome):
         """Test of the GA's ability to improve fitness when the value is index-dependent.
         If a gene is equal to its index in the chromosome + 1, fitness is incremented.

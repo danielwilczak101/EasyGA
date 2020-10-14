@@ -27,13 +27,56 @@ class Crossover_Methods:
     class Individual:
         """Methods for crossing parents"""
 
-        def single_point_crossover(ga, parent_one, parent_two):
+        def single_point(ga, parent_one, parent_two):
             """Cross two parents by swapping genes at one random point"""
 
             index = random.randint(0, parent_one.size()-1)
             return ga.make_chromosome(parent_one.get_gene_list()[:index] + parent_two.get_gene_list()[index:])
 
 
-        def multi_point_crossover(ga, parent_one, parent_two):
+        def multi_point(ga, parent_one, parent_two):
             """Cross two parents by swapping genes at multiple points"""
             pass
+
+
+        def uniform(ga, parent_one, parent_two):
+            """Cross two parents by swapping all genes randomly"""
+            return ga.make_chromosome([
+                       random.choice([parent_one.get_gene(i), parent_two.get_gene(i)])
+                   for i in range(parent_one.size())])
+
+        class Arithmetic:
+            """Crossover methods for numerical genes"""
+
+            def int_random(ga, parent_one, parent_two):
+                """Cross two parents by taking a random integer value between each of the genes"""
+                return ga.make_chromosome([
+                           ga.make_gene(random.randint(*sorted([parent_one.get_gene(i).get_value(), parent_two.get_gene(i).get_value()])))
+                       for i in range(parent_one.size())])
+
+
+            def int_weighted(ga, parent_one, parent_two):
+                """Cross two parents by taking a a weighted average of the genes"""
+
+                # the percentage of genes taken from the first gene
+                weight = 0.25
+                return ga.make_chromosome([
+                           ga.make_gene(int(weight*parent_one.get_gene(i).get_value()+(1-weight)*parent_two.get_gene(i).get_value()))
+                       for i in range(parent_one.size())])
+
+
+            def float_random(ga, parent_one, parent_two):
+                """Cross two parents by taking a random numeric value between each of the genes"""
+                return ga.make_chromosome([
+                           ga.make_gene(random.uniform(parent_one.get_gene(i).get_value(), parent_two.get_gene(i).get_value()))
+                       for i in range(parent_one.size())])
+
+
+            def float_weighted(ga, parent_one, parent_two):
+                """Cross two parents by taking a a weighted average of the genes"""
+
+                # the percentage of genes taken from the first gene
+                weight = 0.25
+                return ga.make_chromosome([
+                           ga.make_gene(weight*parent_one.get_gene(i).get_value()+(1-weight)*parent_two.get_gene(i).get_value())
+                       for i in range(parent_one.size())])

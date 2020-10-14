@@ -6,22 +6,23 @@ from structure import Chromosome as create_chromosome
 from structure import Gene as create_gene
 
 # Structure Methods
-from fitness_function import Fitness_Examples
-from initialization import Initialization_Methods
+from fitness_function  import Fitness_Examples
+from initialization    import Initialization_Methods
 from termination_point import Termination_Methods
 
 # Parent/Survivor Selection Methods
-from parent_selection import Parent_Selection
+from parent_selection   import Parent_Selection
 from survivor_selection import Survivor_Selection
 
 # Genetic Operator Methods
-from mutation import Mutation_Methods
+from mutation  import Mutation_Methods
 from crossover import Crossover_Methods
 
 class GA:
 
     def __init__(self):
         """Initialize the GA."""
+
         # Initilization variables
         self.chromosome_length   = 10
         self.population_size     = 10
@@ -33,7 +34,7 @@ class GA:
 
         # Selection variables
         self.parent_ratio          = 0.1
-        self.selection_probability = 0.95
+        self.selection_probability = 0.75
         self.tournament_size_ratio = 0.1
 
         # Termination variables
@@ -54,7 +55,7 @@ class GA:
 
         # Methods for accomplishing Parent-Selection -> Crossover -> Survivor_Selection -> Mutation
         self.parent_selection_impl     = Parent_Selection.Tournament.with_replacement
-        self.crossover_individual_impl = Crossover_Methods.Individual.single_point_crossover
+        self.crossover_individual_impl = Crossover_Methods.Individual.single_point
         self.crossover_population_impl = Crossover_Methods.Population.random_selection
         self.survivor_selection_impl   = Survivor_Selection.fill_in_best
         self.mutation_individual_impl  = Mutation_Methods.Individual.single_gene
@@ -82,7 +83,7 @@ class GA:
             else:
                 self.population.reset_mating_pool()
                 self.set_all_fitness()
-                self.population.set_all_chromosomes(self.sort_by_best_fitness(self.population.get_all_chromosomes()))
+                self.population.sort_by_best_fitness(self)
                 self.parent_selection_impl(self)
                 next_population = self.crossover_population_impl(self)
                 self.survivor_selection_impl(self, next_population)
@@ -119,7 +120,7 @@ class GA:
         """
 
         # Check each chromosome
-        for chromosome in self.population.get_all_chromosomes():
+        for chromosome in self.population.get_chromosome_list():
 
             # Update fitness if needed or asked by the user
             if(chromosome.get_fitness() is None or self.update_fitness):

@@ -7,8 +7,6 @@ class Chromosome:
             self.gene_list = gene_list
 
         self.fitness = None
-        # If the chromosome has been selected then the flag would switch to true
-        self.selected = False
 
 
     def size(self):
@@ -16,10 +14,10 @@ class Chromosome:
         return len(self.gene_list)
 
 
-    def add_gene(self, gene, index = -1):
+    def add_gene(self, gene, index = None):
         """Add a gene to the chromosome at the specified index, defaulted to end of the chromosome"""
-        if index == -1:
-            index = len(self.gene_list)
+        if index is None:
+            index = self.size()
         self.gene_list.insert(index, gene)
 
 
@@ -30,7 +28,7 @@ class Chromosome:
 
     def get_gene(self, index):
         """Returns the gene at the given index"""
-        return gene_list[index]
+        return self.gene_list[index]
 
 
     def get_gene_list(self):

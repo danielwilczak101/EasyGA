@@ -14,7 +14,7 @@ class Population:
 
     def sort_by_best_fitness(self, ga):
         """Sorts the population by fitness"""
-        self.set_all_chromosomes(ga.sort_by_best_fitness(self.chromosome_list))
+        self.set_chromosome_list(ga.sort_by_best_fitness(self.chromosome_list))
 
 
     def size(self):
@@ -27,10 +27,10 @@ class Population:
         pass
 
 
-    def add_chromosome(self, chromosome, index = -1):
+    def add_chromosome(self, chromosome, index = None):
         """Adds a chromosome to the population at the input index, defaulted to the end of the chromosome set"""
-        if index == -1:
-            index = len(self.chromosome_list)
+        if index is None:
+            index = self.size()
         self.chromosome_list.insert(index, chromosome)
 
 
@@ -64,7 +64,7 @@ class Population:
         return self.mating_pool[index]
 
 
-    def get_all_chromosomes(self):
+    def get_chromosome_list(self):
         """Returns all chromosomes in the population"""
         return self.chromosome_list
 
@@ -80,11 +80,11 @@ class Population:
 
 
     def set_parent(self, index):
-        """Sets the index chromosome from the population as a parent"""
+        """Sets the indexed chromosome from the population as a parent"""
         self.add_parent(self.get_chromosome(index))
 
 
-    def set_all_chromosomes(self, chromosome_list):
+    def set_chromosome_list(self, chromosome_list):
         """Sets the chromosome list"""
         self.chromosome_list = chromosome_list
 
@@ -120,5 +120,5 @@ class Population:
         print("Current population:")
 
         for index in range(self.size()):
-            print(f'Chromosome - {index} {self.chromosome_list[index]}', end = "")
-            print(f' / Fitness = {self.chromosome_list[index].get_fitness()}')
+            print(f'Chromosome - {index} {self.get_chromosome(index)}', end = "")
+            print(f' / Fitness = {self.get_chromosome(index).get_fitness()}')
