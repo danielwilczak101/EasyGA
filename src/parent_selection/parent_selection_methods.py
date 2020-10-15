@@ -110,8 +110,10 @@ class Parent_Selection:
                 print("Selection probability must be between 0 and 1 to select parents.")
                 return
 
+            max_fitness = ga.population.get_chromosome(0).get_fitness()
+
             # Error if the highest fitness is not positive
-            if ga.population.get_chromosome(0).get_fitness() <= 0:
+            if max_fitness <= 0:
                 print("Error using stochastic roulette selection, best fitness must be positive.")
                 print("Consider using tournament selection.")
                 return
@@ -123,5 +125,5 @@ class Parent_Selection:
                 index = random.randint(0, ga.population.size()-1)
 
                 # Probability of becoming a parent is fitness/max_fitness
-                if random.uniform(ga.selection_probability, 1) < ga.population.get_chromosome(index).get_fitness() / ga.population.get_chromosome(0).get_fitness():
+                if random.uniform(ga.selection_probability, 1) < ga.population.get_chromosome(index).get_fitness()/max_fitness:
                     ga.population.set_parent(index)

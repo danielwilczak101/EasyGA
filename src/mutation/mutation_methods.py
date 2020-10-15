@@ -25,14 +25,13 @@ class Mutation_Methods:
             # Using the chromosome_impl to set every index inside of the chromosome
             if ga.chromosome_impl != None:
                 return ga.make_chromosome([
-                           ga.make_gene(ga.chromosome_impl(j))
-                       for j in range(chromosome.size())])
+                           ga.make_gene(value)
+                       for value in ga.chromosome_impl()])
 
             # Using the gene_impl
             elif ga.gene_impl != None:
-                function = ga.gene_impl[0]
                 return ga.make_chromosome([
-                           ga.make_gene(function(*ga.gene_impl[1:]))
+                           ga.make_gene(ga.gene_impl())
                        for j in range(chromosome.size())])
 
             # Exit because no gene creation method specified
@@ -48,13 +47,12 @@ class Mutation_Methods:
             # Using the chromosome_impl
             if ga.chromosome_impl != None:
                 index = random.randint(0, chromosome.size()-1)
-                chromosome.set_gene(ga.make_gene(ga.chromosome_impl(index)), index)
+                chromosome.set_gene(ga.make_gene(ga.chromosome_impl()[index]), index)
 
             # Using the gene_impl
             elif ga.gene_impl != None:
-                function = ga.gene_impl[0]
                 index = random.randint(0, chromosome.size()-1)
-                chromosome.set_gene(ga.make_gene(function(*ga.gene_impl[1:])), index)
+                chromosome.set_gene(ga.make_gene(ga.gene_impl()), index)
 
             # Exit because no gene creation method specified
             else:

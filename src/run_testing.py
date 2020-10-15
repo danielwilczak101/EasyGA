@@ -5,7 +5,7 @@ import EasyGA
 ga = EasyGA.GA()
 ga.population_size = 25
 ga.generation_goal = 100
-ga.gene_impl       = [random.randint,0,10]
+ga.gene_impl       = lambda: random.randint(1, 10)
 ga.selection_probability = 0.5
 ga.fitness_function_impl     = EasyGA.Fitness_Examples.near_5
 ga.parent_selection_impl     = EasyGA.Parent_Selection.Roulette.stochastic_selection
