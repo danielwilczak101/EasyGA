@@ -27,7 +27,7 @@ class GA:
         self.chromosome_length   = 10
         self.population_size     = 10
         self.chromosome_impl     = None
-        self.gene_impl           = None
+        self.gene_impl           = lambda: random.randint(1, 10)
         self.population          = None
         self.target_fitness_type = 'maximum'
         self.update_fitness      = True
@@ -136,3 +136,14 @@ class GA:
         return sorted(chromosome_set,                                    # list to be sorted
                      key = lambda chromosome: chromosome.get_fitness(),  # by fitness
                      reverse = True)                                     # from highest to lowest fitness
+
+    # Example of how the setter error checking will look like
+    @property
+    def chromosome_length(self):
+        return self._chromosome_length
+
+    @chromosome_length.setter
+    def chromosome_length(self, value_input):
+        if(value_input == 0):
+            raise ValueError("Sorry your chromosome length must be greater then 0")
+        self._chromosome_length = value_input
