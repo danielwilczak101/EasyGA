@@ -3,7 +3,7 @@ import EasyGA
 
 # Create the Genetic algorithm
 ga = EasyGA.GA()
-ga.population_size = 100
+ga.population_size = 25
 ga.generation_goal = 100
 ga.gene_impl       = lambda: random.randint(1, 10)
 ga.selection_probability = 0.5

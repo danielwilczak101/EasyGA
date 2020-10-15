@@ -27,7 +27,7 @@ class GA:
         self.chromosome_length   = 10
         self.population_size     = 10
         self.chromosome_impl     = None
-        self.gene_impl           = [random.randint,1,10]
+        self.gene_impl           = None
         self.population          = None
         self.target_fitness_type = 'maximum'
         self.update_fitness      = True
@@ -68,10 +68,9 @@ class GA:
     def evolve_generation(self, number_of_generations = 1, consider_termination = True):
         """Evolves the ga the specified number of generations."""
 
-        # Evolve the specified number of generations
-        # and if consider_termination flag is set then
-        # also check if termination conditions reached
-        while(number_of_generations > 0 and (not consider_termination or self.termination_impl(self))):
+        while(number_of_generations > 0               # Evolve the specified number of generations
+              and (not consider_termination           #     and if consider_termination flag is set
+                   or self.termination_impl(self))):  #         then also check if termination conditions reached
 
             # If its the first generation then initialize the population
             if self.current_generation == 0:
@@ -81,13 +80,13 @@ class GA:
 
             # Otherwise evolve the population
             else:
-                self.population.reset_mating_pool()
                 self.set_all_fitness()
                 self.population.sort_by_best_fitness(self)
                 self.parent_selection_impl(self)
-                next_population = self.crossover_population_impl(self)
-                self.survivor_selection_impl(self, next_population)
+                self.crossover_population_impl(self)
+                self.survivor_selection_impl(self)
                 self.mutation_population_impl(self)
+                self.population.update()
 
             number_of_generations -= 1
             self.current_generation += 1
@@ -134,4 +133,6 @@ class GA:
         etc.
         """
 
-        return sorted(chromosome_set, key = lambda chromosome: chromosome.get_fitness(), reverse = True)
+        return sorted(chromosome_set,                                    # list to be sorted
+                     key = lambda chromosome: chromosome.get_fitness(),  # by fitness
+                     reverse = True)                                     # from highest to lowest fitness
