@@ -12,16 +12,15 @@ class Initialization_Methods:
         if ga.chromosome_impl != None:
             return ga.make_population([
                        ga.make_chromosome([
-                           ga.make_gene(ga.chromosome_impl(j))
-                       for j in range(ga.chromosome_length)])
+                           ga.make_gene(value)
+                       for value in ga.chromosome_impl()])
                    for i in range(ga.population_size)])
 
         # Using the gene_impl to set every gene to be the same
         elif ga.gene_impl != None:
-            function = ga.gene_impl[0]
             return ga.make_population([
                        ga.make_chromosome([
-                           ga.make_gene(function(*ga.gene_impl[1:]))
+                           ga.make_gene(ga.gene_impl())
                        for j in range(ga.chromosome_length)])
                    for i in range(ga.population_size)])
 
