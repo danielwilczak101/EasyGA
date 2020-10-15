@@ -63,6 +63,7 @@ class attributes:
         # The type of termination to impliment
         self.termination_impl = Termination_Methods.generation_based
 
+
     # Example of how the setter error checking will look like
     @property
     def chromosome_length(self):

@@ -4,8 +4,11 @@ from attributes import attributes
 
 
 class GA(attributes):
-    def __init__(self):             # Inhert all the ga attributes 
-       super(GA, self).__init__()   # from the attributes class
+
+    # Inhert all the ga attributes from the attributes class.
+    def __init__(self):             
+       super(GA, self).__init__()
+
 
     def evolve_generation(self, number_of_generations = 1, consider_termination = True):
         """Evolves the ga the specified number of generations."""
