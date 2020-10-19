@@ -6,8 +6,9 @@ class Parent_Selection:
 
         def tournament(ga):
             """
-            Will make tournaments of size tournament_size and choose the winner (best fitness) from the tournament and use it as a parent for the next generation
-            The total number of parents selected is determined by parent_ratio, an attribute to the GA object.
+            Will make tournaments of size tournament_size and choose the winner (best fitness) 
+            from the tournament and use it as a parent for the next generation. The total number 
+            of parents selected is determined by parent_ratio, an attribute to the GA object.
             """
 
             # Error if can't select parents
