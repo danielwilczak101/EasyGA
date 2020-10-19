@@ -53,7 +53,7 @@ class attributes:
         self.make_gene             = create_gene
 
         # Methods for accomplishing Parent-Selection -> Crossover -> Survivor_Selection -> Mutation
-        self.parent_selection_impl     = Parent_Selection.Tournament.with_replacement
+        self.parent_selection_impl     = Parent_Selection.Rank.tournament
         self.crossover_individual_impl = Crossover_Methods.Individual.single_point
         self.crossover_population_impl = Crossover_Methods.Population.random_selection
         self.survivor_selection_impl   = Survivor_Selection.fill_in_best

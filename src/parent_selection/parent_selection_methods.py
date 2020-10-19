@@ -2,9 +2,9 @@ import random
 
 class Parent_Selection:
 
-    class Tournament:
+    class Rank:
 
-        def with_replacement(ga):
+        def tournament(ga):
             """
             Will make tournaments of size tournament_size and choose the winner (best fitness) from the tournament and use it as a parent for the next generation
             The total number of parents selected is determined by parent_ratio, an attribute to the GA object.
@@ -46,9 +46,9 @@ class Parent_Selection:
                             break
 
 
-    class Roulette:
+    class Fitness:
 
-        def roulette_selection(ga):
+        def roulette(ga):
             """Roulette selection works based off of how strong the fitness is of the
             chromosomes in the population. The stronger the fitness the higher the probability
             that it will be selected. Using the example of a casino roulette wheel.
@@ -95,7 +95,7 @@ class Parent_Selection:
                         break
 
 
-        def stochastic_selection(ga):
+        def stochastic(ga):
             """Stochastic roulette selection works based off of how strong the fitness is of the
             chromosomes in the population. The stronger the fitness the higher the probability
             that it will be selected. Instead of dividing the fitness by the sum of all fitnesses
