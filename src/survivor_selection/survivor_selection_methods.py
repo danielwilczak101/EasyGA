@@ -27,16 +27,10 @@ class Survivor_Selection:
     def fill_in_parents_then_random(ga):
         """Fills in the next population with all parents followed by random chromosomes from the last population"""
 
-        ga.population.append_children([              # add in chromosomes
-            random.choice(                           #     randomly
-                ga.population.get_chromosome_list()  #         from the population
-            )                                        # until the next population is full
-        for n in range(ga.population.size()-ga.population.total_children())])
-
-
         ga.population.append_children(               # add in chromosomes
             ga.population.get_mating_pool()          #     from the mating pool
-        )                                            # 
+        )                                            #
+
         ga.population.append_children([              # add in chromosomes
             random.choice(                           #     randomly
                 ga.population.get_chromosome_list()  #         from the population

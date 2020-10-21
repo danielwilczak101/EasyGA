@@ -28,7 +28,7 @@ class attributes:
         self.chromosome_impl     = None
         self.gene_impl           = lambda: random.randint(1, 10)
         self.population          = None
-        self.target_fitness_type = 'maximum'
+        self.target_fitness_type = 'max'
         self.update_fitness      = True
 
         # Selection variables

@@ -80,4 +80,26 @@ class GA(attributes):
 
         return sorted(chromosome_set,                                    # list to be sorted
                      key = lambda chromosome: chromosome.get_fitness(),  # by fitness
-                     reverse = True)                                     # from highest to lowest fitness
+                     reverse = (self.target_fitness_type == 'max'))      # from highest to lowest fitness
+
+
+    def get_chromosome_fitness(self, index):
+        """Returns the fitness value of the chromosome
+        at the specified index after conversion based
+        on the target fitness type.
+        """
+        return self.convert_fitness(
+                   self.population.get_chromosome(index).get_fitness()
+               )
+
+
+    def convert_fitness(self, fitness_value):
+        """Returns the fitness value if the type of problem
+        is a maximization problem. Otherwise the fitness is
+        inverted using max - value + min.
+        """
+
+        if self.target_fitness_type == 'max': return fitness_value
+        max_fitness = self.population.get_chromosome(-1).get_fitness()
+        min_fitness = self.population.get_chromosome(0).get_fitness()
+        return max_fitness - fitness_value + min_fitness

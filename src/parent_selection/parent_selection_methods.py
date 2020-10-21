@@ -66,20 +66,20 @@ class Parent_Selection:
                 return
 
             # Error if not all chromosomes has positive fitness
-            if (ga.population.get_chromosome(0).get_fitness() == 0 or ga.population.get_chromosome(-1).get_fitness() < 0):
+            if (ga.get_chromosome_fitness(0) == 0 or ga.get_chromosome_fitness(-1) < 0):
                 print("Error using roulette selection, all fitnesses must be positive.")
                 print("Consider using stockastic roulette selection or tournament selection.")
                 return
 
             # The sum of all the fitnessess in a population
-            fitness_sum = sum(chromosome.get_fitness() for chromosome in ga.population.get_all_chromosomes())
+            fitness_sum = sum(ga.get_chromosome_fitness(index) for index in range(ga.population.size()))
 
             # A list of ranges that represent the probability of a chromosome getting chosen
             probability = [ga.selection_probability]
 
             # The chance of being selected increases incrementally
-            for chromosome in ga.population.chromosome_list:
-                probability.append(probability[-1]+chromosome.fitness/fitness_sum)
+            for index in range(ga.population.size()):
+                probability.append(probability[-1]+ga.get_chromosome_fitness(index)/fitness_sum)
 
             probability = probability[1:]
 
@@ -111,7 +111,7 @@ class Parent_Selection:
                 print("Selection probability must be between 0 and 1 to select parents.")
                 return
 
-            max_fitness = ga.population.get_chromosome(0).get_fitness()
+            max_fitness = ga.get_chromosome_fitness(0)
 
             # Error if the highest fitness is not positive
             if max_fitness <= 0:
@@ -126,5 +126,5 @@ class Parent_Selection:
                 index = random.randint(0, ga.population.size()-1)
 
                 # Probability of becoming a parent is fitness/max_fitness
-                if random.uniform(ga.selection_probability, 1) < ga.population.get_chromosome(index).get_fitness()/max_fitness:
+                if random.uniform(ga.selection_probability, 1) < ga.get_chromosome_fitness(index)/max_fitness:
                     ga.population.set_parent(index)
