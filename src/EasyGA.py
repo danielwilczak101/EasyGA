@@ -1,4 +1,20 @@
-import random
+# Import all the data structure prebuilt modules
+from structure import Population as create_population
+from structure import Chromosome as create_chromosome
+from structure import Gene as create_gene
+
+# Structure Methods
+from fitness_function  import Fitness_Examples
+from initialization    import Initialization_Methods
+from termination_point import Termination_Methods
+
+# Parent/Survivor Selection Methods
+from parent_selection   import Parent_Selection
+from survivor_selection import Survivor_Selection
+
+# Genetic Operator Methods
+from mutation  import Mutation_Methods
+from crossover import Crossover_Methods
 
 from attributes import attributes
 
@@ -13,9 +29,9 @@ class GA(attributes):
     def evolve_generation(self, number_of_generations = 1, consider_termination = True):
         """Evolves the ga the specified number of generations."""
 
-        while(number_of_generations > 0               # Evolve the specified number of generations
-              and (not consider_termination           #     and if consider_termination flag is set
-                   or self.termination_impl(self))):  #         then also check if termination conditions reached
+        while(number_of_generations > 0      # Evolve the specified number of generations
+              and (not consider_termination  #     and if consider_termination flag is set
+                   or self.active())):       #         then also check if termination conditions reached
 
             # If its the first generation then initialize the population
             if self.current_generation == 0:
@@ -25,13 +41,13 @@ class GA(attributes):
 
             # Otherwise evolve the population
             else:
-                self.set_all_fitness()
-                self.population.sort_by_best_fitness(self)
                 self.parent_selection_impl(self)
                 self.crossover_population_impl(self)
                 self.survivor_selection_impl(self)
                 self.mutation_population_impl(self)
                 self.population.update()
+                self.set_all_fitness()
+                self.population.sort_by_best_fitness(self)
 
             number_of_generations -= 1
             self.current_generation += 1

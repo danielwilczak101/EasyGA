@@ -4,22 +4,23 @@ class Termination_Methods:
     def fitness_based(ga):
         """Fitness based approach to terminate when the goal fitness has been reached"""
 
-        # Need to start the algorithm if the population is None
+        # Need to start the algorithm if the population is None.
         if ga.population == None:
             return True
 
-        # Check all chromosomes
-        for chromosome in ga.population.get_all_chromosomes():
+        # If minimum fitness goal reached, stop ga.
+        if ga.target_fitness_type == 'min' and ga.get_chromosome_fitness(0) >= ga.convert_fitness(ga.fitness_goal):
+            return False
 
-            # Stop if a chromosome has reached the fitness_goal
-            if(chromosome.fitness >= ga.fitness_goal):
-                return False
-
-        # Continue if no chromosomes have reached the fitness goal
+        # If maximum fitness goal reached, stop ga.
+        if ga.target_fitness_type == 'max' and ga.get_chromosome_fitness(0) >= ga.convert_fitness(ga.fitness_goal):
+            return False
+        
+        # Otherwise continue ga.
         return True
 
 
     def generation_based(ga):
-        """Generation based approach to terminate when the goal generation has been reached"""
+        """Generation based approach to terminate when the goal generation has been reached."""
 
         return ga.current_generation < ga.generation_goal
