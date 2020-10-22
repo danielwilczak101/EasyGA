@@ -17,7 +17,7 @@ ga.target_fitness_type = 'min'
 
 # Terminate when a chromosome has all 0's
 ga.fitness_goal = 0
-ga.termination_impl = EasyGA.Termination_Methods.fitness_based
+ga.generation_goal = None
 
 ga.evolve()
 
