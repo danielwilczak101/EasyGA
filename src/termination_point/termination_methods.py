@@ -20,4 +20,4 @@ class Termination_Methods:
                 return False
 
         # If generation goal is set, check it.
-        return ga.generation_goal is not None and ga.current_generation < ga.generation_goal
+        return ga.generation_goal is None or ga.current_generation < ga.generation_goal
