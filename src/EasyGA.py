@@ -119,3 +119,19 @@ class GA(attributes):
         max_fitness = self.population.get_chromosome(-1).get_fitness()
         min_fitness = self.population.get_chromosome(0).get_fitness()
         return max_fitness - fitness_value + min_fitness
+
+
+    def print_generation(self):
+        """Prints the current generation"""
+        print(f"Current Generation: {self.current_generation}")
+
+
+    def print_population(self):
+        """Prints the entire population"""
+        self.population.print_all()
+
+
+    def print_best(self):
+        """Prints the best chromosome and its fitness"""
+        print(f"Best Chromosome \t: {self.population.get_chromosome(0)}")
+        print(f"Best Fitness    \t: {self.population.get_chromosome(0).get_fitness()}")

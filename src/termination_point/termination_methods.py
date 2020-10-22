@@ -16,7 +16,7 @@ class Termination_Methods:
                 return False
 
             # If maximum fitness goal reached, stop ga.
-            if ga.target_fitness_type == 'max' and ga.get_chromosome_fitness(0) >= ga.convert_fitness(ga.fitness_goal):
+            elif ga.target_fitness_type == 'max' and ga.get_chromosome_fitness(0) >= ga.convert_fitness(ga.fitness_goal):
                 return False
 
         # If generation goal is set, check it.

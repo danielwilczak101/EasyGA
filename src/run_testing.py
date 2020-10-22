@@ -4,8 +4,12 @@ import EasyGA
 # Create the Genetic algorithm
 ga = EasyGA.GA()
 
+# Mutate and reproduce frequently
+ga.parent_ratio  = 0.25
+ga.mutation_rate = 0.25
+
 # Create 25 chromosomes each with 10 genes
-ga.population_size = 25
+ga.population_size = 50
 ga.chromosome_length = 10
 
 # Create random genes from 0 to 10
@@ -19,7 +23,9 @@ ga.target_fitness_type = 'min'
 ga.fitness_goal = 0
 ga.generation_goal = None
 
-ga.evolve()
-
-print(f"Current Generation: {ga.current_generation}")
-ga.population.print_all()
+while ga.active():
+    ga.evolve_generation(10)
+    ga.print_generation()
+    ga.print_best()
+    #ga.print_population()
+    print('-'*75)
