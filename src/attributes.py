@@ -40,7 +40,7 @@ class attributes:
         self.current_generation = 0
         self.current_fitness    = 0
         self.generation_goal    = 15
-        self.fitness_goal       = 9
+        self.fitness_goal       = None
 
         # Mutation variables
         self.mutation_rate = 0.10
@@ -61,7 +61,7 @@ class attributes:
         self.mutation_population_impl  = Mutation_Methods.Population.random_selection
 
         # The type of termination to impliment
-        self.termination_impl = Termination_Methods.generation_based
+        self.termination_impl = Termination_Methods.fitness_and_generation_based
 
 
     # Getter and setters for all varibles
