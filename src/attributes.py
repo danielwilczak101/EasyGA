@@ -85,7 +85,3 @@ class attributes:
         if(value_input == 0):
             raise ValueError("Population length must be greater then 0")
         self._population_size = value_input
-
-    @property
-    def chromosome_impl(self):
-        return self._chromosome_impl
