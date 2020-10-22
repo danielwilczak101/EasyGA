@@ -64,7 +64,7 @@ class attributes:
         self.termination_impl = Termination_Methods.generation_based
 
 
-    # Example of how the setter error checking will look like
+    # Getter and setters for all varibles
     @property
     def chromosome_length(self):
         return self._chromosome_length
@@ -72,5 +72,20 @@ class attributes:
     @chromosome_length.setter
     def chromosome_length(self, value_input):
         if(value_input == 0):
-            raise ValueError("Sorry your chromosome length must be greater then 0")
+            raise ValueError("Chromosome length must be greater then 0")
         self._chromosome_length = value_input
+
+
+    @property
+    def population_size(self):
+        return self._population_size
+
+    @population_size.setter
+    def population_size(self, value_input):
+        if(value_input == 0):
+            raise ValueError("Population length must be greater then 0")
+        self._population_size = value_input
+
+    @property
+    def chromosome_impl(self):
+        return self._chromosome_impl

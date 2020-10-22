@@ -3,10 +3,10 @@ import EasyGA
 
 # Create the Genetic algorithm
 ga = EasyGA.GA()
-ga.target_fitness_type = 'min'
+ga.target_fitness_type = 'max'
 ga.chromosome_length = 10
-ga.population_size = 25
-ga.generation_goal = 50
+ga.population_size = 10
+ga.generation_goal = 200
 ga.gene_impl = lambda: random.randint(0, 10)
 
 def fitness_function(chromosome):
