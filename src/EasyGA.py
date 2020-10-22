@@ -123,7 +123,7 @@ class GA(attributes):
 
     def print_generation(self):
         """Prints the current generation"""
-        print(f"Current Generation: {self.current_generation}")
+        print(f"Current Generation \t: {self.current_generation}")
 
 
     def print_population(self):
