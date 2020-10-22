@@ -1,4 +1,4 @@
-<img src="https://github.com/danielwilczak101/EasyGA/blob/master/github_logo.png">
+<img src="https://github.com/danielwilczak101/EasyGA/blob/master/images/github_logo.png">
 
 # EasyGA - A general solution to Genetic Algorithms
 
