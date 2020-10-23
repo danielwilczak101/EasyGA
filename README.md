@@ -29,17 +29,18 @@ ga.print_population()
 
 ### Output:
 ```bash
+Current Generation      : 15
 Current population:
-Chromosome - 0 [8][9][5][5][1][5][7][3][10][8] / Fitness = 3
-Chromosome - 1 [5][9][8][5][1][5][7][3][10][10] / Fitness = 3
-Chromosome - 2 [5][9][5][5][1][6][7][3][10][8] / Fitness = 3
-Chromosome - 3 [5][9][5][5][1][6][7][3][10][8] / Fitness = 3
-Chromosome - 4 [5][9][5][5][1][4][7][3][10][10] / Fitness = 3
-Chromosome - 5 [5][9][6][5][1][5][7][3][10][10] / Fitness = 3
-Chromosome - 6 [5][9][5][5][1][6][7][3][10][8] / Fitness = 3
-Chromosome - 7 [5][9][8][5][1][5][7][3][10][10] / Fitness = 3
-Chromosome - 8 [4][9][5][5][1][6][7][3][10][10] / Fitness = 2
-Chromosome - 9 [5][10][5][7][7][2][2][6][2][9] / Fitness = 2
+Chromosome - 0 [7][4][4][5][3][5][5][8][3][7] / Fitness = 3
+Chromosome - 1 [7][4][4][5][3][5][5][8][3][7] / Fitness = 3
+Chromosome - 2 [7][4][4][5][3][5][5][8][3][7] / Fitness = 3
+Chromosome - 3 [7][4][4][5][3][5][5][8][3][7] / Fitness = 3
+Chromosome - 4 [7][2][4][5][3][5][5][8][3][7] / Fitness = 3
+Chromosome - 5 [7][2][4][5][3][5][5][8][3][7] / Fitness = 3
+Chromosome - 6 [5][8][8][6][10][10][5][7][2][7] / Fitness = 2
+Chromosome - 7 [5][8][8][6][10][10][5][7][2][7] / Fitness = 2
+Chromosome - 8 [5][8][8][6][10][10][5][7][2][7] / Fitness = 2
+Chromosome - 9 [7][2][8][10][3][5][5][8][1][7] / Fitness = 2
 ```
 
 
