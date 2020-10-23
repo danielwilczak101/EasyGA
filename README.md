@@ -65,7 +65,7 @@ platform darwin -- Python 3.8.6rc1, pytest-6.0.2, py-1.9.0, pluggy-0.13.1
 rootdir: /Users/danielwilczak/github/EasyGA
 collected 2 items                                                      
 
-test_EasyGA.py ..                                                        [100%]
+test_EasyGA.py ..                                                                    [100%]
 
 ============================================== 2 passed in 0.04s ==========================
 ```
