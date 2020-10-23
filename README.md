@@ -16,10 +16,15 @@ pip3 install EasyGA
 ```Python
 import EasyGA
 
-# Setup the default genetic algorithm
+# Create the Genetic algorithm
 ga = EasyGA.GA()
-# Run the default genetic algorithm
+
+# Evolve the whole genetic algorithm until termination has been reached
 ga.evolve()
+
+# Print out the current generation and the population
+ga.print_generation()
+ga.print_population()
 ```
 
 ### Output:
