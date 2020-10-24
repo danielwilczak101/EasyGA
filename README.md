@@ -70,6 +70,9 @@ test_EasyGA.py ..                                                               
 ============================================== 2 passed in 0.04s ==========================
 ```
 
+
+
+
 This is only an example and we will create hundreds of tests so this list will become bigger and bigger.
 
 
@@ -86,6 +89,18 @@ Use the github tab to pull the github repository. Its self explanitory.
 
 Use the <b>run_testing.py</b> file inside the src folder to run your code and test while we build the package.
 
+## Upload to PyPi
+
+####Steps:
+1. Change version number to whatever plus 1
+2. Rename "src" folder to "EasyGA"
+3. Run these two commands
+```bash
+python setup.py bdist_wheel sdist // Build the package for publishing
+twine upload dist/* // Upload package to PyPI
+```
+
+The second command requires a username and password.
 
 ## Other options
 
