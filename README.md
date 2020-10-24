@@ -91,7 +91,6 @@ Use the <b>run_testing.py</b> file inside the src folder to run your code and te
 
 ## Upload to PyPi
 
-####Steps:
 1. Change version number to whatever plus 1
 2. Rename "src" folder to "EasyGA"
 3. Run these two commands
