@@ -6,9 +6,9 @@ with open("README.md", "r") as fh:
 
 setup(
     name='EasyGA',
-    version='0.0.26',
+    version='0.0.27',
     description='A ubiquitous or general purpuse GA',
-    py_modules=["EasyGA"],
+    py_modules=["EasyGA","attributes","test_EasyGA"],
     packages=find_packages(where='EasyGA'),
     package_dir={
         '': 'EasyGA',
@@ -26,8 +26,6 @@ setup(
         "License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)",
         "Operating System :: OS Independent",
         ],
-    install_requires = ["blessings ~= 1.7",
-                        ],
     extra_require = {
         "dev": [
             "pytest>=3.7",
