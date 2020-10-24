@@ -94,7 +94,7 @@ Use the <b>run_testing.py</b> file inside the src folder to run your code and te
 1. Change version number to whatever plus 1
 2. Rename "src" folder to "EasyGA"
 3. Run these two commands
-```bash
+```
 python setup.py bdist_wheel sdist // Build the package for publishing
 twine upload dist/* // Upload package to PyPI
 ```
