@@ -3,7 +3,7 @@ import random
 class Crossover_Methods:
 
     class Population:
-        """Methods for selecting chromosomes to crossover"""
+        """Methods for selecting chromosomes to crossover."""
 
         def sequential_selection(ga):
             """Select sequential pairs from the mating pool.
@@ -41,22 +41,22 @@ class Crossover_Methods:
 
 
     class Individual:
-        """Methods for crossing parents"""
+        """Methods for crossing parents."""
 
         def single_point(ga, parent_one, parent_two):
-            """Cross two parents by swapping genes at one random point"""
+            """Cross two parents by swapping genes at one random point."""
 
             index = random.randint(0, parent_one.size()-1)
             return ga.make_chromosome(parent_one.get_gene_list()[:index] + parent_two.get_gene_list()[index:])
 
 
         def multi_point(ga, parent_one, parent_two):
-            """Cross two parents by swapping genes at multiple points"""
+            """Cross two parents by swapping genes at multiple points."""
             pass
 
 
         def uniform(ga, parent_one, parent_two):
-            """Cross two parents by swapping all genes randomly"""
+            """Cross two parents by swapping all genes randomly."""
 
             return ga.make_chromosome([                 # Make a new chromosome
                        random.choice([                  #     by selecting random genes from
@@ -66,10 +66,10 @@ class Crossover_Methods:
                    for i in range(parent_one.size())])  #     for each gene
 
         class Arithmetic:
-            """Crossover methods for numerical genes"""
+            """Crossover methods for numerical genes."""
 
             def int_random(ga, parent_one, parent_two):
-                """Cross two parents by taking a random integer value between each of the genes"""
+                """Cross two parents by taking a random integer value between each of the genes."""
 
                 return ga.make_chromosome([                             # Make a new chromosome
                            ga.make_gene(                                #     filled with new genes
@@ -81,7 +81,7 @@ class Crossover_Methods:
 
 
             def int_weighted(ga, parent_one, parent_two):
-                """Cross two parents by taking a a weighted average of the genes"""
+                """Cross two parents by taking a a weighted average of the genes."""
 
                 # the percentage of genes taken from the first gene
                 weight = 0.25
@@ -95,7 +95,7 @@ class Crossover_Methods:
 
 
             def float_random(ga, parent_one, parent_two):
-                """Cross two parents by taking a random numeric value between each of the genes"""
+                """Cross two parents by taking a random numeric value between each of the genes."""
 
                 return ga.make_chromosome([                             # Make a new chromosome
                            ga.make_gene(                                #     filled with new genes
@@ -108,7 +108,7 @@ class Crossover_Methods:
 
 
             def float_weighted(ga, parent_one, parent_two):
-                """Cross two parents by taking a a weighted average of the genes"""
+                """Cross two parents by taking a a weighted average of the genes."""
 
                 # the percentage of genes taken from the first gene
                 weight = 0.25

@@ -19,6 +19,8 @@ from mutation  import Mutation_Methods
 from crossover import Crossover_Methods
 
 class attributes:
+    """SAMPLE TEXT"""
+
     def __init__(self):
         """Initialize the GA."""
 
@@ -55,7 +57,7 @@ class attributes:
         # Methods for accomplishing Parent-Selection -> Crossover -> Survivor_Selection -> Mutation
         self.parent_selection_impl     = Parent_Selection.Rank.tournament
         self.crossover_individual_impl = Crossover_Methods.Individual.single_point
-        self.crossover_population_impl = Crossover_Methods.Population.random_selection
+        self.crossover_population_impl = Crossover_Methods.Population.sequential_selection
         self.survivor_selection_impl   = Survivor_Selection.fill_in_best
         self.mutation_individual_impl  = Mutation_Methods.Individual.single_gene
         self.mutation_population_impl  = Mutation_Methods.Population.random_selection
@@ -67,6 +69,7 @@ class attributes:
     # Getter and setters for all varibles
     @property
     def chromosome_length(self):
+        """SAMPLE TEXT"""
         return self._chromosome_length
 
     @chromosome_length.setter

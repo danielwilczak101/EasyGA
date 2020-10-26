@@ -55,7 +55,8 @@ class Parent_Selection:
             that it will be selected. Using the example of a casino roulette wheel.
             Where the chromosomes are the numbers to be selected and the board size for
             those numbers are directly proportional to the chromosome's current fitness. Where
-            the ball falls is a randomly generated number between 0 and 1."""
+            the ball falls is a randomly generated number between 0 and 1.
+            """
 
             # Make sure the population is sorted by fitness
             ga.population.sort_by_best_fitness(ga)
