@@ -75,8 +75,8 @@ class attributes:
 
     @chromosome_length.setter
     def chromosome_length(self, value_input):
-        if(value_input == 0):
-            raise ValueError("Chromosome length must be greater then 0")
+        if(not isinstance(value_input, int) or value_input <= 0):
+            raise ValueError("Chromosome length must be integer greater then 0")
         self._chromosome_length = value_input
 
 
@@ -86,6 +86,6 @@ class attributes:
 
     @population_size.setter
     def population_size(self, value_input):
-        if(value_input == 0):
-            raise ValueError("Population length must be greater then 0")
+        if(not isinstance(value_input, int) or value_input <= 0):
+            raise ValueError("Population length must be integer greater then 0")
         self._population_size = value_input
