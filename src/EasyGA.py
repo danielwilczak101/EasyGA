@@ -44,8 +44,8 @@ class GA(attributes):
                 self.parent_selection_impl(self)
                 self.crossover_population_impl(self)
                 self.survivor_selection_impl(self)
-                self.mutation_population_impl(self)
                 self.population.update()
+                self.mutation_population_impl(self)
                 self.set_all_fitness()
                 self.population.sort_by_best_fitness(self)
 
