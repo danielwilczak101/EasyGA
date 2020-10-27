@@ -86,5 +86,5 @@ class attributes:
     @population_size.setter
     def population_size(self, value_input):
         if(value_input == 0):
-            raise ValueError("Population length must be greater then 0")
+            raise ValueError("Population size must be greater then 0")
         self._population_size = value_input

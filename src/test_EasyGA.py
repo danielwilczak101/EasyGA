@@ -12,13 +12,23 @@ import EasyGA
 
 def test_population_size():
     """Test the population size is create correctly"""
-    pass
+
+    for i in range(1,100):
+        # Create the ga to test
+        ga = EasyGA.GA()
+        # Set the upper limit of testing
+        ga.population_size = i
+        # Evolve the ga
+        ga.evolve()
+
+        # If they are not equal throw an error
+        assert ga.population.size() == ga.population_size
 
 def test_chromosome_length():
     """ Test to see if the actual chromosome length is the same as defined."""
 
     # Test from 0 to 100 chromosome length
-    for i in range(0,100):
+    for i in range(1,100):
         # Create the ga to test
         ga = EasyGA.GA()
         # Set the upper limit of testing
