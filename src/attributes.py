@@ -45,7 +45,8 @@ class attributes:
         self.fitness_goal       = None
 
         # Mutation variables
-        self.mutation_rate = 0.10
+        self.chromosome_mutation_rate = 0.10
+        self.gene_mutation_rate       = 0.01
 
         # Default EasyGA implimentation structure
         self.initialization_impl   = Initialization_Methods.random_initialization
@@ -86,5 +87,5 @@ class attributes:
     @population_size.setter
     def population_size(self, value_input):
         if(value_input == 0):
-            raise ValueError("Population size must be greater then 0")
+            raise ValueError("Population length must be greater then 0")
         self._population_size = value_input

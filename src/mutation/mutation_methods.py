@@ -7,13 +7,18 @@ class Mutation_Methods:
 
         def random_selection(ga):
             """Selects random chromosomes"""
+            mutation_count = 0
 
-            # Loop through the population
-            for index in range(ga.population.size()):
+            # Loop until enough mutations occur
+            while mutation_count < ga.population.size()*ga.chromosome_mutation_rate:
 
-                # Randomly apply mutations
-                if random.uniform(0, 1) < ga.mutation_rate:
-                    ga.population.set_chromosome(ga.mutation_individual_impl(ga, ga.population.get_chromosome(index)), index)
+                # Loop through the population
+                for index in range(ga.population.size()):
+
+                    # Randomly apply mutations
+                    if random.uniform(0, 1) < ga.chromosome_mutation_rate:
+                        mutation_count += 1
+                        ga.population.set_chromosome(ga.mutation_individual_impl(ga, ga.population.get_chromosome(index)), index)
 
 
     class Individual:
@@ -43,19 +48,25 @@ class Mutation_Methods:
         def single_gene(ga, chromosome):
             """Mutates a random gene in the chromosome and resets the fitness."""
             chromosome.set_fitness(None)
+            mutation_count = 0
 
-            # Using the chromosome_impl
-            if ga.chromosome_impl != None:
-                index = random.randint(0, chromosome.size()-1)
-                chromosome.set_gene(ga.make_gene(ga.chromosome_impl()[index]), index)
+            # Loops until enough mutations occur
+            while mutation_count < chromosome.size()*ga.gene_mutation_rate:
+                mutation_count += 1
 
-            # Using the gene_impl
-            elif ga.gene_impl != None:
-                index = random.randint(0, chromosome.size()-1)
-                chromosome.set_gene(ga.make_gene(ga.gene_impl()), index)
+                # Using the chromosome_impl
+                if ga.chromosome_impl != None:
+                    index = random.randint(0, chromosome.size()-1)
+                    chromosome.set_gene(ga.make_gene(ga.chromosome_impl()[index]), index)
 
-            # Exit because no gene creation method specified
-            else:
-                print("You did not specify any initialization constraints.")
+                # Using the gene_impl
+                elif ga.gene_impl != None:
+                    index = random.randint(0, chromosome.size()-1)
+                    chromosome.set_gene(ga.make_gene(ga.gene_impl()), index)
+
+                # Exit because no gene creation method specified
+                else:
+                    print("You did not specify any initialization constraints.")
+                    break
 
             return chromosome
