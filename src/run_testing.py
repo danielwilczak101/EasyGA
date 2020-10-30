@@ -6,7 +6,7 @@ import EasyGA
 #   Mutate 20% of the population.
 #   Mutate 3% of the genes in each mutated chromosome.
 #   
-#   Create 25 chromosomes each with 10 genes
+#   Create 100 chromosomes each with 25 genes
 #   Create random genes from 0 to 10
 #   
 #   Minimize the sum of the genes
