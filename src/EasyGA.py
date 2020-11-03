@@ -19,6 +19,10 @@ from crossover import Crossover_Methods
 # Default Attributes for the GA
 from attributes import Attributes
 
+# Database class
+from database import database
+from sqlite3 import Error
+
 
 class GA(Attributes):
     """GA is the main class in EasyGA. Everything is run through the ga
@@ -40,8 +44,14 @@ class GA(Attributes):
               and (not consider_termination  #     and if consider_termination flag is set
                    or self.active())):       #         then also check if termination conditions reached
 
-            # If its the first generation then initialize the population
+            # If its the first generation
             if self.current_generation == 0:
+
+                # Create the database and tables
+                # self.database = database.database()
+                # self.database.create_data_table(self)
+
+                # Create the initial population
                 self.initialize_population()
                 self.set_all_fitness()
                 self.population.sort_by_best_fitness(self)

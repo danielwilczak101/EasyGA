@@ -1,4 +1,5 @@
 import random
+import sqlite3
 
 # Import all the data structure prebuilt modules
 from structure import Population as create_population
@@ -17,6 +18,10 @@ from survivor_selection import Survivor_Selection
 # Genetic Operator Methods
 from mutation  import Mutation_Methods
 from crossover import Crossover_Methods
+
+# Database class
+from database import database
+from sqlite3 import Error
 
 class Attributes:
     """Default GA attributes can be found here. If any attributes have not
@@ -55,7 +60,15 @@ class Attributes:
             'mutation_individual_impl'  : Mutation_Methods.Individual.single_gene,
             'mutation_population_impl'  : Mutation_Methods.Population.random_selection,
             'termination_impl'          : Termination_Methods.fitness_and_generation_based,
-            'database_name'             : 'database.db'
+            'database'                  : None,
+            'database_name'             : r"database.db",
+            'sql_create_data_structure' : """ CREATE TABLE IF NOT EXISTS data (
+                                                id integer PRIMARY KEY,
+                                                generation integer NOT NULL,
+                                                fitness DOUBLE,
+                                                chromosome text
+                                            ); """
+
         }
 
         # Filling in the default settings
@@ -107,6 +120,12 @@ class Attributes:
 
         # Database varibles
         self.database_name = attributes['database_name']
+
+        # Database varibles
+        self.database = attributes['database']
+        self.database_name = attributes['database_name']
+        self.sql_create_data_structure = attributes['sql_create_data_structure']
+
 
     # Getter and setters for all required varibles
     @property
