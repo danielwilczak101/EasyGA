@@ -16,6 +16,7 @@ from survivor_selection import Survivor_Selection
 from mutation  import Mutation_Methods
 from crossover import Crossover_Methods
 
+# Default Attributes for the GA
 from attributes import attributes
 
 
