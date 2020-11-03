@@ -47,6 +47,15 @@ def test_initilization():
     """ """
     pass
 
-def test_second():
+def test_default():
+    # Create the Genetic algorithm
+    ga = EasyGA.GA()
 
-    assert 1 + 1 == 2
+    # Evolve the genetic algorithm
+    ga.evolve()
+
+    # Print your default genetic algorithm
+    ga.print_generation()
+    ga.print_population()
+
+    assert ga != None
