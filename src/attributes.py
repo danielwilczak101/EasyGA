@@ -60,7 +60,7 @@ class Attributes:
             termination_impl            = Termination_Methods.fitness_and_generation_based,
             database                    = None,
             database_name               = 'database.db',
-            'sql_create_data_structure' = """ CREATE TABLE IF NOT EXISTS data (
+            sql_create_data_structure = """CREATE TABLE IF NOT EXISTS data (
                                                 id integer PRIMARY KEY,
                                                 generation integer NOT NULL,
                                                 fitness DOUBLE,
