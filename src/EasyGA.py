@@ -17,10 +17,10 @@ from mutation  import Mutation_Methods
 from crossover import Crossover_Methods
 
 # Default Attributes for the GA
-from attributes import attributes
+from attributes import Attributes
 
 
-class GA(attributes):
+class GA(Attributes):
     """GA is the main class in EasyGA. Everything is run through the ga
     class. The GA class inherites all the default ga attributes from the
     attributes class.
@@ -29,9 +29,8 @@ class GA(attributes):
     https://github.com/danielwilczak101/EasyGA/wiki
     """
 
-    # Inhert all the ga attributes from the attributes class.
-    def __init__(self):
-       super(GA, self).__init__()
+    def __init__(self, attributes = None):
+        super(GA, self).__init__({} if attributes is None else attributes)
 
 
     def evolve_generation(self, number_of_generations = 1, consider_termination = True):

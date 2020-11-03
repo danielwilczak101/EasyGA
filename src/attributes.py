@@ -18,57 +18,95 @@ from survivor_selection import Survivor_Selection
 from mutation  import Mutation_Methods
 from crossover import Crossover_Methods
 
-class attributes:
+class Attributes:
     """Default GA attributes can be found here. If any attributes have not
     been set then they will fall back onto the default attribute. All
     attributes have been catigorized to explain sections in the ga process."""
 
-    def __init__(self):
+    def __init__(self, attributes):
+
+        # Default settings for the GA
+        default_attributes = {
+            'chromosome_length'         : 10,
+            'population_size'           : 10,
+            'chromosome_impl'           : None,
+            'gene_impl'                 : lambda: random.randint(1, 10),
+            'population'                : None,
+            'target_fitness_type'       : 'max',
+            'update_fitness'            : True,
+            'parent_ratio'              : 0.10,
+            'selection_probability'     : 0.50,
+            'tournament_size_ratio'     : 0.10,
+            'current_generation'        : 0,
+            'current_fitness'           : 0,
+            'generation_goal'           : 15,
+            'fitness_goal'              : None,
+            'chromosome_mutation_rate'  : 0.15,
+            'gene_mutation_rate'        : 0.03,
+            'initialization_impl'       : Initialization_Methods.random_initialization,
+            'fitness_function_impl'     : Fitness_Examples.is_it_5,
+            'make_population'           : create_population,
+            'make_chromosome'           : create_chromosome,
+            'make_gene'                 : create_gene,
+            'parent_selection_impl'     : Parent_Selection.Rank.tournament,
+            'crossover_individual_impl' : Crossover_Methods.Individual.single_point,
+            'crossover_population_impl' : Crossover_Methods.Population.sequential_selection,
+            'survivor_selection_impl'   : Survivor_Selection.fill_in_best,
+            'mutation_individual_impl'  : Mutation_Methods.Individual.single_gene,
+            'mutation_population_impl'  : Mutation_Methods.Population.random_selection,
+            'termination_impl'          : Termination_Methods.fitness_and_generation_based,
+            'database_name'             : 'database.db'
+        }
+
+        # Filling in the default settings
+        for attribute in default_attributes.keys():
+            if attribute not in attributes.keys():
+                attributes[attribute] = default_attributes[attribute]
 
         # Initilization variables
-        self.chromosome_length   = 10
-        self.population_size     = 10
-        self.chromosome_impl     = None
-        self.gene_impl           = lambda: random.randint(1, 10)
-        self.population          = None
-        self.target_fitness_type = 'max'
-        self.update_fitness      = True
+        self.chromosome_length   = attributes['chromosome_length']
+        self.population_size     = attributes['population_size']
+        self.chromosome_impl     = attributes['chromosome_impl']
+        self.gene_impl           = attributes['gene_impl']
+        self.population          = attributes['population']
+        self.target_fitness_type = attributes['target_fitness_type']
+        self.update_fitness      = attributes['update_fitness']
 
         # Selection variables
-        self.parent_ratio          = 0.1
-        self.selection_probability = 0.75
-        self.tournament_size_ratio = 0.1
+        self.parent_ratio          = attributes['parent_ratio']
+        self.selection_probability = attributes['selection_probability']
+        self.tournament_size_ratio = attributes['tournament_size_ratio']
 
         # Termination variables
-        self.current_generation = 0
-        self.current_fitness    = 0
-        self.generation_goal    = 15
-        self.fitness_goal       = None
+        self.current_generation = attributes['current_generation']
+        self.current_fitness    = attributes['current_fitness']
+        self.generation_goal    = attributes['generation_goal']
+        self.fitness_goal       = attributes['fitness_goal']
 
         # Mutation variables
-        self.gene_mutation_rate       = 0.03
-        self.chromosome_mutation_rate = 0.15
+        self.chromosome_mutation_rate = attributes['chromosome_mutation_rate']
+        self.gene_mutation_rate       = attributes['gene_mutation_rate']
 
         # Default EasyGA implimentation structure
-        self.initialization_impl   = Initialization_Methods.random_initialization
-        self.fitness_function_impl = Fitness_Examples.is_it_5
-        self.make_population       = create_population
-        self.make_chromosome       = create_chromosome
-        self.make_gene             = create_gene
+        self.initialization_impl   = attributes['initialization_impl']
+        self.fitness_function_impl = attributes['fitness_function_impl']
+        self.make_population       = attributes['make_population']
+        self.make_chromosome       = attributes['make_chromosome']
+        self.make_gene             = attributes['make_gene']
 
         # Methods for accomplishing Parent-Selection -> Crossover -> Survivor_Selection -> Mutation
-        self.parent_selection_impl     = Parent_Selection.Rank.tournament
-        self.crossover_individual_impl = Crossover_Methods.Individual.single_point
-        self.crossover_population_impl = Crossover_Methods.Population.sequential_selection
-        self.survivor_selection_impl   = Survivor_Selection.fill_in_best
-        self.mutation_individual_impl  = Mutation_Methods.Individual.single_gene
-        self.mutation_population_impl  = Mutation_Methods.Population.random_selection
+        self.parent_selection_impl     = attributes['parent_selection_impl']
+        self.crossover_individual_impl = attributes['crossover_individual_impl']
+        self.crossover_population_impl = attributes['crossover_population_impl']
+        self.survivor_selection_impl   = attributes['survivor_selection_impl']
+        self.mutation_individual_impl  = attributes['mutation_individual_impl']
+        self.mutation_population_impl  = attributes['mutation_population_impl']
 
         # The type of termination to impliment
-        self.termination_impl = Termination_Methods.fitness_and_generation_based
+        self.termination_impl = attributes['termination_impl']
 
         # Database varibles
-        self.database_name = "database.db"
+        self.database_name = attributes['database_name']
 
     # Getter and setters for all required varibles
     @property
