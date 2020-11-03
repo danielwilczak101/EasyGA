@@ -45,6 +45,7 @@ def create_chromosome(conn, chromosome):
     conn.commit()
     return cur.lastrowid
 
+
 def main():
     database = r"database.db"
 

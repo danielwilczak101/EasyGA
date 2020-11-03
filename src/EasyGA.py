@@ -29,66 +29,9 @@ class GA(attributes):
     https://github.com/danielwilczak101/EasyGA/wiki
     """
 
-    def __init__(self,
-            chromosome_length = None,
-            population_size = None,
-            chromosome_impl = None,
-            gene_impl = None,
-            population = None,
-            target_fitness_type = None,
-            update_fitness = None,
-            parent_ratio = None,
-            selection_probability = None,
-            tournament_size_ratio = None,
-            current_generation = None,
-            current_fitness = None,
-            generation_goal = None,
-            fitness_goal = None,
-            chromosome_mutation_rate = None,
-            gene_mutation_rate = None,
-            initialization_impl = None,
-            fitness_function_impl = None,
-            make_population = None,
-            make_chromosome = None,
-            make_gene = None,
-            parent_selection_impl = None,
-            crossover_individual_impl = None,
-            crossover_population_impl = None,
-            survivor_selection_impl = None,
-            mutation_individual_impl = None,
-            mutation_population_impl = None,
-            termination_impl = None
-            ):
-        super(GA, self).__init__(
-            chromosome_length,
-            population_size,
-            chromosome_impl,
-            gene_impl,
-            population,
-            target_fitness_type,
-            update_fitness,
-            parent_ratio,
-            selection_probability,
-            tournament_size_ratio,
-            current_generation,
-            current_fitness,
-            generation_goal,
-            fitness_goal,
-            chromosome_mutation_rate,
-            gene_mutation_rate,
-            initialization_impl,
-            fitness_function_impl,
-            make_population,
-            make_chromosome,
-            make_gene,
-            parent_selection_impl,
-            crossover_individual_impl,
-            crossover_population_impl,
-            survivor_selection_impl,
-            mutation_individual_impl,
-            mutation_population_impl,
-            termination_impl
-        )
+    # Inhert all the ga attributes from the attributes class.
+    def __init__(self):
+       super(GA, self).__init__()
 
 
     def evolve_generation(self, number_of_generations = 1, consider_termination = True):
