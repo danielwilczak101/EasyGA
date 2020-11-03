@@ -19,7 +19,7 @@ from mutation  import Mutation_Methods
 from crossover import Crossover_Methods
 
 class attributes:
-    """SAMPLE TEXT"""
+    """Default GA attributes can be found here"""
 
     def __init__(self,
             chromosome_length,
@@ -51,7 +51,10 @@ class attributes:
             mutation_population_impl,
             termination_impl
             ):
-        """Initialize the GA."""
+
+        """Default GA attributes can be found here. If any attributes have not
+        been set then they will fall back onto the default attribute. All
+        attributes have been catigorized to explain sections in the ga process."""
 
         # Initilization variables
         self.chromosome_length   = 10    if chromosome_length   is None else chromosome_length
@@ -96,14 +99,18 @@ class attributes:
         self.termination_impl = Termination_Methods.fitness_and_generation_based if termination_impl is None else termination_impl
 
 
-    # Getter and setters for all varibles
+    # Getter and setters for all required varibles
     @property
     def chromosome_length(self):
-        """SAMPLE TEXT"""
+        """Getter function for chromosome length"""
+
         return self._chromosome_length
 
     @chromosome_length.setter
     def chromosome_length(self, value_input):
+        """Setter function with error checking for chromosome length"""
+
+        # If the chromosome length is less then or equal 0 throw error
         if(not isinstance(value_input, int) or value_input <= 0):
             raise ValueError("Chromosome length must be integer greater then 0")
         self._chromosome_length = value_input
@@ -111,10 +118,15 @@ class attributes:
 
     @property
     def population_size(self):
+        """Getter function for population size"""
+
         return self._population_size
 
     @population_size.setter
     def population_size(self, value_input):
+        """Setter function with error checking for population size"""
+
+        # If the population size is less then or equal 0 throw error
         if(not isinstance(value_input, int) or value_input <= 0):
             raise ValueError("Population length must be integer greater then 0")
         self._population_size = value_input

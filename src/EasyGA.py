@@ -20,8 +20,14 @@ from attributes import attributes
 
 
 class GA(attributes):
+    """GA is the main class in EasyGA. Everything is run through the ga
+    class. The GA class inherites all the default ga attributes from the
+    attributes class.
 
-    # Inhert all the ga attributes from the attributes class.
+    An extensive wiki going over all major functions can be found at
+    https://github.com/danielwilczak101/EasyGA/wiki
+    """
+
     def __init__(self,
             chromosome_length = None,
             population_size = None,
@@ -51,7 +57,7 @@ class GA(attributes):
             mutation_individual_impl = None,
             mutation_population_impl = None,
             termination_impl = None
-            ):             
+            ):
         super(GA, self).__init__(
             chromosome_length,
             population_size,
