@@ -33,9 +33,6 @@ class GA(Attributes):
     https://github.com/danielwilczak101/EasyGA/wiki
     """
 
-    def __init__(self, attributes = None):
-        super(GA, self).__init__({} if attributes is None else attributes)
-
 
     def evolve_generation(self, number_of_generations = 1, consider_termination = True):
         """Evolves the ga the specified number of generations."""
