@@ -58,7 +58,6 @@ def test_default():
     ga.print_generation()
     ga.print_population()
 
-    assert ga != None
 
 def test_attributes_gene_impl():
     # Create the Genetic algorithm
@@ -74,7 +73,6 @@ def test_attributes_gene_impl():
     # Evolve the genetic algorithm
     ga.evolve()
 
-    assert ga != None
 
 def test_attributes_chromosome_impl_lambdas():
     # Create the Genetic algorithm
@@ -94,8 +92,6 @@ def test_attributes_chromosome_impl_lambdas():
 
     # Evolve the genetic algorithm
     ga.evolve()
-
-    assert ga != None
 
 def test_attributes_chromosome_impl_functions():
     # Create the Genetic algorithm
@@ -120,8 +116,6 @@ def test_attributes_chromosome_impl_functions():
     # Evolve the genetic algorithm
     ga.evolve()
 
-    assert ga != None
-
 def test_while_ga_active():
     # Create the Genetic algorithm
     ga = EasyGA.GA()
@@ -133,7 +127,6 @@ def test_while_ga_active():
     while ga.active():
         ga.evolve_generation(5)
 
-    assert ga != None
 
 def test_initilization_impl():
     # Create the Genetic algorithm
