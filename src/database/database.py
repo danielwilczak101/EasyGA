@@ -1,5 +1,7 @@
 import sqlite3
 from sqlite3 import Error
+import os
+
 
 class database:
     """Main database class that controls all the functionality for input /
@@ -12,10 +14,8 @@ class database:
 
     def create_connection(self, db_file):
         """ create a database connection to the SQLite database
-            specified by db_file
-        :param db_file: database file
-        :return: Connection object or None
-        """
+         specified by db_file."""
+
         conn = None
         try:
             conn = sqlite3.connect(db_file)
@@ -38,22 +38,40 @@ class database:
         except Error as e:
             print(e)
 
-    def insert_chromosome(self, chromosome):
+    def insert_chromosome(self, generation, chromosome):
         """
-        Create a new task
+        Insert a new chromosome
         :param conn:
+        :param generation:
         :param chromosome:
         :return:
         """
 
+        # Structure the insert data
+        db_chromosome = (generation, chromosome.fitness, '[chromosome]')
+
+
         sql = ''' INSERT INTO data(generation,fitness,chromosome)
                   VALUES(?,?,?) '''
         cur = self.conn.cursor()
-        cur.execute(sql, chromosome)
+        cur.execute(sql, db_chromosome)
         self.conn.commit()
         return cur.lastrowid
 
+    def insert_current_population(self, ga):
+        """ Insert current generations population """
+
+        for chromosome in ga.population.chromosome_list:
+            self.insert_chromosome(ga.current_generation, chromosome)
+
+
     def create_data_table(self, ga):
+
+        try:
+            # Remove old database if there
+            os.remove(ga.database_name)
+        except:
+            pass
 
         # create a database connection
         self.conn = self.create_connection(ga.database_name)
@@ -67,13 +85,3 @@ class database:
             # create_table(conn, sql_create_tasks_table)
         else:
             print("Error! cannot create the database connection.")
-
-        with self.conn:
-
-            # Create a fake chromosome
-            # Generation / Fitness / chromosome
-            data1 = (0, 99, '[gene,gene,gene,gene]')
-            data2 = (1, 200, '[gene,gene,gene,gene]')
-            # Add chromosome to the data table inside the database
-            self.insert_chromosome(data1)
-            self.insert_chromosome(data2)

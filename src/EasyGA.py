@@ -44,14 +44,17 @@ class GA(Attributes):
             # If its the first generation
             if self.current_generation == 0:
 
-                # Create the database and tables
-                # self.database = database.database()
-                # self.database.create_data_table(self)
+                # Create the database here to allow the user to change
+                # the database name and structure in the running function.
+                self.database = database.database()
+                self.database.create_data_table(self)
 
                 # Create the initial population
                 self.initialize_population()
                 self.set_all_fitness()
                 self.population.sort_by_best_fitness(self)
+                # Save the population to the database
+                self.database.insert_current_population(self)
 
             # Otherwise evolve the population
             else:
@@ -62,6 +65,8 @@ class GA(Attributes):
                 self.mutation_population_impl(self)
                 self.set_all_fitness()
                 self.population.sort_by_best_fitness(self)
+                # Save the population to the database
+                self.database.insert_current_population(self)
 
             number_of_generations -= 1
             self.current_generation += 1
