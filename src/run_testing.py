@@ -1,14 +1,14 @@
-import random
 import EasyGA
+import random
 
 # Create the Genetic algorithm
 ga = EasyGA.GA()
 
-ga.population_size = 3
-ga.generation_goal = 10
-# Evolve the genetic algorithm
+ga.generation_goal = 200
+ga.population_size = 50
+
 ga.evolve()
 
-# Print your default genetic algorithm
-ga.print_generation()
 ga.print_population()
+
+ga.graph_scatter()

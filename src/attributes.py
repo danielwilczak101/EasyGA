@@ -24,6 +24,7 @@ from crossover import Crossover_Methods
 from database import database
 from sqlite3 import Error
 
+
 class Attributes:
     """Default GA attributes can be found here. If any attributes have not
     been set then they will fall back onto the default attribute. All
@@ -60,7 +61,7 @@ class Attributes:
             termination_impl            = Termination_Methods.fitness_and_generation_based,
             database                    = None,
             database_name               = 'database.db',
-            sql_create_data_structure = """CREATE TABLE IF NOT EXISTS data (
+            sql_create_data_structure   = """CREATE TABLE IF NOT EXISTS data (
                                                 id integer PRIMARY KEY,
                                                 generation integer NOT NULL,
                                                 fitness DOUBLE,
