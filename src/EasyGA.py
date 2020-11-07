@@ -104,20 +104,22 @@ class GA(Attributes):
         for chromosome in self.population.get_chromosome_list():
 
             # Update fitness if needed or asked by the user
-            if(chromosome.get_fitness() is None or self.update_fitness):
+            if chromosome.get_fitness() is None or self.update_fitness:
                 chromosome.set_fitness(self.fitness_function_impl(chromosome))
 
 
     def sort_by_best_fitness(self, chromosome_set):
-        """Sorts the array by fitness.
-        1st element has highest fitness.
-        2nd element has second highest fitness.
+        """Sorts the array by fitness based on fitness type.
+        1st element has best fitness.
+        2nd element has second best fitness.
         etc.
         """
 
-        return sorted(chromosome_set,                                    # list to be sorted
-                     key = lambda chromosome: chromosome.get_fitness(),  # by fitness
-                     reverse = (self.target_fitness_type == 'max'))      # from highest to lowest fitness
+        return sorted(
+                chromosome_set,                                     # list to be sorted
+                key = lambda chromosome: chromosome.get_fitness(),  # by fitness
+                reverse = (self.target_fitness_type == 'max')       # ordered by fitness type
+            )
 
 
     def get_chromosome_fitness(self, index):
