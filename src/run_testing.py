@@ -5,7 +5,7 @@ import random
 ga = EasyGA.GA()
 
 # Create 25 chromosomes each with 10 genes and 200 generations
-ga.population_size = 25
+ga.population_size = 100
 ga.chromosome_length = 10
 ga.generation_goal = 150
 
@@ -18,4 +18,6 @@ ga.target_fitness_type = 'min'
 
 ga.evolve()
 
-ga.graph.scatter(ga)
+ga.print_population()
+
+ga.graph.lowest_value_chromosome(ga)

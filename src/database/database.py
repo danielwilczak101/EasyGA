@@ -110,3 +110,40 @@ class database:
         query_data = cur.fetchone()
 
         return query_data[0]
+
+    def get_generation_total_fitness(self):
+        """Get each generations total fitness sum from the database """
+
+        query_data = self.query_all("SELECT SUM(fitness) FROM data GROUP BY generation;")
+
+        # Format the fitness data into one list
+        formated_query_data = [i[0] for i in query_data]
+
+        return formated_query_data
+
+    def get_total_generations(self):
+        """Get the total generations from the database"""
+
+        query_data = self.query_one_item("SELECT COUNT(DISTINCT generation) FROM data;")
+
+        return query_data
+
+    def get_highest_chromosome(self):
+        """Get the highest fitness of each generation"""
+
+        query_data = self.query_all("select fitness, max(fitness) from data group by generation")
+
+        # Format the fitness data into one list
+        formated_query_data = [i[0] for i in query_data]
+
+        return formated_query_data;
+
+    def get_lowest_chromosome(self):
+        """Get the lowest fitness of each generation"""
+
+        query_data = self.query_all("select fitness, min(fitness) from data group by generation")
+
+        # Format the fitness data into one list
+        formated_query_data = [i[0] for i in query_data]
+
+        return formated_query_data;

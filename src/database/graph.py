@@ -5,27 +5,30 @@ from database import database
 from sqlite3 import Error
 
 class graph:
-    """ """
+    """Prebuilt graphing functions to make visual represention of fitness data."""
 
-    def scatter(ga):
-        """Show a scatter plot of the database information."""
+    def generation_total_fitness(ga,type_of_plot = "line",size = [6,6]):
+        """Show a plot of generation by generation total fitness."""
 
         # Query the X data
-        generations = ga.database.query_one_item("SELECT COUNT(DISTINCT generation) FROM data;")
+        generations = ga.database.get_total_generations()
 
-        # Create the generations array
+        # Create the generations list - [0,1,2,etc]
         X = list(range(0, generations))
 
-        #Query the Y data
-        Y_data = ga.database.query_all("SELECT SUM(fitness) FROM data GROUP BY generation;")
-
-        # Format the Y data so we can use it to plot
-        Y = [i[0] for i in Y_data]
+        # Query for Y data
+        Y = ga.database.get_generation_total_fitness()
 
         # Set the plot size
-        plt.figure(figsize=[5, 5])
+        plt.figure(figsize=size)
 
-        plt.scatter(X,Y)
+        if(type_of_plot  == "line"):
+            plt.plot(X,Y)
+        elif(type_of_plot == "scatter"):
+            plt.scatter(X,Y)
+        elif(type_of_plot == "bar"):
+            plt.bar(X,Y)
+
         # x and y labels
         plt.xlabel('Generation')
         plt.ylabel('Generation Total Fitness')
@@ -34,6 +37,63 @@ class graph:
         # Show the plot
         plt.show()
 
+    def highest_value_chromosome(ga,type_of_plot = "line",size = [6,6]):
+        """Generation by Max value chromosome """
 
-    def line(ga):
-        pass
+        # Query the X data
+        generations = ga.database.get_total_generations()
+
+        # Create the generations list - [0,1,2,etc]
+        X = list(range(0, generations))
+
+        # Query for Y data
+        Y = ga.database.get_highest_chromosome()
+
+        # Set the plot size
+        plt.figure(figsize=size)
+
+        if(type_of_plot  == "line"):
+            plt.plot(X,Y)
+        elif(type_of_plot == "scatter"):
+            plt.scatter(X,Y)
+        elif(type_of_plot == "bar"):
+            plt.bar(X,Y)
+
+        # x and y labels
+        plt.xlabel('Generation')
+        plt.ylabel('Generation Highest Fitness Chromosome')
+        plt.title('Relationship Between Generations and Highest Value Chromosome')
+
+        # Show the plot
+        plt.show()
+
+
+    def lowest_value_chromosome(ga,type_of_plot = "line",size = [6,6]):
+        """Generation by Min value Chromosome """
+
+        # Query the X data
+        generations = ga.database.get_total_generations()
+
+        # Create the generations list - [0,1,2,etc]
+        X = list(range(0, generations))
+
+        # Query for Y data
+        Y = ga.database.get_lowest_chromosome()
+
+        # Set the plot size
+        plt.figure(figsize=size)
+
+        if(type_of_plot  == "line"):
+            plt.plot(X,Y)
+        elif(type_of_plot == "scatter"):
+            plt.scatter(X,Y)
+        elif(type_of_plot == "bar"):
+            plt.bar(X,Y)
+
+        # x and y labels
+        plt.xlabel('Generation')
+        plt.ylabel('Generation Highest Fitness Chromosome')
+        plt.title('Relationship Between Generations and Lowest Value Chromosome')
+
+        # Show the plot
+        plt.show()
