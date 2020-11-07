@@ -24,6 +24,10 @@ from crossover import Crossover_Methods
 from database import database
 from sqlite3 import Error
 
+# Graphing package
+from database import graph
+import matplotlib.pyplot as plt
+
 
 class Attributes:
     """Default GA attributes can be found here. If any attributes have not
@@ -66,7 +70,8 @@ class Attributes:
                                                 generation integer NOT NULL,
                                                 fitness DOUBLE,
                                                 chromosome text
-                                            ); """
+                                            ); """,
+            graph                       = graph.graph
         ):
 
         # Initilization variables
@@ -116,6 +121,8 @@ class Attributes:
         self.database_name = deepcopy(database_name)
         self.sql_create_data_structure = deepcopy(sql_create_data_structure)
 
+        # Graphing variables
+        self.graph = deepcopy(graph)
 
     # Getter and setters for all required varibles
     @property

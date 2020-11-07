@@ -24,6 +24,7 @@ from database import database
 from sqlite3 import Error
 
 # Graphing package
+from database import graph
 import matplotlib.pyplot as plt
 
 
@@ -157,34 +158,3 @@ class GA(Attributes):
         """Prints the best chromosome and its fitness"""
         print(f"Best Chromosome \t: {self.population.get_chromosome(0)}")
         print(f"Best Fitness    \t: {self.population.get_chromosome(0).get_fitness()}")
-
-    def graph_scatter(self):
-        """Show a scatter plot of the database information."""
-
-        # Query the X data
-        generations = self.database.query_one_item("SELECT COUNT(DISTINCT generation) FROM data;")
-
-        # Create the generations array
-        X = list(range(0, generations))
-
-        #Query the Y data
-        Y_data = self.database.query_all("SELECT SUM(fitness) FROM data GROUP BY generation;")
-
-        # Format the Y data so we can use it to plot
-        Y = [i[0] for i in Y_data]
-
-        # Set the plot size
-        plt.figure(figsize=[5, 5])
-
-        plt.scatter(X,Y)
-        # x and y labels
-        plt.xlabel('Generation')
-        plt.ylabel('Generation Total Fitness')
-        plt.title('Relationship Between Generations and Generation Total Fitness')
-
-        # Show the plot
-        plt.show()
-
-
-    def graph_line(self):
-        pass
