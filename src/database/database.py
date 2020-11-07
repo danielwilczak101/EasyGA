@@ -37,7 +37,7 @@ class database:
 
 
     def insert_chromosome(self, generation, chromosome):
-        """ """
+        """ Insert one chromosome into the database"""
 
         # Structure the insert data
         db_chromosome = (generation, chromosome.fitness, '[chromosome]')
