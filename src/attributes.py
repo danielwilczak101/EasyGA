@@ -63,7 +63,7 @@ class Attributes:
             mutation_individual_impl    = Mutation_Methods.Individual.single_gene,
             mutation_population_impl    = Mutation_Methods.Population.random_selection,
             termination_impl            = Termination_Methods.fitness_and_generation_based,
-            database                    = None,
+            Database                    = database.Database,
             database_name               = 'database.db',
             sql_create_data_structure   = """CREATE TABLE IF NOT EXISTS data (
                                                 id integer PRIMARY KEY,
@@ -117,12 +117,12 @@ class Attributes:
         self.termination_impl = deepcopy(termination_impl)
 
         # Database varibles
-        self.database = deepcopy(database)
+        self.database = Database()
         self.database_name = deepcopy(database_name)
         self.sql_create_data_structure = deepcopy(sql_create_data_structure)
 
         # Graphing variables
-        self.graph = Graph(self)
+        self.graph = Graph(self.database)
 
 
     # Getter and setters for all required varibles

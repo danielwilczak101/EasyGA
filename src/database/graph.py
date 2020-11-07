@@ -8,8 +8,8 @@ class Graph:
     """Prebuilt graphing functions to make visual represention of fitness data."""
 
 
-    def __init__(self, ga):
-        self.ga = ga
+    def __init__(self, database):
+        self.database = database
 
 
     def make_plot(self, type_of_plot, size, X, Y):
@@ -30,13 +30,13 @@ class Graph:
         """Show a plot of generation by generation total fitness."""
 
         # Query the X data
-        generations = self.ga.database.get_total_generations()
+        generations = self.database.get_total_generations()
 
         # Create the generations list - [0,1,2,etc]
         X = list(range(0, generations))
 
         # Query for Y data
-        Y = self.ga.database.get_generation_total_fitness()
+        Y = self.database.get_generation_total_fitness()
 
         self.make_plot(type_of_plot, size, X, Y)
 
@@ -53,13 +53,13 @@ class Graph:
         """Generation by Max value chromosome """
 
         # Query the X data
-        generations = self.ga.database.get_total_generations()
+        generations = self.database.get_total_generations()
 
         # Create the generations list - [0,1,2,etc]
         X = list(range(0, generations))
 
         # Query for Y data
-        Y = self.ga.database.get_highest_chromosome()
+        Y = self.database.get_highest_chromosome()
 
         self.make_plot(type_of_plot, size, X, Y)
 
@@ -76,13 +76,13 @@ class Graph:
         """Generation by Min value Chromosome """
 
         # Query the X data
-        generations = self.ga.database.get_total_generations()
+        generations = self.database.get_total_generations()
 
         # Create the generations list - [0,1,2,etc]
         X = list(range(0, generations))
 
         # Query for Y data
-        Y = self.ga.database.get_lowest_chromosome()
+        Y = self.database.get_lowest_chromosome()
 
         self.make_plot(type_of_plot, size, X, Y)
 
