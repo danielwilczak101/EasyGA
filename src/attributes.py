@@ -130,6 +130,11 @@ class Attributes:
         self.database.insert_current_population(self)
 
 
+    def save_chromosome(self, chromosome):
+        """Saves the given chromosome to the database."""
+        self.database.insert_current_chromosome(self.current_generation, chromosome)
+
+
     # Getter and setters for all required varibles
     @property
     def chromosome_length(self):
