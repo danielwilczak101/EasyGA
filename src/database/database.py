@@ -35,6 +35,7 @@ class database:
         except Error as e:
             print(e)
 
+
     def insert_chromosome(self, generation, chromosome):
         """ """
 
@@ -50,13 +51,24 @@ class database:
         self.conn.commit()
         return cur.lastrowid
 
+
     def insert_current_population(self, ga):
         """ Insert current generations population """
 
-        # For each chromosome in the population
-        for chromosome in ga.population.chromosome_list:
-            # Insert the chromosome into the database
-            self.insert_chromosome(ga.current_generation, chromosome)
+        # Structure the insert data
+        db_chromosome_list = [
+                (ga.current_generation, chromosome.fitness, '[chromosome]')
+                    for chromosome in ga.population.get_chromosome_list()
+            ]
+
+        # Create sql query structure
+        sql = ''' INSERT INTO data(generation,fitness,chromosome)
+         VALUES(?,?,?) '''
+
+        cur = self.conn.cursor()
+        cur.executemany(sql, db_chromosome_list)
+        self.conn.commit()
+        return cur.lastrowid
 
 
     def create_data_table(self, ga):
@@ -88,6 +100,7 @@ class database:
         cur.execute(query)
 
         return cur.fetchall()
+
 
     def query_one_item(self, query):
         """Query for single data point"""
