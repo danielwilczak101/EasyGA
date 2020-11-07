@@ -125,6 +125,11 @@ class Attributes:
         self.graph = Graph(self.database)
 
 
+    def save_population(self):
+        """Saves the current population to the database."""
+        self.database.insert_current_population(self)
+
+
     # Getter and setters for all required varibles
     @property
     def chromosome_length(self):

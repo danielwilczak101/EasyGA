@@ -68,7 +68,7 @@ class GA(Attributes):
             self.population.sort_by_best_fitness(self)
 
             # Save the population to the database
-            self.database.insert_current_population(self)
+            self.save_population()
 
             number_of_generations -= 1
             self.current_generation += 1
@@ -76,7 +76,7 @@ class GA(Attributes):
 
     def evolve(self):
         """Runs the ga until the termination point has been satisfied."""
-        while(self.active()):
+        while self.active():
             self.evolve_generation()
 
 
