@@ -20,11 +20,11 @@ from crossover import Crossover_Methods
 from attributes import Attributes
 
 # Database class
-from database import database
+from database import sql_database
 from sqlite3 import Error
 
 # Graphing package
-from database import graph
+from database import matplotlib_graph
 import matplotlib.pyplot as plt
 
 

@@ -1,10 +1,7 @@
 # Graphing package
 import matplotlib.pyplot as plt
-# Database class
-from database import database
-from sqlite3 import Error
 
-class Graph:
+class Matplotlib_Graph:
     """Prebuilt graphing functions to make visual represention of fitness data."""
 
 

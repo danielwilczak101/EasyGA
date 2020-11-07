@@ -21,11 +21,11 @@ from mutation  import Mutation_Methods
 from crossover import Crossover_Methods
 
 # Database class
-from database import database
+from database import sql_database
 from sqlite3 import Error
 
 # Graphing package
-from database import graph
+from database import matplotlib_graph
 import matplotlib.pyplot as plt
 
 
@@ -63,7 +63,7 @@ class Attributes:
             mutation_individual_impl    = Mutation_Methods.Individual.single_gene,
             mutation_population_impl    = Mutation_Methods.Population.random_selection,
             termination_impl            = Termination_Methods.fitness_and_generation_based,
-            Database                    = database.Database,
+            Database                    = sql_database.SQL_Database,
             database_name               = 'database.db',
             sql_create_data_structure   = """CREATE TABLE IF NOT EXISTS data (
                                                 id integer PRIMARY KEY,
@@ -71,7 +71,7 @@ class Attributes:
                                                 fitness DOUBLE,
                                                 chromosome text
                                             ); """,
-            Graph                       = graph.Graph
+            Graph                       = matplotlib_graph.Matplotlib_Graph
         ):
 
         # Initilization variables

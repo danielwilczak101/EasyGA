@@ -3,9 +3,9 @@ from sqlite3 import Error
 import os
 
 
-class Database:
+class SQL_Database:
     """Main database class that controls all the functionality for input /
-    out of the database."""
+    out of the database using SQLite3."""
 
 
     def __init__(self):
