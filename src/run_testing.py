@@ -20,4 +20,4 @@ ga.evolve()
 
 ga.print_population()
 
-ga.graph.lowest_value_chromosome(ga)
+ga.graph.lowest_value_chromosome()

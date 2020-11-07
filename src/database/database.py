@@ -3,7 +3,7 @@ from sqlite3 import Error
 import os
 
 
-class database:
+class Database:
     """Main database class that controls all the functionality for input /
     out of the database."""
 

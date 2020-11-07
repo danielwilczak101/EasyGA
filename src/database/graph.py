@@ -4,30 +4,41 @@ import matplotlib.pyplot as plt
 from database import database
 from sqlite3 import Error
 
-class graph:
+class Graph:
     """Prebuilt graphing functions to make visual represention of fitness data."""
 
-    def generation_total_fitness(ga,type_of_plot = "line",size = [6,6]):
+
+    def __init__(self, ga):
+        self.ga = ga
+
+
+    def make_plot(self, type_of_plot, size, X, Y):
+        """Create the plot"""
+
+        # Set the plot size
+        plt.figure(figsize = size)
+
+        if(type_of_plot  == "line"):
+            plt.plot(X, Y)
+        elif(type_of_plot == "scatter"):
+            plt.scatter(X, Y)
+        elif(type_of_plot == "bar"):
+            plt.bar(X, Y)
+
+
+    def generation_total_fitness(self, type_of_plot = "line", size = [6,6]):
         """Show a plot of generation by generation total fitness."""
 
         # Query the X data
-        generations = ga.database.get_total_generations()
+        generations = self.ga.database.get_total_generations()
 
         # Create the generations list - [0,1,2,etc]
         X = list(range(0, generations))
 
         # Query for Y data
-        Y = ga.database.get_generation_total_fitness()
+        Y = self.ga.database.get_generation_total_fitness()
 
-        # Set the plot size
-        plt.figure(figsize=size)
-
-        if(type_of_plot  == "line"):
-            plt.plot(X,Y)
-        elif(type_of_plot == "scatter"):
-            plt.scatter(X,Y)
-        elif(type_of_plot == "bar"):
-            plt.bar(X,Y)
+        self.make_plot(type_of_plot, size, X, Y)
 
         # x and y labels
         plt.xlabel('Generation')
@@ -37,27 +48,20 @@ class graph:
         # Show the plot
         plt.show()
 
-    def highest_value_chromosome(ga,type_of_plot = "line",size = [6,6]):
+
+    def highest_value_chromosome(self, type_of_plot = "line", size = [6,6]):
         """Generation by Max value chromosome """
 
         # Query the X data
-        generations = ga.database.get_total_generations()
+        generations = self.ga.database.get_total_generations()
 
         # Create the generations list - [0,1,2,etc]
         X = list(range(0, generations))
 
         # Query for Y data
-        Y = ga.database.get_highest_chromosome()
+        Y = self.ga.database.get_highest_chromosome()
 
-        # Set the plot size
-        plt.figure(figsize=size)
-
-        if(type_of_plot  == "line"):
-            plt.plot(X,Y)
-        elif(type_of_plot == "scatter"):
-            plt.scatter(X,Y)
-        elif(type_of_plot == "bar"):
-            plt.bar(X,Y)
+        self.make_plot(type_of_plot, size, X, Y)
 
         # x and y labels
         plt.xlabel('Generation')
@@ -68,27 +72,19 @@ class graph:
         plt.show()
 
 
-    def lowest_value_chromosome(ga,type_of_plot = "line",size = [6,6]):
+    def lowest_value_chromosome(self, type_of_plot = "line", size = [6,6]):
         """Generation by Min value Chromosome """
 
         # Query the X data
-        generations = ga.database.get_total_generations()
+        generations = self.ga.database.get_total_generations()
 
         # Create the generations list - [0,1,2,etc]
         X = list(range(0, generations))
 
         # Query for Y data
-        Y = ga.database.get_lowest_chromosome()
+        Y = self.ga.database.get_lowest_chromosome()
 
-        # Set the plot size
-        plt.figure(figsize=size)
-
-        if(type_of_plot  == "line"):
-            plt.plot(X,Y)
-        elif(type_of_plot == "scatter"):
-            plt.scatter(X,Y)
-        elif(type_of_plot == "bar"):
-            plt.bar(X,Y)
+        self.make_plot(type_of_plot, size, X, Y)
 
         # x and y labels
         plt.xlabel('Generation')

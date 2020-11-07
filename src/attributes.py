@@ -71,7 +71,7 @@ class Attributes:
                                                 fitness DOUBLE,
                                                 chromosome text
                                             ); """,
-            graph                       = graph.graph
+            Graph                       = graph.Graph
         ):
 
         # Initilization variables
@@ -122,7 +122,8 @@ class Attributes:
         self.sql_create_data_structure = deepcopy(sql_create_data_structure)
 
         # Graphing variables
-        self.graph = deepcopy(graph)
+        self.graph = Graph(self)
+
 
     # Getter and setters for all required varibles
     @property
@@ -130,6 +131,7 @@ class Attributes:
         """Getter function for chromosome length"""
 
         return self._chromosome_length
+
 
     @chromosome_length.setter
     def chromosome_length(self, value_input):
@@ -146,6 +148,7 @@ class Attributes:
         """Getter function for population size"""
 
         return self._population_size
+
 
     @population_size.setter
     def population_size(self, value_input):

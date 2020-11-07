@@ -50,7 +50,7 @@ class GA(Attributes):
 
                 # Create the database here to allow the user to change
                 # the database name and structure in the running function.
-                self.database = database.database()
+                self.database = database.Database()
                 self.database.create_data_table(self)
 
                 # Create the initial population
@@ -158,3 +158,9 @@ class GA(Attributes):
         """Prints the best chromosome and its fitness"""
         print(f"Best Chromosome \t: {self.population.get_chromosome(0)}")
         print(f"Best Fitness    \t: {self.population.get_chromosome(0).get_fitness()}")
+
+
+    def print_worst(self):
+        """Prints the worst chromosome and its fitness"""
+        print(f"Worst Chromosome \t: {self.population.get_chromosome(-1)}")
+        print(f"Worst Fitness    \t: {self.population.get_chromosome(-1).get_fitness()}")
