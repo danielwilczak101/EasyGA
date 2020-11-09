@@ -141,7 +141,10 @@ class GA(Attributes):
         if self.target_fitness_type == 'max': return fitness_value
         max_fitness = self.population.get_chromosome(-1).get_fitness()
         min_fitness = self.population.get_chromosome(0).get_fitness()
-        return max_fitness - fitness_value + min_fitness
+        if min_fitness / max_fitness < 1e-5:
+            return -fitness_value
+        else:
+            return max_fitness - fitness_value + min_fitness
 
 
     def print_generation(self):
