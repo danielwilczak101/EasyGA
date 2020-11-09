@@ -111,6 +111,7 @@ class SQL_Database:
 
         return query_data[0]
 
+
     def get_generation_total_fitness(self):
         """Get each generations total fitness sum from the database """
 
@@ -121,12 +122,14 @@ class SQL_Database:
 
         return formated_query_data
 
+
     def get_total_generations(self):
         """Get the total generations from the database"""
 
         query_data = self.query_one_item("SELECT COUNT(DISTINCT generation) FROM data;")
 
         return query_data
+
 
     def get_highest_chromosome(self):
         """Get the highest fitness of each generation"""
@@ -137,6 +140,7 @@ class SQL_Database:
         formated_query_data = [i[0] for i in query_data]
 
         return formated_query_data;
+
 
     def get_lowest_chromosome(self):
         """Get the lowest fitness of each generation"""
