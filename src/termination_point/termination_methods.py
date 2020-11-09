@@ -27,16 +27,11 @@ class Termination_Methods:
         if ga.tolerance_goal is not None:
 
             best_fitness = ga.population.get_chromosome(0).get_fitness()
-            convergence_count = 0
+            threshhold_fitness = ga.population.get_chromosome(int(0.1*ga.population.size())).get_fitness()
             tol = ga.tolerance_goal * (1 + abs(best_fitness))
 
-            # Find out how many chromosomes have converged
-            for chromosome in ga.population.get_chromosome_list():
-                if abs(best_fitness - chromosome.get_fitness()) < tol:
-                    convergence_count += 1
-
             # Terminate if 10% of the population has converged
-            if convergence_count > 0.1*ga.population.size():
+            if abs(best_fitness - threshhold_fitness) < tol:
                 return False
 
         return True
