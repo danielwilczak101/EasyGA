@@ -49,6 +49,7 @@ class Attributes:
             current_fitness             = 0,
             generation_goal             = 15,
             fitness_goal                = None,
+            tolerance_goal              = 1e-3,
             chromosome_mutation_rate    = 0.15,
             gene_mutation_rate          = 0.03,
             initialization_impl         = Initialization_Methods.random_initialization,
@@ -93,6 +94,7 @@ class Attributes:
         self.current_fitness    = deepcopy(current_fitness)
         self.generation_goal    = deepcopy(generation_goal)
         self.fitness_goal       = deepcopy(fitness_goal)
+        self.tolerance_goal     = deepcopy(tolerance_goal)
 
         # Mutation variables
         self.chromosome_mutation_rate = deepcopy(chromosome_mutation_rate)
