@@ -1,7 +1,8 @@
 class Population:
 
     def __init__(self, chromosome_list = None):
-        """Intiialize the population with fitness of value None, and a set of chromosomes dependant on user-passed parameter"""
+        """Intiialize the population with fitness of value None, and a
+        set of chromosomes dependant on user-passed parameter"""
 
         if chromosome_list is None:
           self.chromosome_list = []
@@ -14,6 +15,8 @@ class Population:
 
 
     def update(self):
+        """Sets all the population variables to what they should be at
+        the end of the generation """
         self.set_chromosome_list(self.next_population)
         self.reset_mating_pool()
         self.reset_next_population()
@@ -70,7 +73,9 @@ class Population:
 
 
     def add_chromosome(self, chromosome, index = None):
-        """Adds a chromosome to the population at the input index, defaulted to the end of the chromosome set"""
+        """Adds a chromosome to the population at the input index, defaulted
+         to the end of the chromosome set"""
+
         if index is None:
             index = self.size()
         self.chromosome_list.insert(index, chromosome)
