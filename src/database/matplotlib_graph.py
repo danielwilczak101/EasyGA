@@ -44,6 +44,10 @@ class Matplotlib_Graph:
         #if self.ylabel is not None: xlabel = self.ylabel
         #if self.title  is not None: xlabel = self.title
 
+        plt.xlabel(self.xlabel)
+        plt.ylabel(self.ylabel)
+        plt.title(self.title)
+
         # Show the plot
         plt.show()
 
