@@ -9,7 +9,7 @@ class Initialization_Methods:
         """
 
         # Using the chromosome_impl to set every index inside of the chromosome
-        if ga.chromosome_impl != None:
+        if ga.chromosome_impl is not None:
             return ga.make_population([
                        ga.make_chromosome([
                            ga.make_gene(value)
@@ -17,7 +17,7 @@ class Initialization_Methods:
                    for i in range(ga.population_size)])
 
         # Using the gene_impl to set every gene to be the same
-        elif ga.gene_impl != None:
+        elif ga.gene_impl is not None:
             return ga.make_population([
                        ga.make_chromosome([
                            ga.make_gene(ga.gene_impl())
