@@ -18,6 +18,9 @@ ga.target_fitness_type = 'min'
 
 ga.evolve()
 
+ga.print_generation()
 ga.print_population()
 
+ga.graph.type_of_plot = "line"
+ga.graph.yscale = "log"
 ga.graph.lowest_value_chromosome()

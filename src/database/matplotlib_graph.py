@@ -30,16 +30,17 @@ class Matplotlib_Graph:
         X = list(range(0, generations))
 
         # Query for Y data
-        Y_list = self.database.get_generation_total_fitness()
+        Y_data = self.database.get_generation_total_fitness()
 
         if(self.yscale == "log"):
             # If using log then the values have to be positive numbers
-            Y  =  [abs(ele) for ele in Y_list]
+            Y  =  [abs(ele) for ele in Y_data]
+            Y_data = Y
 
         # Setup data
         plt.figure(figsize = self.size)
         plt.yscale(self.yscale)
-        self.type_of_plot(X,Y_list)
+        self.type_of_plot(X,Y_data)
 
         # x and y labels
         if(self.xlabel == None):
@@ -63,16 +64,17 @@ class Matplotlib_Graph:
         X = list(range(0, generations))
 
         # Query for Y data
-        Y_list = self.database.get_highest_chromosome()
+        Y_data = self.database.get_highest_chromosome()
 
         if(self.yscale == "log"):
             # If using log then the values have to be positive numbers
-            Y  =  [abs(ele) for ele in Y_list]
+            Y  =  [abs(ele) for ele in Y_data]
+            Y_data = Y
 
         # Setup data
         plt.figure(figsize = self.size)
         plt.yscale(self.yscale)
-        self.type_of_plot(X,Y_list)
+        self.type_of_plot(X,Y_data)
 
         # x and y labels
         if(self.xlabel == None):
@@ -94,19 +96,22 @@ class Matplotlib_Graph:
         # Create the generations list - [0,1,2,etc]
         X = list(range(0, generations))
 
+        print(X)
+
         # Query for Y data
-        Y_list = self.database.get_lowest_chromosome()
+        Y_data = self.database.get_lowest_chromosome()
 
         if(self.yscale == "log"):
             # If using log then the values have to be positive numbers
-            Y  =  [abs(ele) for ele in Y_list]
+            Y  =  [abs(ele) for ele in Y_data]
+            Y_data = Y
 
         # Setup data
         plt.figure(figsize = self.size)
         plt.yscale(self.yscale)
-        self.type_of_plot(X,Y_list)
+        self.type_of_plot(X,Y_data)
 
-        # x and y labels
+        # Default x and y labels
         if(self.xlabel == None):
             plt.xlabel('Generation')
         if(self.ylabel == None):
