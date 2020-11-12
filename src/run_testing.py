@@ -11,4 +11,4 @@ ga.generation_goal = 150
 
 ga.evolve()
 
-ga.graph.highest_value_chromosome()
+ga.graph.generation_total_fitness()
