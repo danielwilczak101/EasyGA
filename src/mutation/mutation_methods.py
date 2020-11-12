@@ -20,6 +20,8 @@ class Mutation_Methods:
             # Loop until enough mutations occur
             for n in range(int(ga.population.size()*ga.chromosome_mutation_rate)):
                 index = random.randint(0, ga.population.size()-1)
+                chromosome = ga.population.get_chromosome(index)
+
                 ga.population.set_chromosome(
                     ga.crossover_individual_impl(ga, chromosome, ga.mutation_individual_impl(ga, chromosome)),
                     index
