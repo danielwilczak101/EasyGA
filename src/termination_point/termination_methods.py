@@ -1,8 +1,12 @@
 class Termination_Methods:
     """Example functions that can be used to terminate the the algorithms loop"""
 
-    def fitness_and_generation_based(ga):
-        """Fitness based approach to terminate when the goal fitness has been reached"""
+    def fitness_generation_tolerance(ga):
+        """Terminate GA when any of the
+        - fitness,
+        - generation, or
+        - tolerance
+        goals are met."""
 
         # Need to start the algorithm if the population is None.
         if ga.population == None:

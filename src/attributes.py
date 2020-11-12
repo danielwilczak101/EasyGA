@@ -63,7 +63,7 @@ class Attributes:
             survivor_selection_impl     = Survivor_Selection.fill_in_best,
             mutation_individual_impl    = Mutation_Methods.Individual.single_gene,
             mutation_population_impl    = Mutation_Methods.Population.random_selection,
-            termination_impl            = Termination_Methods.fitness_and_generation_based,
+            termination_impl            = Termination_Methods.fitness_generation_tolerance,
             Database                    = sql_database.SQL_Database,
             database_name               = 'database.db',
             sql_create_data_structure   = """CREATE TABLE IF NOT EXISTS data (
