@@ -21,33 +21,38 @@ class Mutation_Methods:
                         ga.population.set_chromosome(ga.mutation_individual_impl(ga, ga.population.get_chromosome(index)), index)
 
 
+        def random_selection_then_cross(ga):
+            """Selects random chromosomes and self-crosses with parent"""
+            mutation_count = 0
+
+            # Loop until enough mutations occur
+            while mutation_count < ga.population.size()*ga.chromosome_mutation_rate:
+
+                # Loop through the population
+                for index in range(ga.population.size()):
+
+                    chromosome = ga.population.get_chromosome(index)
+
+                    # Randomly apply mutations
+                    if random.uniform(0, 1) < ga.chromosome_mutation_rate:
+                        mutation_count += 1
+                        ga.population.set_chromosome(
+                            ga.crossover_individual_impl(
+                                ga,
+                                chromosome,
+                                ga.mutation_individual_impl(ga, chromosome)
+                            ),
+                            index
+                        )
+
+
     class Individual:
         """Methods for mutating a single chromosome"""
 
-        def whole_chromosome(ga, chromosome):
-            """Makes a completely random chromosome filled with new genes."""
 
-            # Using the chromosome_impl to set every index inside of the chromosome
-            if ga.chromosome_impl != None:
-                return ga.make_chromosome([
-                           ga.make_gene(value)
-                       for value in ga.chromosome_impl()])
-
-            # Using the gene_impl
-            elif ga.gene_impl != None:
-                return ga.make_chromosome([
-                           ga.make_gene(ga.gene_impl())
-                       for j in range(chromosome.size())])
-
-            # Exit because no gene creation method specified
-            else:
-                print("You did not specify any initialization constraints.")
-                return None
-
-
-        def single_gene(ga, chromosome):
+        def individual_genes(ga, old_chromosome):
             """Mutates a random gene in the chromosome and resets the fitness."""
-            chromosome.set_fitness(None)
+            chromosome = ga.make_chromosome(old_chromosome.get_gene_list())
             mutation_count = 0
 
             # Loops until enough mutations occur
