@@ -1,4 +1,5 @@
 import random
+from math import ceil
 
 class Mutation_Methods:
 
@@ -9,7 +10,7 @@ class Mutation_Methods:
             """Selects random chromosomes"""
 
             # Loop until enough mutations occur
-            for n in range(int(ga.population.size()*ga.chromosome_mutation_rate)):
+            for n in range(ceil(ga.population.size()*ga.chromosome_mutation_rate)):
                 index = random.randint(0, ga.population.size()-1)
                 ga.population.set_chromosome(ga.mutation_individual_impl(ga, ga.population.get_chromosome(index)), index)
 
@@ -18,7 +19,7 @@ class Mutation_Methods:
             """Selects random chromosomes and self-crosses with parent"""
 
             # Loop until enough mutations occur
-            for n in range(int(ga.population.size()*ga.chromosome_mutation_rate)):
+            for n in range(ceil(ga.population.size()*ga.chromosome_mutation_rate)):
                 index = random.randint(0, ga.population.size()-1)
                 chromosome = ga.population.get_chromosome(index)
 
@@ -37,7 +38,7 @@ class Mutation_Methods:
             chromosome = ga.make_chromosome(old_chromosome.get_gene_list())
 
             # Loops until enough mutations occur
-            for n in range(int(chromosome.size()*ga.gene_mutation_rate)):
+            for n in range(ceil(chromosome.size()*ga.gene_mutation_rate)):
                 index = random.randint(0, chromosome.size()-1)
 
                 # Using the chromosome_impl
@@ -65,7 +66,7 @@ class Mutation_Methods:
                     chromosome = ga.make_chromosome(old_chromosome.get_gene_list())
 
                     # Loops until enough mutations occur
-                    for n in range(int(chromosome.size()*ga.gene_mutation_rate)):
+                    for n in range(ceil(chromosome.size()*ga.gene_mutation_rate)):
                         index_one = random.randint(0, chromosome.size()-1)
                         index_two = random.randint(0, chromosome.size()-1)
 
