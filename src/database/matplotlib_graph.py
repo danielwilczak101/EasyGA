@@ -4,6 +4,11 @@ import matplotlib.pyplot as plt
 class Matplotlib_Graph:
     """Prebuilt graphing functions to make visual represention of fitness data."""
 
+    type_of_plot_dict = {
+        'line'    : plt.plot,
+        'scatter' : plt.scatter,
+        'bar'     : plt.bar
+    }
 
     def __init__(self, database):
         self.database = database
@@ -119,15 +124,8 @@ class Matplotlib_Graph:
 
 
     @type_of_plot.setter
-    def type_of_plot(self, value_input):
-
-        # Defults type of ploting functions
-        if(value_input  == "line"):
-            self._type_of_plot = plt.plot
-        elif(value_input == "scatter"):
-            self._type_of_plot = plt.scatter
-        elif(value_input == "bar"):
-            self._type_of_plot = plt.bar
+    def type_of_plot(self, _type_of_plot):
+        if _type_of_plot in self.type_of_plot_dict.keys():
+            self._type_of_plot = self.type_of_plot_dict[_type_of_plot]
         else:
-            # If its none of the defaults then use what the user provided.
-            self._type_of_plot = value_input
+            self._type_of_plot = _type_of_plot
