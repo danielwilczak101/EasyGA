@@ -34,6 +34,19 @@ class Attributes:
     been set then they will fall back onto the default attribute. All
     attributes have been catigorized to explain sections in the ga process."""
 
+    target_fitness_type_dict = {
+            'min'          : 'min',
+            'minimize'     : 'min',
+            'minimise'     : 'min',
+            'minimization' : 'min',
+            'minimisation' : 'min',
+            'max'          : 'max',
+            'maximize'     : 'max',
+            'maximise'     : 'max',
+            'maximization' : 'max',
+            'maximisation' : 'max'
+        }
+
     def __init__(self,
             chromosome_length           = 10,
             population_size             = 10,
@@ -170,3 +183,21 @@ class Attributes:
         if(not isinstance(value_input, int) or value_input <= 0):
             raise ValueError("Population length must be integer greater then 0")
         self._population_size = value_input
+
+
+    @property
+    def target_fitness_type(self):
+        """Getter function for target fitness type."""
+
+        return self._target_fitness_type
+
+
+    @target_fitness_type.setter
+    def target_fitness_type(self, value_input):
+        """Setter function for target fitness type for
+        converting input to min/max."""
+
+        if value_input in self.target_fitness_type_dict.keys():
+            self._target_fitness_type = target_fitness_type_dict[value_input]
+        else:
+            self._target_fitness_type = value_input
