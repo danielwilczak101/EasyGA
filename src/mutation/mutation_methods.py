@@ -7,43 +7,23 @@ class Mutation_Methods:
 
         def random_selection(ga):
             """Selects random chromosomes"""
-            mutation_count = 0
 
             # Loop until enough mutations occur
-            while mutation_count < ga.population.size()*ga.chromosome_mutation_rate:
-
-                # Loop through the population
-                for index in range(ga.population.size()):
-
-                    # Randomly apply mutations
-                    if random.uniform(0, 1) < ga.chromosome_mutation_rate:
-                        mutation_count += 1
-                        ga.population.set_chromosome(ga.mutation_individual_impl(ga, ga.population.get_chromosome(index)), index)
+            for n in range(int(ga.population.size()*ga.chromosome_mutation_rate)):
+                index = random.randint(0, ga.population.size()-1)
+                ga.population.set_chromosome(ga.mutation_individual_impl(ga, ga.population.get_chromosome(index)), index)
 
 
         def random_selection_then_cross(ga):
             """Selects random chromosomes and self-crosses with parent"""
-            mutation_count = 0
 
             # Loop until enough mutations occur
-            while mutation_count < ga.population.size()*ga.chromosome_mutation_rate:
-
-                # Loop through the population
-                for index in range(ga.population.size()):
-
-                    chromosome = ga.population.get_chromosome(index)
-
-                    # Randomly apply mutations
-                    if random.uniform(0, 1) < ga.chromosome_mutation_rate:
-                        mutation_count += 1
-                        ga.population.set_chromosome(
-                            ga.crossover_individual_impl(
-                                ga,
-                                chromosome,
-                                ga.mutation_individual_impl(ga, chromosome)
-                            ),
-                            index
-                        )
+            for n in range(int(ga.population.size()*ga.chromosome_mutation_rate)):
+                index = random.randint(0, ga.population.size()-1)
+                ga.population.set_chromosome(
+                    ga.crossover_individual_impl(ga, chromosome, ga.mutation_individual_impl(ga, chromosome)),
+                    index
+                )
 
 
     class Individual:
@@ -59,11 +39,11 @@ class Mutation_Methods:
                 index = random.randint(0, chromosome.size()-1)
 
                 # Using the chromosome_impl
-                if ga.chromosome_impl != None:
+                if ga.chromosome_impl is not None:
                     chromosome.set_gene(ga.make_gene(ga.chromosome_impl()[index]), index)
 
                 # Using the gene_impl
-                elif ga.gene_impl != None:
+                elif ga.gene_impl is not None:
                     chromosome.set_gene(ga.make_gene(ga.gene_impl()), index)
 
                 # Exit because no gene creation method specified
