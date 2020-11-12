@@ -63,8 +63,9 @@ class Attributes:
             generation_goal             = 15,
             fitness_goal                = None,
             tolerance_goal              = 1e-3,
+            percent_converged           = 0.25,
             chromosome_mutation_rate    = 0.15,
-            gene_mutation_rate          = 0.03,
+            gene_mutation_rate          = 0.05,
             initialization_impl         = Initialization_Methods.random_initialization,
             fitness_function_impl       = Fitness_Examples.is_it_5,
             make_population             = create_population,
@@ -74,8 +75,8 @@ class Attributes:
             crossover_individual_impl   = Crossover_Methods.Individual.single_point,
             crossover_population_impl   = Crossover_Methods.Population.sequential_selection,
             survivor_selection_impl     = Survivor_Selection.fill_in_best,
-            mutation_individual_impl    = Mutation_Methods.Individual.single_gene,
-            mutation_population_impl    = Mutation_Methods.Population.random_selection,
+            mutation_individual_impl    = Mutation_Methods.Individual.individual_genes,
+            mutation_population_impl    = Mutation_Methods.Population.random_selection_then_cross,
             termination_impl            = Termination_Methods.fitness_generation_tolerance,
             Database                    = sql_database.SQL_Database,
             database_name               = 'database.db',
@@ -108,6 +109,7 @@ class Attributes:
         self.generation_goal    = deepcopy(generation_goal)
         self.fitness_goal       = deepcopy(fitness_goal)
         self.tolerance_goal     = deepcopy(tolerance_goal)
+        self.percent_converged  = deepcopy(percent_converged)
 
         # Mutation variables
         self.chromosome_mutation_rate = deepcopy(chromosome_mutation_rate)
