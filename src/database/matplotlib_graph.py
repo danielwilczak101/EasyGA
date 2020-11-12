@@ -27,15 +27,13 @@ class Matplotlib_Graph:
         # Query for Y data
         Y_list = self.database.get_generation_total_fitness()
 
-        # Set the y scale
-        plt.yscale(self.yscale)
-
         if(self.yscale == "log"):
             # If using log then the values have to be positive numbers
             Y  =  [abs(ele) for ele in Y_list]
 
         # Setup data
         plt.figure(figsize = self.size)
+        plt.yscale(self.yscale)
         self.type_of_plot(X,Y_list)
 
         # x and y labels
@@ -62,15 +60,13 @@ class Matplotlib_Graph:
         # Query for Y data
         Y_list = self.database.get_highest_chromosome()
 
-        # Set the y scale
-        plt.yscale(self.yscale)
-
         if(self.yscale == "log"):
             # If using log then the values have to be positive numbers
             Y  =  [abs(ele) for ele in Y_list]
 
         # Setup data
         plt.figure(figsize = self.size)
+        plt.yscale(self.yscale)
         self.type_of_plot(X,Y_list)
 
         # x and y labels
@@ -96,15 +92,13 @@ class Matplotlib_Graph:
         # Query for Y data
         Y_list = self.database.get_lowest_chromosome()
 
-        # Set the y scale
-        plt.yscale(self.yscale)
-
         if(self.yscale == "log"):
             # If using log then the values have to be positive numbers
             Y  =  [abs(ele) for ele in Y_list]
 
         # Setup data
         plt.figure(figsize = self.size)
+        plt.yscale(self.yscale)
         self.type_of_plot(X,Y_list)
 
         # x and y labels
@@ -116,6 +110,7 @@ class Matplotlib_Graph:
             plt.title('Relationship Between Generations and Generation Total Fitness')
         # Show the plot
         plt.show()
+
 
     # Getter and setters
     @property
