@@ -23,6 +23,10 @@ class Matplotlib_Graph:
     def plt_setup(self, X, Y, yscale, xlabel, ylabel, title, type_of_plot, size):
         """Setup for plt"""
 
+        if self.xlabel is not None: xlabel = self.xlabel
+        if self.ylabel is not None: xlabel = self.ylabel
+        if self.title  is not None: xlabel = self.title
+
         if yscale == "log":
             # If using log then the values have to be positive numbers
             Y  =  [abs(ele) for ele in Y]
@@ -84,10 +88,6 @@ class Matplotlib_Graph:
 
         # Query for Y data
         Y = self.database.get_lowest_chromosome()
-
-        if(self.yscale == "log"):
-            # If using log then the values have to be positive numbers
-            Y  =  [abs(ele) for ele in Y]
 
         self.plt_setup(X, Y, self.yscale, 'Generation', 'Lowest Fitness', 'Relationship Between Generations and Lowest Fitness', self.type_of_plot, self.size)
 
