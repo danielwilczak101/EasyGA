@@ -198,6 +198,6 @@ class Attributes:
         converting input to min/max."""
 
         if value_input in self.target_fitness_type_dict.keys():
-            self._target_fitness_type = target_fitness_type_dict[value_input]
+            self._target_fitness_type = self.target_fitness_type_dict[value_input]
         else:
             self._target_fitness_type = value_input
