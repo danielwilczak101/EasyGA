@@ -30,9 +30,11 @@ class Matplotlib_Graph:
     def plot(self):
         """Plot all the graph attributes"""
 
+        if self.xlabel is not None: xlabel = self.xlabel
+        if self.ylabel is not None: xlabel = self.ylabel
+        if self.title  is not None: xlabel = self.title
 
-
-        if self.yscale == "log":
+        if yscale == "log":
             # If using log then the values have to be positive numbers
             self.y  =  [abs(ele) for ele in self.y]
 

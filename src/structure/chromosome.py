@@ -1,11 +1,12 @@
+from copy import deepcopy
+
 class Chromosome:
 
-    def __init__(self, gene_list = None):
-        if gene_list is None:
-            self.gene_list = []
-        else:
-            self.gene_list = gene_list
+    def __init__(self, gene_list = []):
+        """Initialize the chromosome with fitness value of None, and a
+        set of genes dependent on user-passed parameter."""
 
+        self.gene_list = deepcopy(gene_list)
         self.fitness = None
 
 

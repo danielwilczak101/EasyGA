@@ -1,15 +1,11 @@
-def check_gene(value):
-    #Check to make sure the gene is not empty
-    assert value != "" , "Gene can not be empty"
-    return value
-
+from copy import deepcopy
 
 class Gene:
 
     def __init__(self, value):
         """Initialize a gene with fitness of value None and the input value"""
+        self.value = deepcopy(value)
         self.fitness = None
-        self.value = check_gene(value)
 
 
     def get_fitness(self):

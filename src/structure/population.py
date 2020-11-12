@@ -1,14 +1,12 @@
+from copy import deepcopy
+
 class Population:
 
-    def __init__(self, chromosome_list = None):
-        """Intiialize the population with fitness of value None, and a
-        set of chromosomes dependant on user-passed parameter"""
+    def __init__(self, chromosome_list = []):
+        """Initialize the population with fitness of value None, and a
+        set of chromosomes dependant on user-passed parameter."""
 
-        if chromosome_list is None:
-          self.chromosome_list = []
-        else:
-          self.chromosome_list = chromosome_list
-
+        self.chromosome_list = deepcopy(chromosome_list)
         self.fitness = None
         self.mating_pool = []
         self.next_population = []
