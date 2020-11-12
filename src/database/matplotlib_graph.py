@@ -5,10 +5,10 @@ class Matplotlib_Graph:
     """Prebuilt graphing functions to make visual represention of fitness data."""
 
     type_of_plot_dict = {
-        'line'    : plt.plot,
-        'scatter' : plt.scatter,
-        'bar'     : plt.bar
-    }
+            'line'    : plt.plot,
+            'scatter' : plt.scatter,
+            'bar'     : plt.bar
+        }
 
     def __init__(self, database):
         self.database = database
@@ -20,7 +20,28 @@ class Matplotlib_Graph:
         self.yscale = "linear"
 
 
-    def generation_total_fitness(self, type_of_plot = "line", size = [6,6]):
+    def plt_setup(self, X, Y, yscale, xlabel, ylabel, title, type_of_plot, size):
+        """Setup for plt"""
+
+        if yscale == "log":
+            # If using log then the values have to be positive numbers
+            Y  =  [abs(ele) for ele in Y]
+
+        # Setup data
+        plt.figure(figsize = size)
+        plt.yscale(self.yscale)
+        type_of_plot(X, Y)
+
+        # labels
+        plt.xlabel(xlabel)
+        plt.ylabel(ylabel)
+        plt.title(title)
+
+        # Show the plot
+        plt.show()
+
+
+    def generation_total_fitness(self):
         """Show a plot of generation by generation total fitness."""
 
         # Query the X data
@@ -30,31 +51,12 @@ class Matplotlib_Graph:
         X = list(range(0, generations))
 
         # Query for Y data
-        Y_data = self.database.get_generation_total_fitness()
+        Y = self.database.get_generation_total_fitness()
 
-        if(self.yscale == "log"):
-            # If using log then the values have to be positive numbers
-            Y  =  [abs(ele) for ele in Y_data]
-            Y_data = Y
-
-        # Setup data
-        plt.figure(figsize = self.size)
-        plt.yscale(self.yscale)
-        self.type_of_plot(X,Y_data)
-
-        # x and y labels
-        if(self.xlabel == None):
-            plt.xlabel('Generation')
-        if(self.ylabel == None):
-            plt.ylabel('Generation Total Fitness')
-        if(self.title == None):
-            plt.title('Relationship Between Generations and Generation Total Fitness')
-
-        # Show the plot
-        plt.show()
+        self.plt_setup(X, Y, self.yscale, 'Generation', 'Generation Total Fitness', 'Relationship Between Generations and Generation Total Fitness', self.type_of_plot, self.size)
 
 
-    def highest_value_chromosome(self, type_of_plot = "line", size = [6,6]):
+    def highest_value_chromosome(self):
         """Generation by Max value chromosome """
 
         # Query the X data
@@ -64,30 +66,12 @@ class Matplotlib_Graph:
         X = list(range(0, generations))
 
         # Query for Y data
-        Y_data = self.database.get_highest_chromosome()
+        Y = self.database.get_highest_chromosome()
 
-        if(self.yscale == "log"):
-            # If using log then the values have to be positive numbers
-            Y  =  [abs(ele) for ele in Y_data]
-            Y_data = Y
-
-        # Setup data
-        plt.figure(figsize = self.size)
-        plt.yscale(self.yscale)
-        self.type_of_plot(X,Y_data)
-
-        # x and y labels
-        if(self.xlabel == None):
-            plt.xlabel('Generation')
-        if(self.ylabel == None):
-            plt.ylabel('Generation Total Fitness')
-        if(self.title == None):
-            plt.title('Relationship Between Generations and Generation Total Fitness')
-        # Show the plot
-        plt.show()
+        self.plt_setup(X, Y, self.yscale, 'Generation', 'Highest Fitness', 'Relationship Between Generations and Highest Fitness', self.type_of_plot, self.size)
 
 
-    def lowest_value_chromosome(self, type_of_plot = "line", size = [6,6]):
+    def lowest_value_chromosome(self):
         """Generation by Min value Chromosome """
 
         # Query the X data
@@ -99,27 +83,13 @@ class Matplotlib_Graph:
         print(X)
 
         # Query for Y data
-        Y_data = self.database.get_lowest_chromosome()
+        Y = self.database.get_lowest_chromosome()
 
         if(self.yscale == "log"):
             # If using log then the values have to be positive numbers
-            Y  =  [abs(ele) for ele in Y_data]
-            Y_data = Y
+            Y  =  [abs(ele) for ele in Y]
 
-        # Setup data
-        plt.figure(figsize = self.size)
-        plt.yscale(self.yscale)
-        self.type_of_plot(X,Y_data)
-
-        # Default x and y labels
-        if(self.xlabel == None):
-            plt.xlabel('Generation')
-        if(self.ylabel == None):
-            plt.ylabel('Generation Total Fitness')
-        if(self.title == None):
-            plt.title('Relationship Between Generations and Generation Total Fitness')
-        # Show the plot
-        plt.show()
+        self.plt_setup(X, Y, self.yscale, 'Generation', 'Lowest Fitness', 'Relationship Between Generations and Lowest Fitness', self.type_of_plot, self.size)
 
 
     # Getter and setters
