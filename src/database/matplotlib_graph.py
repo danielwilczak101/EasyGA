@@ -4,7 +4,8 @@ import matplotlib.pyplot as plt
 class Matplotlib_Graph:
     """Prebuilt graphing functions to make visual represention of fitness data."""
 
-    type_of_plot_dict = {
+    # Common graphing functions
+    type_of_graph_dict = {
             'line'    : plt.plot,
             'scatter' : plt.scatter,
             'bar'     : plt.bar
@@ -12,7 +13,10 @@ class Matplotlib_Graph:
 
     def __init__(self, database):
         self.database = database
-        self.type_of_plot = 'line'
+        self.type_of_graph = 'line'
+        self.x = None
+        self.y = None
+        self.yscale = "linear"
 
 
     def generation_total_fitness(self):
@@ -22,12 +26,16 @@ class Matplotlib_Graph:
         generations = self.database.get_total_generations()
 
         # Create the generations list - [0,1,2,etc]
-        X = list(range(0, generations))
+        self.x = list(range(0, generations))
 
         # Query for Y data
-        Y = self.database.get_generation_total_fitness()
+        self.y = self.database.get_generation_total_fitness()
 
-        self.type_of_plot(X, Y)
+        if self.yscale == "log":
+            # If using log then the values have to be positive numbers
+            self.y  =  [abs(ele) for ele in self.y]
+
+        self.type_of_graph(self.x, self.y)
         plt.xlabel('Generation')
         plt.ylabel('Generation Total Fitness')
         plt.title('Relationship Between Generations and Generation Total Fitness')
@@ -40,12 +48,16 @@ class Matplotlib_Graph:
         generations = self.database.get_total_generations()
 
         # Create the generations list - [0,1,2,etc]
-        X  = list(range(0, generations))
+        self.x  = list(range(0, generations))
 
         # Query for Y data
-        Y = self.database.get_highest_chromosome()
+        self.y = self.database.get_highest_chromosome()
 
-        self.type_of_plot(X, Y)
+        if self.yscale == "log":
+            # If using log then the values have to be positive numbers
+            self.y  =  [abs(ele) for ele in self.y]
+
+        self.type_of_graph(self.x, self.y)
         plt.xlabel('Generation')
         plt.ylabel('Highest Fitness')
         plt.title('Relationship Between Generations and Highest Fitness')
@@ -58,12 +70,16 @@ class Matplotlib_Graph:
         generations = self.database.get_total_generations()
 
         # Create the generations list - [0,1,2,etc]
-        X = list(range(0, generations))
+        self.x = list(range(0, generations))
 
         # Query for Y data
-        Y = self.database.get_lowest_chromosome()
+        self.y = self.database.get_lowest_chromosome()
 
-        self.type_of_plot(X, Y)
+        if self.yscale == "log":
+            # If using log then the values have to be positive numbers
+            self.y  =  [abs(ele) for ele in self.y]
+
+        self.type_of_graph(self.x, self.y)
         plt.xlabel('Generation')
         plt.ylabel('Lowest Fitness')
         plt.title('Relationship Between Generations and Lowest Fitness')
@@ -71,13 +87,13 @@ class Matplotlib_Graph:
 
     # Getter and setters
     @property
-    def type_of_plot(self):
-        return self._type_of_plot
+    def type_of_graph(self):
+        return self._type_of_graph
 
 
-    @type_of_plot.setter
-    def type_of_plot(self, _type_of_plot):
-        if _type_of_plot in self.type_of_plot_dict.keys():
-            self._type_of_plot = self.type_of_plot_dict[_type_of_plot]
+    @type_of_graph.setter
+    def type_of_graph(self, value_input):
+        if value_input in self.type_of_graph_dict.keys():
+            self._type_of_graph = self.type_of_graph_dict[value_input]
         else:
-            self._type_of_plot = _type_of_plot
+            self._type_of_plot = value_input
