@@ -12,44 +12,7 @@ class Matplotlib_Graph:
 
     def __init__(self, database):
         self.database = database
-        # Type
-        self.type_of_plot = plt.plot
-        # Size
-        self.size = [6,6]
-        # Labels
-        self.xlabel = None
-        self.ylabel = None
-        self.title = None
-        # Scale
-        self.yscale = "linear"
-        # Data points
-        self.x = None
-        self.y = None
-
-
-    def plot(self):
-        """Plot all the graph attributes"""
-
-        if self.yscale == "log":
-            # If using log then the values have to be positive numbers
-            self.y  =  [abs(ele) for ele in self.y]
-
-        # Setup data
-        plt.figure(figsize = self.size)
-        plt.yscale(self.yscale)
-        self.type_of_plot(self.x, self.y)
-
-        # labels
-        #if self.xlabel is not None: xlabel = self.xlabel
-        #if self.ylabel is not None: xlabel = self.ylabel
-        #if self.title  is not None: xlabel = self.title
-
-        plt.xlabel(self.xlabel)
-        plt.ylabel(self.ylabel)
-        plt.title(self.title)
-
-        # Show the plot
-        plt.show()
+        self.type_of_plot = 'line'
 
 
     def generation_total_fitness(self):
@@ -59,16 +22,15 @@ class Matplotlib_Graph:
         generations = self.database.get_total_generations()
 
         # Create the generations list - [0,1,2,etc]
-        self.x = list(range(0, generations))
+        X = list(range(0, generations))
 
         # Query for Y data
-        self.y = self.database.get_generation_total_fitness()
+        Y = self.database.get_generation_total_fitness()
 
-        self.xlabel = 'Generation'
-        self.ylabel = 'Generation Total Fitness'
-        self.title  = 'Relationship Between Generations and Generation Total Fitness'
-
-        self.plot()
+        self.type_of_plot(X, Y)
+        plt.xlabel('Generation')
+        plt.ylabel('Generation Total Fitness')
+        plt.title('Relationship Between Generations and Generation Total Fitness')
 
 
     def highest_value_chromosome(self):
@@ -78,16 +40,16 @@ class Matplotlib_Graph:
         generations = self.database.get_total_generations()
 
         # Create the generations list - [0,1,2,etc]
-        self.x  = list(range(0, generations))
+        X  = list(range(0, generations))
 
         # Query for Y data
-        self.y = self.database.get_highest_chromosome()
+        Y = self.database.get_highest_chromosome()
 
-        self.xlabel = 'Generation'
-        self.ylabel = 'Highest Fitness'
-        self.title  = 'Relationship Between Generations and Highest Fitness'
+        self.type_of_plot(X, Y)
+        plt.xlabel('Generation')
+        plt.ylabel('Highest Fitness')
+        plt.title('Relationship Between Generations and Highest Fitness')
 
-        self.plot()
 
     def lowest_value_chromosome(self):
         """Generation by Min value Chromosome """
@@ -96,16 +58,16 @@ class Matplotlib_Graph:
         generations = self.database.get_total_generations()
 
         # Create the generations list - [0,1,2,etc]
-        self.x = list(range(0, generations))
+        X = list(range(0, generations))
 
         # Query for Y data
-        self.y = self.database.get_lowest_chromosome()
+        Y = self.database.get_lowest_chromosome()
 
-        self.xlabel = 'Generation'
-        self.ylabel = 'Lowest Fitness'
-        self.title  = 'Relationship Between Generations and Lowest Fitness'
+        self.type_of_plot(X, Y)
+        plt.xlabel('Generation')
+        plt.ylabel('Lowest Fitness')
+        plt.title('Relationship Between Generations and Lowest Fitness')
 
-        self.plot()
 
     # Getter and setters
     @property
