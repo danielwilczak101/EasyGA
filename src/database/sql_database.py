@@ -88,7 +88,7 @@ class SQL_Database:
         if self.conn is not None:
             # create projects table
             self.create_table(ga.sql_create_data_structure)
-
+            self.create_table(ga.sql_create_config_structure)
         else:
             print("Error! cannot create the database connection.")
 

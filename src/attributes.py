@@ -86,6 +86,12 @@ class Attributes:
                                                 fitness DOUBLE,
                                                 chromosome text
                                             ); """,
+            sql_create_config_structure   = """CREATE TABLE IF NOT EXISTS config (
+                                                id integer PRIMARY KEY,
+                                                generation integer NOT NULL,
+                                                fitness DOUBLE,
+                                                chromosome text
+                                            ); """,                                
             Graph                       = matplotlib_graph.Matplotlib_Graph
         ):
 
@@ -137,6 +143,7 @@ class Attributes:
         self.database = Database()
         self.database_name = deepcopy(database_name)
         self.sql_create_data_structure = deepcopy(sql_create_data_structure)
+        self.sql_create_config_structure = deepcopy(sql_create_config_structure)
 
         # Graphing variables
         self.graph = Graph(self.database)
