@@ -7,7 +7,7 @@ class SQL_Database:
     """Main database class that controls all the functionality for input /
     out of the database using SQLite3."""
 
-    sql_types_dict = [int, float, str]
+    sql_types = [int, float, str]
 
     def __init__(self):
         self.conn = None
@@ -98,74 +98,21 @@ class SQL_Database:
         """Insert the configuration attributes into the config."""
 
         # Structure the insert data
-        db_config_list = [
-            ga.chromosome_length,
-            ga.population_size,
-            ga.chromosome_impl,
-            ga.gene_impl,
-            ga.target_fitness_type,
-            ga.update_fitness,
-            ga.parent_ratio,
-            ga.selection_probability,
-            ga.tournament_size_ratio,
-            ga.current_generation,
-            float(ga.current_fitness),
-            ga.generation_goal,
-            ga.fitness_goal,
-            ga.tolerance_goal,
-            ga.percent_converged,
-            ga.chromosome_mutation_rate,
-            ga.gene_mutation_rate,
-            ga.initialization_impl,
-            ga.fitness_function_impl,
-            ga.parent_selection_impl,
-            ga.crossover_individual_impl,
-            ga.crossover_population_impl,
-            ga.survivor_selection_impl,
-            ga.mutation_individual_impl,
-            ga.mutation_population_impl,
-            ga.termination_impl,
-            ga.database_name
-            ]
+        db_config_list = list(ga.__dict__.values())
 
         # Clean up so the sqlite database accepts the data structure
         for i in range(len(db_config_list)):
             if callable(db_config_list[i]):
                 db_config_list[i] = db_config_list[i].__name__
-            elif type(db_config_list[i]) not in self.sql_types_dict:
+            elif type(db_config_list[i]) not in self.sql_types:
                 db_config_list[i] = str(db_config_list[i])
 
         # For some reason it has to be in var = array(tuple()) form
         db_config_list = [tuple(db_config_list)]
 
         # Create sql query structure
-        sql = f'''INSERT INTO config (chromosome_length,
-        population_size,
-        chromosome_impl,
-        gene_impl,
-        target_fitness_type,
-        update_fitness,
-        parent_ratio,
-        selection_probability,
-        tournament_size_ratio,
-        current_generation,
-        current_fitness,
-        generation_goal,
-        fitness_goal,
-        tolerance_goal,
-        percent_converged,
-        chromosome_mutation_rate,
-        gene_mutation_rate,
-        initialization_impl,
-        fitness_function_impl,
-        parent_selection_impl,
-        crossover_individual_impl,
-        crossover_population_impl,
-        survivor_selection_impl,
-        mutation_individual_impl,
-        mutation_population_impl,
-        termination_impl,
-        database_name) VALUES({(',?'*len(db_config_list))[1:]}) '''
+        sql = f"""INSERT INTO config ({''',
+        '''.join(ga.__dict__.keys())}) VALUES({(',?'*len(db_config_list))[1:]}) """
 
         # Execute sql query
         cur = self.conn.cursor()
