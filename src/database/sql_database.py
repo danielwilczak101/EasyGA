@@ -101,8 +101,8 @@ class SQL_Database:
         db_config_list = [
             ga.chromosome_length,
             ga.population_size,
-            chromosome_impl,
-            gene_impl,
+            ga.chromosome_impl,
+            ga.gene_impl,
             ga.target_fitness_type,
             ga.update_fitness,
             ga.parent_ratio,
