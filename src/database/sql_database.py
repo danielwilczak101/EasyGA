@@ -107,12 +107,12 @@ class SQL_Database:
             elif type(db_config_list[i]) not in self.sql_types:
                 db_config_list[i] = str(db_config_list[i])
 
-        # For some reason it has to be in var = array(tuple()) form
-        db_config_list = [tuple(db_config_list)]
-
         # Create sql query structure
         sql = f"""INSERT INTO config ({''',
         '''.join(ga.__dict__.keys())}) VALUES({(',?'*len(db_config_list))[1:]}) """
+
+        # For some reason it has to be in var = array(tuple()) form
+        db_config_list = [tuple(db_config_list)]
 
         # Execute sql query
         cur = self.conn.cursor()
