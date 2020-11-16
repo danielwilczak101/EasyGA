@@ -93,6 +93,7 @@ class Attributes:
                                                 population_size INTEGER NOT NULL,
                                                 chromosome_impl TEXT,
                                                 gene_impl TEXT,
+                                                population TEXT,
                                                 target_fitness_type TEXT,
                                                 update_fitness INTEGER,
                                                 parent_ratio REAL,
@@ -108,6 +109,9 @@ class Attributes:
                                                 gene_mutation_rate REAL,
                                                 initialization_impl TEXT,
                                                 fitness_function_impl TEXT,
+                                                make_population TEXT,
+                                                make_chromosome TEXT,
+                                                make_gene TEXT,
                                                 parent_selection_impl TEXT,
                                                 crossover_individual_impl TEXT,
                                                 crossover_population_impl TEXT,
@@ -115,7 +119,11 @@ class Attributes:
                                                 mutation_individual_impl TEXT,
                                                 mutation_population_impl TEXT,
                                                 termination_impl TEXT,
-                                                database_name TEXT
+                                                database TEXT,
+                                                database_name TEXT,
+                                                sql_create_data_structure TEXT,
+                                                sql_create_config_structure TEXT,
+                                                graph TEXT
                                             ); """,
             Graph                       = matplotlib_graph.Matplotlib_Graph
         ):
