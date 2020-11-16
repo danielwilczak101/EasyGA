@@ -7,6 +7,7 @@ class SQL_Database:
     """Main database class that controls all the functionality for input /
     out of the database using SQLite3."""
 
+    sql_types_dict = [int, float, str]
 
     def __init__(self):
         self.conn = None
@@ -92,19 +93,9 @@ class SQL_Database:
         else:
             print("Error! cannot create the database connection.")
 
+
     def insert_config(self,ga):
-        """Insert the configuration attributes into the config """
-
-        # If either function is None we handle the error
-        try:
-            chromosome_impl = ga.chromosome_impl.__name__
-        except:
-            chromosome_impl = 'None'
-
-        try:
-            gene_impl = ga.chromosome_impl.__name__
-        except:
-            gene_impl = 'None'
+        """Insert the configuration attributes into the config."""
 
         # Structure the insert data
         db_config_list = [
@@ -125,33 +116,30 @@ class SQL_Database:
             ga.percent_converged,
             ga.chromosome_mutation_rate,
             ga.gene_mutation_rate,
-            ga.initialization_impl.__name__,
-            ga.fitness_function_impl.__name__,
-            ga.parent_selection_impl.__name__,
-            ga.crossover_individual_impl.__name__,
-            ga.crossover_population_impl.__name__,
-            ga.survivor_selection_impl.__name__,
-            ga.mutation_individual_impl.__name__,
-            ga.mutation_population_impl.__name__,
-            ga.termination_impl.__name__,
+            ga.initialization_impl,
+            ga.fitness_function_impl,
+            ga.parent_selection_impl,
+            ga.crossover_individual_impl,
+            ga.crossover_population_impl,
+            ga.survivor_selection_impl,
+            ga.mutation_individual_impl,
+            ga.mutation_population_impl,
+            ga.termination_impl,
             ga.database_name
             ]
 
         # Clean up so the sqlite database accepts the data structure
         for i in range(len(db_config_list)):
-            if db_config_list[i] == None:
-                db_config_list[i] = "None"
-            if db_config_list[i] == True:
-                db_config_list[i] = "True"
-            if db_config_list [i] == False:
-                db_config_list[i] = "False"
+            if callable(db_config_list[i]):
+                db_config_list[i] = db_config_list[i].__name__
+            elif type(db_config_list[i]) not in self.sql_types_dict:
+                db_config_list[i] = str(db_config_list[i])
 
         # For some reason it has to be in var = array(tuple()) form
-        db_config_list = tuple(db_config_list)
-        db_config_list = [db_config_list]
+        db_config_list = [tuple(db_config_list)]
 
         # Create sql query structure
-        sql_start = '''INSERT INTO config (chromosome_length,
+        sql = f'''INSERT INTO config (chromosome_length,
         population_size,
         chromosome_impl,
         gene_impl,
@@ -177,18 +165,14 @@ class SQL_Database:
         mutation_individual_impl,
         mutation_population_impl,
         termination_impl,
-        database_name) VALUES('''
-
-        # Automate the value inputs
-        sql_middle = '?,' * (27 - 1)
-        sql_end = '?) '
-        sql = sql_start + sql_middle + sql_end
+        database_name) VALUES({(',?'*len(db_config_list))[1:]}) '''
 
         # Execute sql query
         cur = self.conn.cursor()
         cur.executemany(sql, db_config_list)
         self.conn.commit()
         return cur.lastrowid
+
 
     def query_all(self, query):
         """Query for muliple rows of data"""
