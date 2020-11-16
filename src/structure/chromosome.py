@@ -59,4 +59,16 @@ class Chromosome:
         output_str = ''
         for gene in self.gene_list:
             output_str += gene.__repr__()
+
+        return output_str
+
+    def __str__(self):
+        """Create a string of the chromosome. Ex chromsome = 1,2,3"""
+        output_str = ''
+        for gene in self.gene_list:
+            if gene == self.gene_list[0]:
+                output_str += str(gene.get_value())
+            else:
+                output_str += ',' + str(gene.get_value())
+
         return output_str
