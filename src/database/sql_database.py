@@ -7,10 +7,21 @@ class SQL_Database:
     """Main database class that controls all the functionality for input /
     out of the database using SQLite3."""
 
-    sql_types = [int, float, str]
+    sql_type_list = [int, float, str]
 
     def __init__(self):
         self.conn = None
+
+
+    def sql_type_of(self, obj):
+        """Returns the sql type for the object"""
+
+        if type(obj) == int:
+            return 'INT'
+        elif type(obj) == float:
+            return 'REAL'
+        else:
+            return 'TEXT'
 
 
     def create_connection(self, db_file):
@@ -72,6 +83,19 @@ class SQL_Database:
         return cur.lastrowid
 
 
+    def get_var_names(self, ga):
+        """Returns a list of the names of attributes of the ga."""
+
+        var_names = list(ga.__dict__.keys())
+
+        # Remove leading underscores
+        for i in range(len(var_names)):
+            if var_names[i][0] == '_':
+                var_names[i] = var_names[i][1:]
+
+        return var_names
+
+
     def create_all_tables(self, ga):
         """Create the data table that store generation data."""
 
@@ -87,8 +111,19 @@ class SQL_Database:
 
         # create tables
         if self.conn is not None:
-            # create projects table
+
+            # Create data table
             self.create_table(ga.sql_create_data_structure)
+
+            # Retrieve variable names and assign sql data types
+            var_names = self.get_var_names(ga)
+            for i in range(len(var_names)):
+                var_names[i] += ' ' + self.sql_type_of(var_names[i])
+
+            # Create config table
+            sql_create_config_structure = "CREATE TABLE IF NOT EXISTS config (\nid INTEGER PRIMARY KEY,"
+            sql_create_config_structure += "\n,".join(var_names)
+            sql_create_config_structure += "); "
             self.create_table(ga.sql_create_config_structure)
         else:
             print("Error! cannot create the database connection.")
@@ -104,12 +139,11 @@ class SQL_Database:
         for i in range(len(db_config_list)):
             if callable(db_config_list[i]):
                 db_config_list[i] = db_config_list[i].__name__
-            elif type(db_config_list[i]) not in self.sql_types:
+            elif type(db_config_list[i]) not in self.sql_type_list:
                 db_config_list[i] = str(db_config_list[i])
 
         # Create sql query structure
-        sql = f"""INSERT INTO config ({''',
-        '''.join(ga.__dict__.keys())}) VALUES({(',?'*len(db_config_list))[1:]}) """
+        sql = "INSERT INTO config (" + ",\n".join(self.get_var_names(ga)) + ") VALUES(" + (",?"*len(db_config_list))[1:] + ") "
 
         # For some reason it has to be in var = array(tuple()) form
         db_config_list = [tuple(db_config_list)]
