@@ -97,7 +97,8 @@ class SQL_Database:
 
 
     def create_all_tables(self, ga):
-        """Create the data table that store generation data."""
+        """Create the database if it doenst exist and then the data and config
+        tables."""
 
         try:
             # Remove old database file if it exists.
@@ -106,28 +107,33 @@ class SQL_Database:
             # If the database does not exist continue
             pass
 
-        # create a database connection
+        # Create the database connection
         self.conn = self.create_connection(ga.database_name)
 
-        # create tables
         if self.conn is not None:
-
             # Create data table
             self.create_table(ga.sql_create_data_structure)
-
-            # Retrieve variable names and assign sql data types
-            var_names = self.get_var_names(ga)
-            for i in range(len(var_names)):
-                var_names[i] += ' ' + self.sql_type_of(var_names[i])
-
-            # Create config table
-            sql_create_config_structure = "CREATE TABLE IF NOT EXISTS config (\nid INTEGER PRIMARY KEY,"
-            sql_create_config_structure += "\n,".join(var_names)
-            sql_create_config_structure += "); "
-            self.create_table(sql_create_config_structure)
+            # Creare config table
+            self.create_table(self.create_config_table_string(ga))
         else:
             print("Error! cannot create the database connection.")
 
+
+    def create_config_table_string(self,ga):
+        """Automate the table creation sql statement so that it takes all the
+        attribute variables and adds them as columns in the database table config"""
+
+        # Retrieve variable names and assign sql data types
+        var_names = self.get_var_names(ga)
+        for i in range(len(var_names)):
+            var_names[i] += ' ' + self.sql_type_of(var_names[i])
+
+        # Structure the config table
+        sql = "CREATE TABLE IF NOT EXISTS config (\nid INTEGER PRIMARY KEY,"
+        sql += "\n,".join(var_names)
+        sql += "); "
+
+        return sql
 
     def insert_config(self,ga):
         """Insert the configuration attributes into the config."""
