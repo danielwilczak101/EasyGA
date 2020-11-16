@@ -124,7 +124,7 @@ class SQL_Database:
             sql_create_config_structure = "CREATE TABLE IF NOT EXISTS config (\nid INTEGER PRIMARY KEY,"
             sql_create_config_structure += "\n,".join(var_names)
             sql_create_config_structure += "); "
-            self.create_table(ga.sql_create_config_structure)
+            self.create_table(sql_create_config_structure)
         else:
             print("Error! cannot create the database connection.")
 
@@ -143,7 +143,11 @@ class SQL_Database:
                 db_config_list[i] = str(db_config_list[i])
 
         # Create sql query structure
-        sql = "INSERT INTO config (" + ",\n".join(self.get_var_names(ga)) + ") VALUES(" + (",?"*len(db_config_list))[1:] + ") "
+        sql = "INSERT INTO config ("
+        sql += ",\n".join(self.get_var_names(ga))
+        sql += ") VALUES("
+        sql += ( ",?"*len(db_config_list) )[1:]
+        sql += ") "
 
         # For some reason it has to be in var = array(tuple()) form
         db_config_list = [tuple(db_config_list)]

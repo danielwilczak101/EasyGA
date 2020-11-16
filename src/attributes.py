@@ -87,44 +87,6 @@ class Attributes:
                                                 fitness REAL,
                                                 chromosome TEXT
                                             ); """,
-            sql_create_config_structure   = """CREATE TABLE IF NOT EXISTS config (
-                                                id INTEGER PRIMARY KEY,
-                                                chromosome_length INTEGER NOT NULL,
-                                                population_size INTEGER NOT NULL,
-                                                chromosome_impl TEXT,
-                                                gene_impl TEXT,
-                                                population TEXT,
-                                                target_fitness_type TEXT,
-                                                update_fitness INTEGER,
-                                                parent_ratio REAL,
-                                                selection_probability REAL,
-                                                tournament_size_ratio REAL,
-                                                current_generation INTEGER,
-                                                current_fitness REAL,
-                                                generation_goal INTEGER,
-                                                fitness_goal INTEGER,
-                                                tolerance_goal INTEGER,
-                                                percent_converged REAL,
-                                                chromosome_mutation_rate REAL,
-                                                gene_mutation_rate REAL,
-                                                initialization_impl TEXT,
-                                                fitness_function_impl TEXT,
-                                                make_population TEXT,
-                                                make_chromosome TEXT,
-                                                make_gene TEXT,
-                                                parent_selection_impl TEXT,
-                                                crossover_individual_impl TEXT,
-                                                crossover_population_impl TEXT,
-                                                survivor_selection_impl TEXT,
-                                                mutation_individual_impl TEXT,
-                                                mutation_population_impl TEXT,
-                                                termination_impl TEXT,
-                                                database TEXT,
-                                                database_name TEXT,
-                                                sql_create_data_structure TEXT,
-                                                sql_create_config_structure TEXT,
-                                                graph TEXT
-                                            ); """,
             Graph                       = matplotlib_graph.Matplotlib_Graph
         ):
 
@@ -176,7 +138,6 @@ class Attributes:
         self.database = Database()
         self.database_name = deepcopy(database_name)
         self.sql_create_data_structure = deepcopy(sql_create_data_structure)
-        self.sql_create_config_structure = deepcopy(sql_create_config_structure)
 
         # Graphing variables
         self.graph = Graph(self.database)
