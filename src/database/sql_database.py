@@ -71,7 +71,7 @@ class SQL_Database:
         return cur.lastrowid
 
 
-    def create_data_table(self, ga):
+    def create_all_tables(self, ga):
         """Create the data table that store generation data."""
 
         try:
@@ -92,6 +92,103 @@ class SQL_Database:
         else:
             print("Error! cannot create the database connection.")
 
+    def insert_config(self,ga):
+        """Insert the configuration attributes into the config """
+
+        # If either function is None we handle the error
+        try:
+            chromosome_impl = ga.chromosome_impl.__name__
+        except:
+            chromosome_impl = 'None'
+
+        try:
+            gene_impl = ga.chromosome_impl.__name__
+        except:
+            gene_impl = 'None'
+
+        # Structure the insert data
+        db_config_list = [
+            ga.chromosome_length,
+            ga.population_size,
+            chromosome_impl,
+            gene_impl,
+            ga.target_fitness_type,
+            ga.update_fitness,
+            ga.parent_ratio,
+            ga.selection_probability,
+            ga.tournament_size_ratio,
+            ga.current_generation,
+            float(ga.current_fitness),
+            ga.generation_goal,
+            ga.fitness_goal,
+            ga.tolerance_goal,
+            ga.percent_converged,
+            ga.chromosome_mutation_rate,
+            ga.gene_mutation_rate,
+            ga.initialization_impl.__name__,
+            ga.fitness_function_impl.__name__,
+            ga.parent_selection_impl.__name__,
+            ga.crossover_individual_impl.__name__,
+            ga.crossover_population_impl.__name__,
+            ga.survivor_selection_impl.__name__,
+            ga.mutation_individual_impl.__name__,
+            ga.mutation_population_impl.__name__,
+            ga.termination_impl.__name__,
+            ga.database_name
+            ]
+
+        # Clean up so the sqlite database accepts the data structure
+        for i in range(len(db_config_list)):
+            if db_config_list[i] == None:
+                db_config_list[i] = "None"
+            if db_config_list[i] == True:
+                db_config_list[i] = "True"
+            if db_config_list [i] == False:
+                db_config_list[i] = "False"
+
+        # For some reason it has to be in var = array(tuple()) form
+        db_config_list = tuple(db_config_list)
+        db_config_list = [db_config_list]
+
+        # Create sql query structure
+        sql_start = '''INSERT INTO config (chromosome_length,
+        population_size,
+        chromosome_impl,
+        gene_impl,
+        target_fitness_type,
+        update_fitness,
+        parent_ratio,
+        selection_probability,
+        tournament_size_ratio,
+        current_generation,
+        current_fitness,
+        generation_goal,
+        fitness_goal,
+        tolerance_goal,
+        percent_converged,
+        chromosome_mutation_rate,
+        gene_mutation_rate,
+        initialization_impl,
+        fitness_function_impl,
+        parent_selection_impl,
+        crossover_individual_impl,
+        crossover_population_impl,
+        survivor_selection_impl,
+        mutation_individual_impl,
+        mutation_population_impl,
+        termination_impl,
+        database_name) VALUES('''
+
+        # Automate the value inputs
+        sql_middle = '?,' * (27 - 1)
+        sql_end = '?) '
+        sql = sql_start + sql_middle + sql_end
+
+        # Execute sql query
+        cur = self.conn.cursor()
+        cur.executemany(sql, db_config_list)
+        self.conn.commit()
+        return cur.lastrowid
 
     def query_all(self, query):
         """Query for muliple rows of data"""

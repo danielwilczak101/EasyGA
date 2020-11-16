@@ -49,9 +49,10 @@ class GA(Attributes):
             if self.current_generation == 0:
 
                 # Create the database here to allow the user to change
-                # the database name and structure in the running function.
-                self.database.create_data_table(self)
-
+                # the database name and structure before running the function.
+                self.database.create_all_tables(self)
+                # Add the current configuration to the config table
+                self.database.insert_config(self)
                 # Create the initial population
                 self.initialize_population()
 

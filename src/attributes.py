@@ -81,17 +81,42 @@ class Attributes:
             Database                    = sql_database.SQL_Database,
             database_name               = 'database.db',
             sql_create_data_structure   = """CREATE TABLE IF NOT EXISTS data (
-                                                id integer PRIMARY KEY,
-                                                generation integer NOT NULL,
-                                                fitness DOUBLE,
-                                                chromosome text
+                                                id INTEGER PRIMARY KEY,
+                                                config_id INTEGER DEFAULT NULL,
+                                                generation INTEGER NOT NULL,
+                                                fitness REAL,
+                                                chromosome TEXT
                                             ); """,
             sql_create_config_structure   = """CREATE TABLE IF NOT EXISTS config (
-                                                id integer PRIMARY KEY,
-                                                generation integer NOT NULL,
-                                                fitness DOUBLE,
-                                                chromosome text
-                                            ); """,                                
+                                                id INTEGER PRIMARY KEY,
+                                                chromosome_length INTEGER NOT NULL,
+                                                population_size INTEGER NOT NULL,
+                                                chromosome_impl TEXT,
+                                                gene_impl TEXT,
+                                                target_fitness_type TEXT,
+                                                update_fitness INTEGER,
+                                                parent_ratio REAL,
+                                                selection_probability REAL,
+                                                tournament_size_ratio REAL,
+                                                current_generation INTEGER,
+                                                current_fitness REAL,
+                                                generation_goal INTEGER,
+                                                fitness_goal INTEGER,
+                                                tolerance_goal INTEGER,
+                                                percent_converged REAL,
+                                                chromosome_mutation_rate REAL,
+                                                gene_mutation_rate REAL,
+                                                initialization_impl TEXT,
+                                                fitness_function_impl TEXT,
+                                                parent_selection_impl TEXT,
+                                                crossover_individual_impl TEXT,
+                                                crossover_population_impl TEXT,
+                                                survivor_selection_impl TEXT,
+                                                mutation_individual_impl TEXT,
+                                                mutation_population_impl TEXT,
+                                                termination_impl TEXT,
+                                                database_name TEXT
+                                            ); """,
             Graph                       = matplotlib_graph.Matplotlib_Graph
         ):
 
