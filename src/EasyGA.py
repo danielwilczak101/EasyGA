@@ -41,11 +41,11 @@ class GA(Attributes):
     def evolve_generation(self, number_of_generations = 1, consider_termination = True):
         """Evolves the ga the specified number of generations."""
 
-        cond1 = number_of_generations > 0 # Evolve the specified number of generations
-        cond2 = not consider_termination  # If consider_termination flag is set
-        cond3 = self.active               # If termination conditions reached
+        cond1 = lambda: number_of_generations > 0  # Evolve the specified number of generations.
+        cond2 = lambda: not consider_termination   # If consider_termination flag is set:
+        cond3 = lambda: cond2() or self.active()   #     check termination conditions.
 
-        while(cond1 and (cond2 or cond3())):
+        while cond1() and cond3():
             # If its the first generation
             if self.current_generation == 0:
 
