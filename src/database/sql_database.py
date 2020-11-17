@@ -68,7 +68,9 @@ class SQL_Database:
         """ Insert current generations population """
 
         # Structure the insert data
-        db_chromosome_list = [(ga.current_generation, chromosome.fitness, chromosome.__str__())
+        db_chromosome_list = [(ga.current_generation,
+                                  chromosome.fitness,
+                                   chromosome.__str__())
          for chromosome in ga.population.get_chromosome_list() ]
 
         # Create sql query structure

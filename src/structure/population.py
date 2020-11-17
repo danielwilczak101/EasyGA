@@ -148,11 +148,11 @@ class Population:
         """Sets the fitness value of the population"""
         self.fitness = fitness
 
-'''
+
     def __repr__(self):
         """Returns a backend string representation of the entire population"""
         pass
-'''
+
 
     def print_all(self):
         """Prints information about the population in the following format:
