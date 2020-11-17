@@ -151,19 +151,8 @@ class Population:
 
     def __repr__(self):
         """Returns a backend string representation of the entire population"""
-        pass
-
-
-    def print_all(self):
-        """Prints information about the population in the following format:
-        Current population
-        Chromosome 1 - [gene][gene][gene][.etc] / Chromosome fitness -
-        Chromosome 2 - [gene][gene][gene][.etc] / Chromosome fitness -
-        etc.
-        """
-
-        print("Current population:")
-
-        for index in range(self.size()):
-            print(f'Chromosome - {index} {self.get_chromosome(index)}', end = "")
-            print(f' / Fitness = {self.get_chromosome(index).get_fitness()}')
+        return ''.join(
+                'Chromosome - {index} {self.get_chromosome(index)} ' + 
+                '/ Fitness = {self.get_chromosome(index).get_fitness()}\n'
+            for index in range(self.size())
+        )

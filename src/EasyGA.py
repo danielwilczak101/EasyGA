@@ -156,7 +156,7 @@ class GA(Attributes):
 
     def print_population(self):
         """Prints the entire population"""
-        self.population.print_all()
+        print(self.population)
 
 
     def print_best(self):
