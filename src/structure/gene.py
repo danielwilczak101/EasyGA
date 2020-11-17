@@ -29,5 +29,10 @@ class Gene:
 
 
     def __repr__(self):
-        """Format the repr() output value"""
-        return f'[{self.value}]'
+        """Create a backend string of the chromosome. Ex '1'."""
+        return str(self.value)
+
+
+    def __str__(self):
+        """Create a printable string of the chromosome. Ex '[1]'."""
+        return f'[{str(self.value)}]'

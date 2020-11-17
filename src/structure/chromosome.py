@@ -55,20 +55,10 @@ class Chromosome:
 
 
     def __repr__(self):
-        """Format the repr() output for the chromosome"""
-        output_str = ''
-        for gene in self.gene_list:
-            output_str += gene.__repr__()
+        """Create a backend string of the chromosome. Ex '1, 2, 3'."""
+        return ', '.join(repr(gene) for gene in self.gene_list)
 
-        return output_str
 
     def __str__(self):
-        """Create a string of the chromosome. Ex chromsome = 1,2,3"""
-        output_str = ''
-        for gene in self.gene_list:
-            if gene == self.gene_list[0]:
-                output_str += str(gene.get_value())
-            else:
-                output_str += ',' + str(gene.get_value())
-
-        return output_str
+        """Create a printable string of the chromosome. Ex '[1][2][3]'."""
+        return ''.join(str(gene) for gene in self.gene_list)
