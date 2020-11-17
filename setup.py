@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='EasyGA',
-    version='0.0.27',
+    version='0.0.30',
     description='A ubiquitous or general purpuse GA',
     py_modules=["EasyGA","attributes","test_EasyGA"],
     packages=find_packages(where='EasyGA'),
