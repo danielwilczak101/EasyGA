@@ -152,7 +152,7 @@ class Population:
     def __repr__(self):
         """Returns a backend string representation of the entire population"""
         return ''.join(
-                'Chromosome - {index} {self.get_chromosome(index)} ' + 
-                '/ Fitness = {self.get_chromosome(index).get_fitness()}\n'
+                f'Chromosome - {index} {self.get_chromosome(index)} ' + 
+                f'/ Fitness = {self.get_chromosome(index).get_fitness()}\n'
             for index in range(self.size())
         )
