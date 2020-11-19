@@ -153,7 +153,7 @@ class Population:
 
     def __iter__(self):
         """Returns an iterable of chromosomes"""
-        return iter(self.chromosome_list)
+        return self.chromosome_list
 
 
     def __getitem__(self, k):
@@ -175,22 +175,14 @@ class Population:
         """Returns True if the current population contains the chromosome and False otherwise.
         Ex. if chromosome in ga.population: ..."""
 
-        for index in range(len(self)):
-            if self[index] == searched_chromosome:
-                return True
-        else:
-            return False
+        return (searched_chromosome in self.chromosome_list)
 
 
     def index_of(self, searched_chromosome):
         """Returns the index of the chromosome in the current population.
         Returns -1 if no index found."""
 
-        for index in range(len(self)):
-            if self[index] == searched_chromosome:
-                return index
-        else:
-            return -1
+        return self.chromosome_list.index(searched_chromosome)
 
 
     def __repr__(self):

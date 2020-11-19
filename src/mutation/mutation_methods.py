@@ -33,7 +33,7 @@ class Mutation_Methods:
 
         def individual_genes(ga, old_chromosome):
             """Mutates a random gene in the chromosome and resets the fitness."""
-            chromosome = ga.make_chromosome(old_chromosome.get_gene_list())
+            chromosome = ga.make_chromosome(list(old_chromosome))
 
             # Loops until enough mutations occur
             for n in range(ceil(len(chromosome)*ga.gene_mutation_rate)):
@@ -61,7 +61,7 @@ class Mutation_Methods:
 
                 def swap_genes(ga, old_chromosome):
                     """Mutates a random gene in the chromosome and resets the fitness."""
-                    chromosome = ga.make_chromosome(old_chromosome.get_gene_list())
+                    chromosome = ga.make_chromosome(list(old_chromosome))
 
                     # Loops until enough mutations occur
                     for n in range(ceil(len(chromosome)*ga.gene_mutation_rate)):

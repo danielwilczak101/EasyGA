@@ -57,7 +57,7 @@ class Chromosome:
 
     def __iter__(self):
         """Returns an iterable of the gene list"""
-        return iter(self.gene_list)
+        return self.gene_list
 
 
     def __getitem__(self, k):
@@ -75,11 +75,25 @@ class Chromosome:
         return len(self.gene_list)
 
 
+    def __contains__(self, searched_gene):
+        """Returns True if the chromosome contains the gene and False otherwise.
+        Ex. if chromosome in ga.population: ..."""
+
+        return (searched_gene in self.gene_list)
+
+
+    def index_of(self, searched_gene):
+        """Returns the index of the gene in the current chromosome.
+        Returns -1 if no index found."""
+
+        return self.gene_list.index(searched_gene)
+
+
     def __repr__(self):
         """Create a backend string of the chromosome. Ex '1, 2, 3'."""
-        return ', '.join(repr(gene) for gene in self.gene_list)
+        return ', '.join(repr(gene) for gene in self)
 
 
     def __str__(self):
         """Create a printable string of the chromosome. Ex '[1][2][3]'."""
-        return ''.join(str(gene) for gene in self.gene_list)
+        return ''.join(str(gene) for gene in self)
