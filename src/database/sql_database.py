@@ -52,10 +52,10 @@ class SQL_Database:
         """ Insert one chromosome into the database"""
 
         # Structure the insert data
-        db_chromosome = (generation, chromosome.fitness, '[chromosome]')
+        db_chromosome = (generation, chromosome.fitness, repr(chromosome))
 
         # Create sql query structure
-        sql = ''' INSERT INTO data(generation,fitness,chromosome)
+        sql = ''' INSERT INTO data(generation, fitness, chromosome)
          VALUES(?,?,?) '''
 
         cur = self.conn.cursor()
@@ -134,6 +134,7 @@ class SQL_Database:
         sql += "); "
 
         return sql
+
 
     def insert_config(self,ga):
         """Insert the configuration attributes into the config."""
