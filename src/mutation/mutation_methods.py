@@ -68,10 +68,6 @@ class Mutation_Methods:
                         index_one = random.randint(0, len(chromosome)-1)
                         index_two = random.randint(0, len(chromosome)-1)
 
-                        gene_one = chromosome.get_gene(index_one)
-                        gene_two = chromosome.get_gene(index_two)
-
-                        chromosome[index_two] = gene_one
-                        chromosome[index_one] = gene_two
+                        chromosome[index_one], chromosome[index_two] = chromosome[index_two], chromosome[index_one]
 
                     return chromosome
