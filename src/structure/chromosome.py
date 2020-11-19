@@ -53,6 +53,10 @@ class Chromosome:
         """Set the fitness value of the chromosome"""
         self.fitness = fitness
 
+    def list(self):
+        """Returns the chromosome as a list"""
+        return [gene.value for gene in input_value.gene_list]
+
 
     def __repr__(self):
         """Create a backend string of the chromosome. Ex '1, 2, 3'."""
