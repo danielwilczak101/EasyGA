@@ -110,15 +110,15 @@ class GA(Attributes):
                 chromosome.set_fitness(self.fitness_function_impl(chromosome))
 
 
-    def sort_by_best_fitness(self, chromosome_set):
-        """Sorts the array by fitness based on fitness type.
+    def sort_by_best_fitness(self, chromosome_list):
+        """Sorts the chromosome list by fitness based on fitness type.
         1st element has best fitness.
         2nd element has second best fitness.
         etc.
         """
 
         return sorted(
-                chromosome_set,                                     # list to be sorted
+                chromosome_list,                                    # list to be sorted
                 key = lambda chromosome: chromosome.get_fitness(),  # by fitness
                 reverse = (self.target_fitness_type == 'max')       # ordered by fitness type
             )
@@ -130,7 +130,7 @@ class GA(Attributes):
         on the target fitness type.
         """
         return self.convert_fitness(
-                   self.population.get_chromosome(index).get_fitness()
+                   self.population[index].get_fitness()
                )
 
 
@@ -140,11 +140,17 @@ class GA(Attributes):
         inverted using max - value + min.
         """
 
+        # No conversion needed
         if self.target_fitness_type == 'max': return fitness_value
-        max_fitness = self.population.get_chromosome(-1).get_fitness()
-        min_fitness = self.population.get_chromosome(0).get_fitness()
+
+        max_fitness = self.population[-1].get_fitness()
+        min_fitness = self.population[0].get_fitness()
+
+        # Avoid catastrophic cancellation
         if min_fitness / max_fitness < 1e-5:
             return -fitness_value
+
+        # Otherwise flip values
         else:
             return max_fitness - fitness_value + min_fitness
 
@@ -161,11 +167,11 @@ class GA(Attributes):
 
     def print_best(self):
         """Prints the best chromosome and its fitness"""
-        print(f"Best Chromosome \t: {self.population.get_chromosome(0)}")
-        print(f"Best Fitness    \t: {self.population.get_chromosome(0).get_fitness()}")
+        print(f"Best Chromosome \t: {self.population[0]}")
+        print(f"Best Fitness    \t: {self.population[0].get_fitness()}")
 
 
     def print_worst(self):
         """Prints the worst chromosome and its fitness"""
-        print(f"Worst Chromosome \t: {self.population.get_chromosome(-1)}")
-        print(f"Worst Fitness    \t: {self.population.get_chromosome(-1).get_fitness()}")
+        print(f"Worst Chromosome \t: {self.population[-1]}")
+        print(f"Worst Fitness    \t: {self.population[-1].get_fitness()}")

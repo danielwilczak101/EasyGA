@@ -21,15 +21,15 @@ class Parent_Selection:
 
             # Choose the tournament size.
             # Use no less than 5 chromosomes per tournament.
-            tournament_size = int(ga.population.size()*ga.tournament_size_ratio)
+            tournament_size = int(len(ga.population)*ga.tournament_size_ratio)
             if tournament_size < 5:
                 tournament_size = 5
 
             # Repeat tournaments until the mating pool is large enough.
-            while (len(ga.population.get_mating_pool()) < ga.population.size()*ga.parent_ratio):
+            while (len(ga.population.get_mating_pool()) < len(ga.population)*ga.parent_ratio):
 
                 # Generate a random tournament group and sort by fitness.
-                tournament_group = sorted([random.randint(0, ga.population.size()-1) for n in range(tournament_size)])
+                tournament_group = sorted([random.randint(0, len(ga.population)-1) for n in range(tournament_size)])
 
                 # For each chromosome, add it to the mating pool based on its rank in the tournament.
                 for index in range(tournament_size):
@@ -43,7 +43,7 @@ class Parent_Selection:
                         ga.population.set_parent(tournament_group[index])
 
                         # Stop if parent ratio reached
-                        if len(ga.population.get_mating_pool()) >= ga.population.size()*ga.parent_ratio:
+                        if len(ga.population.get_mating_pool()) >= len(ga.population)*ga.parent_ratio:
                             break
 
 
@@ -73,19 +73,19 @@ class Parent_Selection:
                 return
 
             # The sum of all the fitnessess in a population
-            fitness_sum = sum(ga.get_chromosome_fitness(index) for index in range(ga.population.size()))
+            fitness_sum = sum(ga.get_chromosome_fitness(index) for index in range(len(ga.population)))
 
             # A list of ranges that represent the probability of a chromosome getting chosen
             probability = [ga.selection_probability]
 
             # The chance of being selected increases incrementally
-            for index in range(ga.population.size()):
+            for index in range(len(ga.population)):
                 probability.append(probability[-1]+ga.get_chromosome_fitness(index)/fitness_sum)
 
             probability = probability[1:]
 
             # Loops until it reaches a desired mating pool size
-            while (len(ga.population.get_mating_pool()) < ga.population.size()*ga.parent_ratio):
+            while (len(ga.population.get_mating_pool()) < len(ga.population)*ga.parent_ratio):
 
                 # Spin the roulette
                 rand_number = random.random()
@@ -121,10 +121,10 @@ class Parent_Selection:
                 return
 
             # Loops until it reaches a desired mating pool size
-            while (len(ga.population.get_mating_pool()) < ga.population.size()*ga.parent_ratio):
+            while (len(ga.population.get_mating_pool()) < len(ga.population)*ga.parent_ratio):
 
                 # Selected chromosome
-                index = random.randint(0, ga.population.size()-1)
+                index = random.randint(0, len(ga.population)-1)
 
                 # Probability of becoming a parent is fitness/max_fitness
                 if random.uniform(ga.selection_probability, 1) < ga.get_chromosome_fitness(index)/max_fitness:

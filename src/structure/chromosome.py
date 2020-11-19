@@ -10,11 +10,6 @@ class Chromosome:
         self.fitness = None
 
 
-    def size(self):
-        """Returns the number of genes in the chromosome"""
-        return len(self.gene_list)
-
-
     def add_gene(self, gene, index = None):
         """Add a gene to the chromosome at the specified index, defaulted to end of the chromosome"""
         if index is None:
@@ -54,10 +49,30 @@ class Chromosome:
         self.fitness = fitness
 
 
+    @property
+    def gene_value_list(self):
+        """Returns a list of gene values"""
+        return [gene.value for gene in self]
+
+
     def __iter__(self):
-        """Returns an iterable of the gene values"""
-        for gene in self.gene_list:
-            yeild gene.value
+        """Returns an iterable of the gene list"""
+        return iter(self.gene_list)
+
+
+    def __getitem__(self, k):
+        """Returns the k-th gene"""
+        return self.get_gene(k)
+
+
+    def __setitem__(self, k, gene):
+        """Sets the k-th gene value"""
+        self.set_gene(gene, k)
+
+
+    def __len__(self):
+        """Returns the number of genes in the chromosome"""
+        return len(self.gene_list)
 
 
     def __repr__(self):

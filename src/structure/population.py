@@ -55,14 +55,16 @@ class Population:
         self.set_chromosome_list(ga.sort_by_best_fitness(self.chromosome_list))
 
 
-    def size(self):
-        """Returns the size of the population"""
-        return len(self.chromosome_list)
-
-
+    @property
     def total_children(self):
         """Returns the size of the next population"""
         return len(self.next_population)
+
+
+    @property
+    def total_parents(self):
+        """Returns the size of the mating pool"""
+        return len(self.mating_pool)
 
 
     def get_closet_fitness(self, value):
@@ -71,8 +73,8 @@ class Population:
 
 
     def add_chromosome(self, chromosome, index = None):
-        """Adds a chromosome to the population at the input index, defaulted
-         to the end of the chromosome set"""
+        """Adds a chromosome to the population at the input index,
+        defaulted to the end of the chromosome set"""
 
         if index is None:
             index = self.size()
@@ -150,15 +152,52 @@ class Population:
 
 
     def __iter__(self):
-        """Returns an iterable of chromosome iterables"""
-        for chromosome in self.chromosome_list:
-            yield iter(chromosome)
+        """Returns an iterable of chromosomes"""
+        return iter(self.chromosome_list)
+
+
+    def __getitem__(self, k):
+        """Returns the k-th chromosome"""
+        return self.get_chromosome(k)
+
+
+    def __setitem__(self, k, chromosome):
+        """Sets the k-th chromosome"""
+        self.set_chromosome(chromosome, k)
+
+
+    def __len__(self):
+        """Returns the number of chromosomes in the current population"""
+        return len(self.chromosome_list)
+
+
+    def __contains__(self, searched_chromosome):
+        """Returns True if the current population contains the chromosome and False otherwise.
+        Ex. if chromosome in ga.population: ..."""
+
+        for index in range(len(self)):
+            if self[index] == searched_chromosome:
+                return True
+        else:
+            return False
+
+
+    def index_of(self, searched_chromosome):
+        """Returns the index of the chromosome in the current population.
+        Returns -1 if no index found."""
+
+        for index in range(len(self)):
+            if self[index] == searched_chromosome:
+                return index
+        else:
+            return -1
 
 
     def __repr__(self):
         """Returns a backend string representation of the entire population"""
+
         return ''.join(
-                f'Chromosome - {index} {self.get_chromosome(index)} ' + 
-                f'/ Fitness = {self.get_chromosome(index).get_fitness()}\n'
-            for index in range(self.size())
+                f'Chromosome - {self.index_of(chromosome)} {chromosome} ' + 
+                f'/ Fitness = {chromosome.get_fitness()}\n'
+            for chromosome in self
         )
