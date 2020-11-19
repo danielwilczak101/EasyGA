@@ -46,16 +46,20 @@ class GA(Attributes):
         cond3 = lambda: cond2() or self.active()   #     check termination conditions.
 
         while cond1() and cond3():
+
             # If its the first generation
             if self.current_generation == 0:
 
-                # Create the database here to allow the user to change
-                # the database name and structure before running the function.
+                # Create the database here to allow the user to change the
+                # database name and structure before running the function.
                 self.database.create_all_tables(self)
+
                 # Add the current configuration to the config table
                 self.database.insert_config(self)
+
                 # Create the initial population
-                self.initialize_population()
+                if self.population is None:
+                    self.initialize_population()
 
             # Otherwise evolve the population
             else:
