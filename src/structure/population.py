@@ -197,7 +197,7 @@ class Population:
         """Returns a backend string representation of the entire population"""
 
         return ''.join(
-                f'Chromosome - {self.index_of(chromosome)} {chromosome} ' + 
-                f'/ Fitness = {chromosome.get_fitness()}\n'
-            for chromosome in self
+                f'Chromosome - {index} {self[index]} ' + 
+                f'/ Fitness = {self[index].get_fitness()}\n'
+            for index in range(len(self))
         )
