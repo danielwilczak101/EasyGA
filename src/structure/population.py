@@ -149,9 +149,10 @@ class Population:
         self.fitness = fitness
 
 
-    def data_list(self):
-        """Returns a list of chromosome data lists"""
-        return [chromosome.data_list() for chromosome in self.chromosome_list]
+    def __iter__(self):
+        """Returns an iterable of chromosome iterables"""
+        for chromosome in self.chromosome_list:
+            yield iter(chromosome)
 
 
     def __repr__(self):

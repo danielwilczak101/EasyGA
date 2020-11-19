@@ -69,9 +69,9 @@ class Crossover_Methods:
             def int_random(ga, parent_1, parent_2):
                 """Cross two parents by taking a random integer value between each of the genes."""
 
-                return ga.make_chromosome([                                                  # Make a new chromosome
-                        ga.make_gene(random.randint(*sorted([data_1, data_2])))              # by randomly selecting integer genes between
-                    for data_1, data_2 in zip(parent_1.data_list(), parent_2.data_list())])  # each parents' genes
+                return ga.make_chromosome([                                      # Make a new chromosome
+                        ga.make_gene(random.randint(*sorted([data_1, data_2])))  # by randomly selecting integer genes between
+                    for data_1, data_2 in zip(iter(parent_1), iter(parent_2))])  # each parents' genes
 
 
             def int_weighted(ga, parent_1, parent_2):
@@ -80,19 +80,19 @@ class Crossover_Methods:
                 # the percentage of genes taken from the first gene
                 weight = 0.25
 
-                return ga.make_chromosome([                                                  # Make a new chromosome
-                        ga.make_gene(int(                                                    #     filled with new integer genes
-                            weight*data_1+(1-weight)*data_2                                  #         with weight% from gene 1 and
-                        ))                                                                   #         (100-weight)% from gene 2
-                    for data_1, data_2 in zip(parent_1.data_list(), parent_2.data_list())])  # from each parents' genes
+                return ga.make_chromosome([                                      # Make a new chromosome
+                        ga.make_gene(int(                                        #     filled with new integer genes
+                            weight*data_1+(1-weight)*data_2                      #         with weight% from gene 1 and
+                        ))                                                       #         (100-weight)% from gene 2
+                    for data_1, data_2 in zip(iter(parent_1), iter(parent_2))])  # from each parents' genes
 
 
             def float_random(ga, parent_one, parent_two):
                 """Cross two parents by taking a random numeric value between each of the genes."""
 
-                return ga.make_chromosome([                                                  # Make a new chromosome
-                        ga.make_gene(random.uniform([data_1, data_2]))                       # by randomly selecting integer genes between
-                    for data_1, data_2 in zip(parent_1.data_list(), parent_2.data_list())])  # from each parents' genes
+                return ga.make_chromosome([                                      # Make a new chromosome
+                        ga.make_gene(random.uniform([data_1, data_2]))           # by randomly selecting integer genes between
+                    for data_1, data_2 in zip(iter(parent_1), iter(parent_2))])  # from each parents' genes
 
 
             def float_weighted(ga, parent_one, parent_two):
@@ -101,8 +101,8 @@ class Crossover_Methods:
                 # the percentage of genes taken from the first gene
                 weight = 0.25
 
-                return ga.make_chromosome([                                                  # Make a new chromosome
-                        ga.make_gene(                                                        #     filled with new float genes
-                            weight*data_1+(1-weight)*data_2                                  #         with weight% from gene 1 and
-                        )                                                                    #         (100-weight)% from gene 2
-                    for data_1, data_2 in zip(parent_1.data_list(), parent_2.data_list())])  # from each parents' genes
+                return ga.make_chromosome([                                      # Make a new chromosome
+                        ga.make_gene(                                            #     filled with new float genes
+                            weight*data_1+(1-weight)*data_2                      #         with weight% from gene 1 and
+                        )                                                        #         (100-weight)% from gene 2
+                    for data_1, data_2 in zip(iter(parent_1), iter(parent_2))])  # from each parents' genes

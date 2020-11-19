@@ -53,9 +53,11 @@ class Chromosome:
         """Set the fitness value of the chromosome"""
         self.fitness = fitness
 
-    def data_list(self):
-        """Returns a list of the gene values"""
-        return [gene.value for gene in self.gene_list]
+
+    def __iter__(self):
+        """Returns an iterable of the gene values"""
+        for gene in self.gene_list:
+            yeild gene.value
 
 
     def __repr__(self):
