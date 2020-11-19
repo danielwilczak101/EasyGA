@@ -65,7 +65,7 @@ class Population:
         return len(self.next_population)
 
 
-    def get_closet_fitness(self,value):
+    def get_closet_fitness(self, value):
         """Get the chomosome that has the closets fitness to the value defined"""
         pass
 
@@ -147,6 +147,11 @@ class Population:
     def set_fitness(self, fitness):
         """Sets the fitness value of the population"""
         self.fitness = fitness
+
+
+    def data_list(self):
+        """Returns a list of chromosome data lists"""
+        return [chromosome.data_list() for chromosome in self.chromosome_list]
 
 
     def __repr__(self):
