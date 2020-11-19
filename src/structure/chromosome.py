@@ -45,17 +45,17 @@ class Chromosome:
         self.gene_list[index] = gene
 
 
-    def set_gene_list(self, genes):
-        self.gene_list = genes
+    def set_gene_list(self, gene_list):
+        self.gene_list = gene_list
 
 
     def set_fitness(self, fitness):
         """Set the fitness value of the chromosome"""
         self.fitness = fitness
 
-    def list(self):
-        """Returns the chromosome as a list"""
-        return [gene.value for gene in input_value.gene_list]
+    def data_list(self):
+        """Returns a list of the gene values"""
+        return [gene.value for gene in self.gene_list]
 
 
     def __repr__(self):
