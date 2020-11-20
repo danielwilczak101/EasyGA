@@ -43,6 +43,14 @@ class Crossover_Methods:
     class Individual:
         """Methods for crossing parents."""
 
+        def __values_to_chromosome(crossover_method):
+            def helper(ga, parent_1, parent_2):
+                return ga.make_chromosome([
+                           ga.make_gene(value)
+                       for value in crossover_method(ga, parent_1, parent_2)])
+            return helper
+
+
         def single_point(ga, parent_1, parent_2):
             """Cross two parents by swapping genes at one random point."""
 
@@ -66,17 +74,18 @@ class Crossover_Methods:
         class Arithmetic:
             """Crossover methods for numerical genes."""
 
+            @Individual._Individual__values_to_chromosome
             def int_random(ga, parent_1, parent_2):
                 """Cross two parents by taking a random integer value between each of the genes."""
 
                 value_list_1 = parent_1.gene_value_list
                 value_list_2 = parent_2.gene_value_list
 
-                return ga.make_chromosome([                                        # Make a new chromosome
-                        ga.make_gene(random.randint(*sorted([value_1, value_2])))  # by randomly selecting integer genes between
-                    for value_1, value_2 in zip(value_list_1, value_list_2)])      # each parents' genes
+                for value_1, value_2 in zip(value_list_1, value_list_2):
+                    yield random.randint(*sorted([value_1, value_2]))
 
 
+            @Individual._Individual__values_to_chromosome
             def int_weighted(ga, parent_1, parent_2):
                 """Cross two parents by taking a a weighted average of the genes."""
 
@@ -86,24 +95,22 @@ class Crossover_Methods:
                 value_list_1 = parent_1.gene_value_list
                 value_list_2 = parent_2.gene_value_list
 
-                return ga.make_chromosome([                                    # Make a new chromosome
-                        ga.make_gene(int(                                      #     filled with new integer genes
-                            weight*value_1+(1-weight)*value_2                  #         with weight% from gene 1 and
-                        ))                                                     #         (100-weight)% from gene 2
-                    for value_1, value_2 in zip(value_list_1, value_list_2)])  # from each parents' genes
+                for value_1, value_2 in zip(value_list_1, value_list_2):
+                    yield int(weight*value_1+(1-weight)*value_2)
 
 
+            @Individual._Individual__values_to_chromosome
             def float_random(ga, parent_one, parent_two):
                 """Cross two parents by taking a random numeric value between each of the genes."""
 
                 value_list_1 = parent_1.gene_value_list
                 value_list_2 = parent_2.gene_value_list
 
-                return ga.make_chromosome([                                    # Make a new chromosome
-                        ga.make_gene(random.uniform([value_1, value_2]))       # by randomly selecting integer genes between
-                    for value_1, value_2 in zip(value_list_1, value_list_2)])  # from each parents' genes
+                for value_1, value_2 in zip(value_list_1, value_list_2):
+                    yield random.uniform([value_1, value_2])
 
 
+            @Individual._Individual__values_to_chromosome
             def float_weighted(ga, parent_one, parent_two):
                 """Cross two parents by taking a a weighted average of the genes."""
 
@@ -112,9 +119,6 @@ class Crossover_Methods:
 
                 value_list_1 = parent_1.gene_value_list
                 value_list_2 = parent_2.gene_value_list
-
-                return ga.make_chromosome([                                    # Make a new chromosome
-                        ga.make_gene(                                          #     filled with new float genes
-                            weight*value_1+(1-weight)*value_2                  #         with weight% from gene 1 and
-                        )                                                      #         (100-weight)% from gene 2
-                    for value_1, value_2 in zip(value_list_1, value_list_2)])  # from each parents' genes
+                
+                for value_1, value_2 in zip(value_list_1, value_list_2):
+                    yield weight*value_1+(1-weight)*value_2
