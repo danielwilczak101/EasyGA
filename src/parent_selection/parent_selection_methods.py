@@ -27,6 +27,13 @@ def ensure_sorted(selection_method):
 
 class Parent_Selection:
 
+    def __check_selection_probability(selection_method):
+        return check_selection_probability(selection_method)
+    def __check_positive_fitness(selection_method):
+        return check_positive_fitness(selection_method)
+    def __ensure_sorted(selection_method):
+        return ensure_sorted(selection_method)
+
 
     class Rank:
 

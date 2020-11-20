@@ -1,13 +1,13 @@
 import random
 
-def append_to_next_population(survivor_method):
-    return lambda ga: ga.population.append_children(survivor_method(ga))
-
 class Survivor_Selection:
     """Survivor selection determines which individuals should be brought to the next generation"""
 
+    def __append_to_next_population(survivor_method):
+        return lambda ga: ga.population.append_children(survivor_method(ga))
 
-    @append_to_next_population
+
+    @__append_to_next_population
     def fill_in_best(ga):
         """Fills in the next population with the best chromosomes from the last population"""
 
@@ -15,7 +15,7 @@ class Survivor_Selection:
         return ga.population[:needed_amount]
 
 
-    @append_to_next_population
+    @__append_to_next_population
     def fill_in_random(ga):
         """Fills in the next population with random chromosomes from the last population"""
 
@@ -23,7 +23,7 @@ class Survivor_Selection:
         return [random.choice(ga.population) for n in range(needed_amount)]
 
 
-    @append_to_next_population
+    @__append_to_next_population
     def fill_in_parents_then_random(ga):
         """Fills in the next population with all parents followed by random chromosomes from the last population"""
 

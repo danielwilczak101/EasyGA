@@ -18,6 +18,12 @@ def values_to_chromosome(crossover_method):
 
 class Crossover_Methods:
 
+    def __append_children_from_mating_pool(crossover_method):
+        return append_children_from_mating_pool(crossover_method)
+    def __values_to_chromosome(crossover_method):
+        return values_to_chromosome(crossover_method)
+
+
     class Population:
         """Methods for selecting chromosomes to crossover."""
 

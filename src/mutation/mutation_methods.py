@@ -23,6 +23,12 @@ def loop_mutations(mutation_method):
 
 class Mutation_Methods:
 
+    def __loop_selections(selection_method):
+        return loop_selections(selection_method)
+    def __loop_mutations(mutation_method):
+        return loop_mutations(mutation_method)
+
+
     class Population:
         """Methods for selecting chromosomes to mutate"""
 
