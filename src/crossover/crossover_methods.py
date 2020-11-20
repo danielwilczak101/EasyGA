@@ -5,39 +5,42 @@ class Crossover_Methods:
     class Population:
         """Methods for selecting chromosomes to crossover."""
 
-        def sequential_selection(ga):
+        def __append_children_from_mating_pool(crossover_method):
+            def helper(ga):
+                mating_pool = ga.population.mating_pool
+                ga.population.append_children([
+                    [chromosome for cromosome in crossover_method(ga, mating_pool)]
+                )
+            return helper
+
+
+        @__append_children_from_mating_pool
+        def sequential_selection(ga, mating_pool):
             """Select sequential pairs from the mating pool.
             Every parent is paired with the previous parent.
             The first parent is paired with the last parent.
             """
 
-            mating_pool = ga.population.get_mating_pool()
-
-            for index in range(len(mating_pool)):  # for each parent in the mating pool
-                ga.population.add_child(           #     add a child
-                    ga.crossover_individual_impl(  #         by crossing
-                        ga,                        #
-                        mating_pool[index],        #             the parent and
-                        mating_pool[index-1]       #             the previous parent
-                    )
-                )
+            for index in range(len(mating_pool)):    # for each parent in the mating pool
+                yield ga.crossover_individual_impl(  #     apply crossover to
+                          ga,                        # 
+                          mating_pool[index],        #         the parent and
+                          mating_pool[index-1]       #         the previous parent
+                      )
 
 
-        def random_selection(ga):
+        @__append_children_from_mating_pool
+        def random_selection(ga, mating_pool):
             """Select random pairs from the mating pool.
             Every parent is paired with a random parent.
             """
 
-            mating_pool = ga.population.get_mating_pool()
-
-            for parent in mating_pool:              # for each parent in the mating pool
-                ga.population.add_child(            #     add a child
-                    ga.crossover_individual_impl(   #         by crossing
-                        ga,                         #
-                        parent,                     #             the parent and
-                        random.choice(mating_pool)  #             a random parent
-                    )
-                )
+            for parent in mating_pool:                # for each parent in the mating pool
+                yield ga.crossover_individual_impl(   #     apply crossover to
+                          ga,                         # 
+                          parent,                     #         the parent and
+                          random.choice(mating_pool)  #         a random parent
+                      )
 
 
     class Individual:
