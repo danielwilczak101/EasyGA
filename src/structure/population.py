@@ -179,8 +179,7 @@ class Population:
 
 
     def index_of(self, searched_chromosome):
-        """Returns the index of the chromosome in the current population.
-        Returns -1 if no index found."""
+        """Returns the index of the chromosome in the current population."""
 
         return self.chromosome_list.index(searched_chromosome)
 
@@ -189,7 +188,7 @@ class Population:
         """Returns a backend string representation of the entire population"""
 
         return ''.join(
-                f'Chromosome - {index} {self[index]} ' + 
-                f'/ Fitness = {self[index].get_fitness()}\n'
-            for index in range(len(self))
+                f'Chromosome - {index} {chromosome} ' + 
+                f'/ Fitness = {chromosome.fitness}\n'
+            for index, chromosome in enumerate(self)
         )
