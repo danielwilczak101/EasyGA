@@ -11,10 +11,10 @@ def check_selection_probability(selection_method):
 
 def check_positive_fitness(selection_method):
     def helper(ga):
-        if ga.get_chromosome_fitness(0) == 0 or ga.get_chromosome_fitness(-1) < 0:
-            raise Exception("Converted fitness values must be all positive. Consider using rank selection instead.")
-        else:
+        if ga.get_chromosome_fitness(0) > 0 and ga.get_chromosome_fitness(-1) >= 0:
             selection_method(ga)
+        else:
+            raise Exception("Converted fitness values must be all positive. Consider using rank selection instead.")
     return helper
 
 
