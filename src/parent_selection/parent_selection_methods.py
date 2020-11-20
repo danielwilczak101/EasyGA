@@ -1,36 +1,37 @@
 import random
 
-class Parent_Selection:
-
-    def __check_selection_probability(selection_method):
-        def helper(ga):
-            if 0 < ga.selection_probability < 1:
-                selection_method(ga)
-            else:
-                raise Exception("Selection probability must be greater than 0 to select parents.")
-        return helper
-
-
-    def __check_positive_fitness(selection_method):
-        def helper(ga):
-            if ga.get_chromosome_fitness(0) == 0 or ga.get_chromosome_fitness(-1) < 0:
-                raise Exception("Converted fitness values must be all positive. Consider using rank selection instead.")
-            else:
-                selection_method(ga)
-        return helper
-
-
-    def __ensure_sorted(selection_method):
-        def helper(ga):
-            ga.population.sort_by_best_fitness(ga)
+def check_selection_probability(selection_method):
+    def helper(ga):
+        if 0 < ga.selection_probability < 1:
             selection_method(ga)
-        return helper
+        else:
+            raise Exception("Selection probability must be greater than 0 to select parents.")
+    return helper
+
+
+def check_positive_fitness(selection_method):
+    def helper(ga):
+        if ga.get_chromosome_fitness(0) == 0 or ga.get_chromosome_fitness(-1) < 0:
+            raise Exception("Converted fitness values must be all positive. Consider using rank selection instead.")
+        else:
+            selection_method(ga)
+    return helper
+
+
+def ensure_sorted(selection_method):
+    def helper(ga):
+        ga.population.sort_by_best_fitness(ga)
+        selection_method(ga)
+    return helper
+
+
+class Parent_Selection:
 
 
     class Rank:
 
-        @Parent_Selection._Parent_Selection__check_selection_probability
-        @Parent_Selection._Parent_Selection__ensure_sorted
+        @check_selection_probability
+        @ensure_sorted
         def tournament(ga):
             """
             Will make tournaments of size tournament_size and choose the winner (best fitness) 
@@ -68,9 +69,9 @@ class Parent_Selection:
 
     class Fitness:
 
-        @Parent_Selection._Parent_Selection__check_selection_probability
-        @Parent_Selection._Parent_Selection__check_positive_fitness
-        @Parent_Selection._Parent_Selection__ensure_sorted
+        @check_selection_probability
+        @check_positive_fitness
+        @ensure_sorted
         def roulette(ga):
             """Roulette selection works based off of how strong the fitness is of the
             chromosomes in the population. The stronger the fitness the higher the probability
@@ -105,9 +106,9 @@ class Parent_Selection:
                         break
 
 
-        @Parent_Selection._Parent_Selection__check_selection_probability
-        @Parent_Selection._Parent_Selection__check_positive_fitness
-        @Parent_Selection._Parent_Selection__ensure_sorted
+        @check_selection_probability
+        @check_positive_fitness
+        @ensure_sorted
         def stochastic(ga):
             """Stochastic roulette selection works based off of how strong the fitness is of the
             chromosomes in the population. The stronger the fitness the higher the probability
