@@ -21,18 +21,18 @@ class Population:
 
 
     def remove_chromosome(self, index):
-        """Removes a chromosome from the indicated index from the population"""
-        del self.chromosome_list[index]
+        """Removes and returns a chromosome from the indicated index from the population"""
+        return self.chromosome_list.pop(index)
 
 
     def remove_parent(self, index):
-        """Removes a parent from the indicated index from the mating pool"""
-        del self.mating_pool[index]
+        """Removes and returns a parent from the indicated index from the mating pool"""
+        return self.mating_pool.pop(index)
 
 
     def remove_child(self, index):
-        """Removes a child from the indicated index from the next population"""
-        del self.next_population[index]
+        """Removes and returns a child from the indicated index from the next population"""
+        return self.next_population.pop(index)
 
 
     def reset_mating_pool(self):
@@ -153,17 +153,17 @@ class Population:
 
     def __iter__(self):
         """Returns an iterable of chromosomes"""
-        return self.chromosome_list
+        return iter(self.chromosome_list)
 
 
-    def __getitem__(self, k):
-        """Returns the k-th chromosome"""
-        return self.get_chromosome(k)
+    def __getitem__(self, index):
+        """Returns the indexed chromosome"""
+        return self.chromosome_list[index]
 
 
-    def __setitem__(self, k, chromosome):
-        """Sets the k-th chromosome"""
-        self.set_chromosome(chromosome, k)
+    def __setitem__(self, index, chromosome):
+        """Sets the indexed chromosome"""
+        self.chromosome_list[index] = chromosome
 
 
     def __len__(self):

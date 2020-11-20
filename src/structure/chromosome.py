@@ -57,17 +57,17 @@ class Chromosome:
 
     def __iter__(self):
         """Returns an iterable of the gene list"""
-        return self.gene_list
+        return iter(self.gene_list)
 
 
-    def __getitem__(self, k):
-        """Returns the k-th gene"""
-        return self.get_gene(k)
+    def __getitem__(self, index):
+        """Returns the indexed gene"""
+        return self.gene_list[index]
 
 
-    def __setitem__(self, k, gene):
-        """Sets the k-th gene value"""
-        self.set_gene(gene, k)
+    def __setitem__(self, index, gene):
+        """Sets the indexed gene value"""
+        self.gene_list[index] = gene
 
 
     def __len__(self):
