@@ -83,8 +83,7 @@ class Chromosome:
 
 
     def index_of(self, searched_gene):
-        """Returns the index of the gene in the current chromosome.
-        Returns -1 if no index found."""
+        """Returns the index of the gene in the current chromosome."""
 
         return self.gene_list.index(searched_gene)
 
