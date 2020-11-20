@@ -2,22 +2,41 @@ import random
 
 class Parent_Selection:
 
+    def __check_selection_probability(selection_method):
+        def helper(ga):
+            if 0 < ga.selection_probability < 1:
+                selection_method(ga)
+            else:
+                raise Exception("Selection probability must be greater than 0 to select parents.")
+        return helper
+
+
+    def __check_positive_fitness(selection_method):
+        def helper(ga):
+            if ga.get_chromosome_fitness(0) == 0 or ga.get_chromosome_fitness(-1) < 0:
+                raise Exception("Converted fitness values must be all positive. Consider using rank selection instead.")
+            else:
+                selection_method(ga)
+        return helper
+
+
+    def __ensure_sorted(selection_method):
+        def helper(ga):
+            ga.population.sort_by_best_fitness(ga)
+            selection_method(ga)
+        return helper
+
+
     class Rank:
 
+        @Parent_Selection._Parent_Selection__check_selection_probability
+        @Parent_Selection._Parent_Selection__ensure_sorted
         def tournament(ga):
             """
             Will make tournaments of size tournament_size and choose the winner (best fitness) 
             from the tournament and use it as a parent for the next generation. The total number 
             of parents selected is determined by parent_ratio, an attribute to the GA object.
             """
-
-            # Error if can't select parents
-            if ga.selection_probability <= 0:
-                print("Selection probability must be greater than 0 to select parents.")
-                return
-
-            # Make sure the population is sorted by fitness
-            ga.population.sort_by_best_fitness(ga)
 
             # Choose the tournament size.
             # Use no less than 5 chromosomes per tournament.
@@ -49,6 +68,9 @@ class Parent_Selection:
 
     class Fitness:
 
+        @Parent_Selection._Parent_Selection__check_selection_probability
+        @Parent_Selection._Parent_Selection__check_positive_fitness
+        @Parent_Selection._Parent_Selection__ensure_sorted
         def roulette(ga):
             """Roulette selection works based off of how strong the fitness is of the
             chromosomes in the population. The stronger the fitness the higher the probability
@@ -57,20 +79,6 @@ class Parent_Selection:
             those numbers are directly proportional to the chromosome's current fitness. Where
             the ball falls is a randomly generated number between 0 and 1.
             """
-
-            # Make sure the population is sorted by fitness
-            ga.population.sort_by_best_fitness(ga)
-
-            # Error if can't select parents
-            if ga.selection_probability <= 0:
-                print("Selection probability must be greater than 0 to select parents.")
-                return
-
-            # Error if not all chromosomes has positive fitness
-            if (ga.get_chromosome_fitness(0) == 0 or ga.get_chromosome_fitness(-1) < 0):
-                print("Error using roulette selection, all fitnesses must be positive.")
-                print("Consider using stockastic roulette selection or tournament selection.")
-                return
 
             # The sum of all the fitnessess in a population
             fitness_sum = sum(ga.get_chromosome_fitness(index) for index in range(len(ga.population)))
@@ -97,6 +105,9 @@ class Parent_Selection:
                         break
 
 
+        @Parent_Selection._Parent_Selection__check_selection_probability
+        @Parent_Selection._Parent_Selection__check_positive_fitness
+        @Parent_Selection._Parent_Selection__ensure_sorted
         def stochastic(ga):
             """Stochastic roulette selection works based off of how strong the fitness is of the
             chromosomes in the population. The stronger the fitness the higher the probability
@@ -104,21 +115,7 @@ class Parent_Selection:
             and incrementally increasing the chance something is selected, the stochastic method
             just divides by the highest fitness and selects randomly."""
 
-            # Make sure the population is sorted by fitness
-            ga.population.sort_by_best_fitness(ga)
-
-            # Error if can't select parents
-            if ga.selection_probability <= 0 or ga.selection_probability >= 1:
-                print("Selection probability must be between 0 and 1 to select parents.")
-                return
-
             max_fitness = ga.get_chromosome_fitness(0)
-
-            # Error if the highest fitness is not positive
-            if max_fitness <= 0:
-                print("Error using stochastic roulette selection, best fitness must be positive.")
-                print("Consider using tournament selection.")
-                return
 
             # Loops until it reaches a desired mating pool size
             while (len(ga.population.get_mating_pool()) < len(ga.population)*ga.parent_ratio):
