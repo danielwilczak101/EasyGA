@@ -40,7 +40,6 @@ class Matplotlib_Graph:
         plt.ylabel('Generation Total Fitness')
         plt.title('Relationship Between Generations and Generation Total Fitness')
 
-
     def highest_value_chromosome(self):
         """Generation by Max value chromosome """
 
@@ -84,6 +83,9 @@ class Matplotlib_Graph:
         plt.ylabel('Lowest Fitness')
         plt.title('Relationship Between Generations and Lowest Fitness')
 
+    def show(self):
+        """Used to show the matplot lib graph."""
+        plt.show()
 
     # Getter and setters
     @property

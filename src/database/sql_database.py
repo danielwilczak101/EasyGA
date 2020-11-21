@@ -11,7 +11,12 @@ class SQL_Database:
 
     def __init__(self):
         self.conn = None
+        self.config_id = None
 
+
+    def get_current_config(self):
+        """Get the current config_id from the config table."""
+        return self.query_one_item("SELECT MAX(id) FROM config")
 
     def sql_type_of(self, obj):
         """Returns the sql type for the object"""
@@ -52,11 +57,11 @@ class SQL_Database:
         """ Insert one chromosome into the database"""
 
         # Structure the insert data
-        db_chromosome = (generation, chromosome.fitness, repr(chromosome))
+        db_chromosome = (self.config_id,generation, chromosome.fitness, repr(chromosome))
 
         # Create sql query structure
-        sql = ''' INSERT INTO data(generation, fitness, chromosome)
-         VALUES(?,?,?) '''
+        sql = ''' INSERT INTO data(config_id, generation, fitness, chromosome)
+         VALUES(?,?,?,?) '''
 
         cur = self.conn.cursor()
         cur.execute(sql, db_chromosome)
@@ -68,14 +73,19 @@ class SQL_Database:
         """ Insert current generations population """
 
         # Structure the insert data
-        db_chromosome_list = [(ga.current_generation,
-                                  chromosome.fitness,
-                                   repr(chromosome))
-         for chromosome in ga.population.get_chromosome_list() ]
+        db_chromosome_list = [
+        (
+        self.config_id,
+        ga.current_generation,
+        chromosome.fitness,
+        repr(chromosome)
+        )
+         for chromosome in ga.population.get_chromosome_list()
+        ]
 
         # Create sql query structure
-        sql = ''' INSERT INTO data(generation,fitness,chromosome)
-         VALUES(?,?,?) '''
+        sql = ''' INSERT INTO data(config_id,generation,fitness,chromosome)
+         VALUES(?,?,?,?) '''
 
         cur = self.conn.cursor()
         cur.executemany(sql, db_chromosome_list)
@@ -101,8 +111,8 @@ class SQL_Database:
         tables."""
 
         try:
-            # Remove old database file if it exists.
-            os.remove(ga.database_name)
+            # if the database file already exists.
+            self.config = self.get_current_config()
         except:
             # If the database does not exist continue
             pass
@@ -163,6 +173,7 @@ class SQL_Database:
         cur = self.conn.cursor()
         cur.executemany(sql, db_config_list)
         self.conn.commit()
+        self.config_id = self.get_current_config()
         return cur.lastrowid
 
 
@@ -185,10 +196,12 @@ class SQL_Database:
         return query_data[0]
 
 
-    def get_generation_total_fitness(self):
+    def get_generation_total_fitness(self,config_id = None):
         """Get each generations total fitness sum from the database """
 
-        query_data = self.query_all("SELECT SUM(fitness) FROM data GROUP BY generation;")
+        if config_id == None: config_id = self.config_id
+
+        query_data = self.query_all(f"SELECT SUM(fitness) FROM data WHERE config_id={config_id} GROUP BY generation;")
 
         # Format the fitness data into one list
         formated_query_data = [i[0] for i in query_data]
@@ -196,18 +209,22 @@ class SQL_Database:
         return formated_query_data
 
 
-    def get_total_generations(self):
+    def get_total_generations(self,config_id = None):
         """Get the total generations from the database"""
 
-        query_data = self.query_one_item("SELECT COUNT(DISTINCT generation) FROM data;")
+        if config_id == None: config_id = self.config_id
+
+        query_data = self.query_one_item(f"SELECT COUNT(DISTINCT generation) FROM data WHERE config_id={config_id};")
 
         return query_data
 
 
-    def get_highest_chromosome(self):
+    def get_highest_chromosome(self,config_id = None):
         """Get the highest fitness of each generation"""
 
-        query_data = self.query_all("select fitness, max(fitness) from data group by generation")
+        if config_id == None: config_id = self.config_id
+
+        query_data = self.query_all(f"SELECT fitness, max(fitness) FROM data WHERE config_id={config_id} GROUP by generation;")
 
         # Format the fitness data into one list
         formated_query_data = [i[0] for i in query_data]
@@ -215,10 +232,12 @@ class SQL_Database:
         return formated_query_data;
 
 
-    def get_lowest_chromosome(self):
+    def get_lowest_chromosome(self,config_id = None):
         """Get the lowest fitness of each generation"""
 
-        query_data = self.query_all("select fitness, min(fitness) from data group by generation")
+        if config_id == None: config_id = self.config_id
+
+        query_data = self.query_all(f"SELECT fitness, min(fitness) FROM data WHERE config_id={config_id} GROUP by generation;")
 
         # Format the fitness data into one list
         formated_query_data = [i[0] for i in query_data]
