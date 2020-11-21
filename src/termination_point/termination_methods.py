@@ -7,11 +7,11 @@ def add_by_fitness_goal(termination_impl):
         if ga.fitness_goal is not None:
 
             # If minimum fitness goal reached, stop ga.
-            if ga.target_fitness_type == 'min' and ga.population.get_chromosome(0).get_fitness() <= ga.fitness_goal:
+            if ga.target_fitness_type == 'min' and ga.population[0].fitness <= ga.fitness_goal:
                 return False
 
             # If maximum fitness goal reached, stop ga.
-            elif ga.target_fitness_type == 'max' and ga.population.get_chromosome(0).get_fitness() >= ga.fitness_goal:
+            elif ga.target_fitness_type == 'max' and ga.population[0].fitness >= ga.fitness_goal:
                 return False
 
         # Check other termination methods
@@ -25,7 +25,7 @@ def add_by_generation_goal(termination_impl):
     def helper(ga):
 
         # If generation goal is set, check it.
-        if ga.fitness_goal is not None:
+        if ga.generation_goal is not None and ga.current_generation >= ga.generation_goal:
             return False
 
         # Check other termination methods
@@ -40,8 +40,8 @@ def add_by_tolerance_goal(termination_impl):
 
         # If tolerance is set, check it.
         if ga.tolerance_goal is not None:
-            best_fitness = ga.population.get_chromosome(0).get_fitness()
-            threshhold_fitness = ga.population.get_chromosome(int(ga.percent_converged*ga.population.size())).get_fitness()
+            best_fitness = ga.population[0].get_fitness()
+            threshhold_fitness = ga.population[int(ga.percent_converged*len(ga.population))].fitness
             tol = ga.tolerance_goal * (1 + abs(best_fitness))
 
             # Terminate if the specified amount of the population has converged to the specified tolerance
