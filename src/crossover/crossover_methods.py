@@ -11,13 +11,13 @@ def append_children_from_mating_pool(crossover_method):
 def genes_to_chromosome(crossover_method):
     """Converts a collection of genes into a chromosome."""
     return lambda ga, parent_1, parent_2:\
-        return ga.make_chromosome(crossover_method(ga, parent_1, parent_2))
+        ga.make_chromosome(crossover_method(ga, parent_1, parent_2))
 
 
 def values_to_genes(crossover_method):
     """Converts a collection of values into genes."""
     return lambda ga, parent_1, parent_2:\
-        return (ga.make_gene(value) for value in crossover_method(ga, parent_1, parent_2))
+        (ga.make_gene(value) for value in crossover_method(ga, parent_1, parent_2))
 
 
 class Crossover_Methods:
