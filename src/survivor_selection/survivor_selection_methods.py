@@ -26,7 +26,7 @@ class Survivor_Selection:
         """Fills in the next population with random chromosomes from the last population"""
 
         needed_amount = len(ga.population) - ga.population.total_children
-        return [random.choice(ga.population) for n in range(needed_amount)]
+        return random.choices(ga.population, k=needed_amount)
 
 
     @append_to_next_population
@@ -37,4 +37,4 @@ class Survivor_Selection:
         parent_amount = min(ga.population.total_parents, needed_amount)
         random_amount = needed_amount - parent_amount
 
-        return ga.population.get_mating_pool()[:parent_amount] + [random.choice(ga.population) for n in range(random_amount)]
+        return ga.population.get_mating_pool()[:parent_amount] + random.choices(ga.population, k=random_amount)
