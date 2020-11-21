@@ -1,4 +1,4 @@
-<img src="https://github.com/danielwilczak101/EasyGA/blob/media/images/easyGA_logo.png">
+![](https://github.com/danielwilczak101/EasyGA/blob/media/images/easyGA_logo.png)
 
 # EasyGA - Genetic Algorithms made Easy
 
