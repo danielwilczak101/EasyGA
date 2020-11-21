@@ -72,7 +72,7 @@ class Crossover_Methods:
         def single_point(ga, parent_1, parent_2):
             """Cross two parents by swapping genes at one random point."""
 
-            swap_index = random.randint(0, len(parent_1)-1)
+            swap_index = random.randrange(len(parent_1))
             return parent_1[:swap_index] + parent_2[swap_index:]
 
 

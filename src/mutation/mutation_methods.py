@@ -37,7 +37,7 @@ class Mutation_Methods:
         def random_selection(ga):
             """Selects random chromosomes."""
 
-            index = random.randint(0, len(ga.population)-1)
+            index = random.randrange(len(ga.population))
             ga.population[index] = ga.mutation_individual_impl(ga, ga.population[index])
 
 
@@ -45,7 +45,7 @@ class Mutation_Methods:
         def random_selection_then_cross(ga):
             """Selects random chromosomes and self-crosses with parent."""
 
-            index = random.randint(0, len(ga.population)-1)
+            index = random.randrange(len(ga.population))
             chromosome = ga.population[index]
             ga.population[index] = ga.crossover_individual_impl(ga, chromosome, ga.mutation_individual_impl(ga, chromosome))
 
@@ -56,7 +56,7 @@ class Mutation_Methods:
         @loop_mutations
         def individual_genes(ga, chromosome):
             """Mutates a random gene in the chromosome."""
-            index = random.randint(0, len(chromosome)-1)
+            index = random.randrange(len(chromosome))
 
             # Using the chromosome_impl
             if ga.chromosome_impl is not None:
@@ -79,7 +79,7 @@ class Mutation_Methods:
             def swap_genes(ga, chromosome):
                 """Swaps two random genes in the chromosome."""
 
-                index_one = random.randint(0, len(chromosome)-1)
-                index_two = random.randint(0, len(chromosome)-1)
+                index_one = random.randrange(len(chromosome))
+                index_two = random.randrange(len(chromosome))
 
                 chromosome[index_one], chromosome[index_two] = chromosome[index_two], chromosome[index_one]
