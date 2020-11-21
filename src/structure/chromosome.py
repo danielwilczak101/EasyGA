@@ -56,43 +56,81 @@ class Chromosome:
 
 
     def __iter__(self):
-        """Returns an iterable of the gene list"""
+        """
+        Allows the user to use
+
+                iter(chromosome)
+                list(chromosome) == chromosome.gene_list
+                tuple(chromosome)
+                for gene in chromosome
+
+        to loop through the chromosome.
+        """
         return iter(self.gene_list)
 
 
     def __getitem__(self, index):
-        """Returns the indexed gene"""
+        """
+        Allows the user to use
+                gene = chromosome[index]
+        to get the indexed gene.
+        """
         return self.gene_list[index]
 
 
     def __setitem__(self, index, gene):
-        """Sets the indexed gene value"""
+        """
+        Allows the user to use
+                chromosome[index] = gene
+        to set the indexed gene.
+        """
         self.gene_list[index] = gene
 
 
     def __len__(self):
-        """Returns the number of genes in the chromosome"""
+        """
+        Allows the user to use
+                size = len(chromosome)
+        to get the length of the chromosome.
+        """
         return len(self.gene_list)
 
 
     def __contains__(self, searched_gene):
-        """Returns True if the chromosome contains the gene and False otherwise.
-        Ex. if chromosome in ga.population: ..."""
-
+        """
+        Allows the user to use
+                if gene in chromosome
+        to check if a gene is in the chromosome.
+        """
         return (searched_gene in self.gene_list)
 
 
     def index_of(self, searched_gene):
-        """Returns the index of the gene in the current chromosome."""
-
+        """
+        Allows the user to use
+                index = chromosome.index_of(gene)
+        to find the index of a gene in the chromosome.
+        Be sure to check if the chromosome contains the gene
+        first, or to catch an exception if the gene is not
+        in the chromosome.
+        """
         return self.gene_list.index(searched_gene)
 
 
     def __repr__(self):
-        """Create a backend string of the chromosome. Ex '1, 2, 3'."""
+        """
+        Allows the user to use
+                repr(chromosome)
+        to get a backend representation of the chromosome.
+        """
         return ', '.join(repr(gene) for gene in self)
 
 
     def __str__(self):
-        """Create a printable string of the chromosome. Ex '[1][2][3]'."""
+        """
+        Allows the user to use
+                str(chromosome)
+                print(chromosome)
+        to get a frontend representation of the chromosome.
+        """
         return ''.join(str(gene) for gene in self)

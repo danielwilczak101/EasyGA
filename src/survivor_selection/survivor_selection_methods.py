@@ -1,12 +1,14 @@
 import random
 
 def append_to_next_population(survivor_method):
+    """Appends the selected chromosomes to the next population."""
     return lambda ga: ga.population.append_children(survivor_method(ga))
 
 
 class Survivor_Selection:
     """Survivor selection determines which individuals should be brought to the next generation"""
 
+    # Private method decorator, see above.
     def __append_to_next_population(survivor_method):
         return append_to_next_population(survivor_method)
 

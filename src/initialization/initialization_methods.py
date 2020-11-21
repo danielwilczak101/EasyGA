@@ -1,16 +1,20 @@
 def chromosomes_to_population(initialize):
+    """Makes a population from chromosomes."""
     return lambda ga: ga.make_population([initialize(ga) for _ in range(ga.population_size)])
 
 def genes_to_chromosome(initialize):
+    """Converts a collection of genes to a chromosome."""
     return lambda ga: ga.make_chromosome([genes for genes in initialize(ga)])
 
 def value_to_gene(initialize):
+    """Converts a collection of values to genes."""
     return lambda ga: (ga.make_gene(value) for value in initialize(ga))
 
 
 class Initialization_Methods:
     """Initialization examples that are used as defaults and examples"""
 
+    # Private method decorators, see above.
     def __chromosomes_to_population(initialize):
         return chromosomes_to_population(initialize)
     def __genes_to_chromosome(initialize):
@@ -23,10 +27,8 @@ class Initialization_Methods:
     @genes_to_chromosome
     @value_to_gene
     def random_initialization(ga):
-        """Takes the initialization inputs and
-        - return a new population
-          - filled with chromosomes
-            - filled with genes
+        """Takes the initialization inputs and returns a collection of values.
+        Method decorators convert them to a GA population object.
         """
 
         # Using the chromosome_impl to set every index inside of the chromosome

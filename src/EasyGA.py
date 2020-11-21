@@ -47,7 +47,11 @@ class GA(Attributes):
 
         while cond1() and cond3():
 
-            # If its the first generation
+            # Create the initial population if necessary.
+            if self.population is None:
+                self.initialize_population()
+
+            # If its the first generation, setup the database.
             if self.current_generation == 0:
 
                 # Create the database here to allow the user to change the
@@ -57,11 +61,7 @@ class GA(Attributes):
                 # Add the current configuration to the config table
                 self.database.insert_config(self)
 
-                # Create the initial population
-                if self.population is None:
-                    self.initialize_population()
-
-            # Otherwise evolve the population
+            # Otherwise evolve the population.
             else:
                 self.parent_selection_impl(self)
                 self.crossover_population_impl(self)
@@ -107,7 +107,7 @@ class GA(Attributes):
         """
 
         # Check each chromosome
-        for chromosome in self.population.get_chromosome_list():
+        for chromosome in self.population:
 
             # Update fitness if needed or asked by the user
             if chromosome.fitness is None or self.update_fitness:

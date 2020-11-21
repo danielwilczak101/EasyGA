@@ -152,41 +152,75 @@ class Population:
 
 
     def __iter__(self):
-        """Returns an iterable of chromosomes"""
+        """
+        Allows the user to use
+
+                iter(population)
+                list(population) == population.chromosome_list
+                tuple(population)
+                for chromosome in population
+
+        to loop through the population.
+        """
         return iter(self.chromosome_list)
 
 
     def __getitem__(self, index):
-        """Returns the indexed chromosome"""
+        """
+        Allows the user to use
+                chromosome = population[index]
+        to get the indexed chromosome.
+        """
         return self.chromosome_list[index]
 
 
     def __setitem__(self, index, chromosome):
-        """Sets the indexed chromosome"""
+        """
+        Allows the user to use
+                population[index] = chromosome
+        to set the indexed chromosome.
+        """
         self.chromosome_list[index] = chromosome
 
 
     def __len__(self):
-        """Returns the number of chromosomes in the current population"""
+        """
+        Allows the user to use
+                size = len(population)
+        to get the length of the population.
+        """
         return len(self.chromosome_list)
 
 
     def __contains__(self, searched_chromosome):
-        """Returns True if the current population contains the chromosome and False otherwise.
-        Ex. if chromosome in ga.population: ..."""
-
+        """
+        Allows the user to use
+                if chromosome in population
+        to check if a chromosome is in the population.
+        """
         return (searched_chromosome in self.chromosome_list)
 
 
     def index_of(self, searched_chromosome):
-        """Returns the index of the chromosome in the current population."""
-
+        """
+        Allows the user to use
+                index = population.index_of(chromosome)
+        to find the index of a chromosome in the population.
+        Be sure to check if the population contains the chromosome
+        first, or to catch an exception if the chromosome is not
+        in the population.
+        """
         return self.chromosome_list.index(searched_chromosome)
 
 
     def __repr__(self):
-        """Returns a backend string representation of the entire population"""
-
+        """
+        Allows the user to use
+                repr(population)
+                str(population)
+                print(population)
+        to get a backend representation of the population.
+        """
         return ''.join(
                 f'Chromosome - {index} {chromosome} ' + 
                 f'/ Fitness = {chromosome.fitness}\n'

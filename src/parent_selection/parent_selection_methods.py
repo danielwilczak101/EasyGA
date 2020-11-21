@@ -1,6 +1,10 @@
 import random
 
 def check_selection_probability(selection_method):
+    """Raises an exception if the selection_probability
+    is not between 0 and 1. Otherwise runs the selection
+    method.
+    """
     def helper(ga):
         if 0 < ga.selection_probability < 1:
             selection_method(ga)
@@ -10,6 +14,10 @@ def check_selection_probability(selection_method):
 
 
 def check_positive_fitness(selection_method):
+    """Raises an exception if the population contains a
+    chromosome with negative fitness. Otherwise runs
+    the selection method.
+    """
     def helper(ga):
         if ga.get_chromosome_fitness(0) > 0 and ga.get_chromosome_fitness(-1) >= 0:
             selection_method(ga)
@@ -19,6 +27,9 @@ def check_positive_fitness(selection_method):
 
 
 def ensure_sorted(selection_method):
+    """Sorts the population by fitness
+    and then runs the selection method.
+    """
     def helper(ga):
         ga.population.sort_by_best_fitness(ga)
         selection_method(ga)
@@ -27,6 +38,7 @@ def ensure_sorted(selection_method):
 
 class Parent_Selection:
 
+    # Private method decorators, see above.
     def __check_selection_probability(selection_method):
         return check_selection_probability(selection_method)
     def __check_positive_fitness(selection_method):

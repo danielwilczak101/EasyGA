@@ -1,6 +1,7 @@
 import random
 
 def append_children_from_mating_pool(crossover_method):
+    """Appends the new chromosomes to the next population."""
     return lambda ga:\
         ga.population.append_children(
             [chromosome for chromosome in crossover_method(ga, ga.population.mating_pool)]
@@ -8,17 +9,20 @@ def append_children_from_mating_pool(crossover_method):
 
 
 def genes_to_chromosome(crossover_method):
+    """Converts a collection of genes into a chromosome."""
     return lambda ga, parent_1, parent_2:\
         return ga.make_chromosome(crossover_method(ga, parent_1, parent_2))
 
 
 def values_to_genes(crossover_method):
+    """Converts a collection of values into genes."""
     return lambda ga, parent_1, parent_2:\
         return (ga.make_gene(value) for value in crossover_method(ga, parent_1, parent_2))
 
 
 class Crossover_Methods:
 
+    # Private method decorators, see above.
     def __append_children_from_mating_pool(crossover_method):
         return append_children_from_mating_pool(crossover_method)
     def __genes_to_chromosome(crossover_method):

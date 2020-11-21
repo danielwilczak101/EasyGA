@@ -1,4 +1,6 @@
 def add_by_fitness_goal(termination_impl):
+    """Adds termination by fitness goal to the method."""
+
     def helper(ga):
 
         # If fitness goal is set, check it.
@@ -18,6 +20,8 @@ def add_by_fitness_goal(termination_impl):
 
 
 def add_by_generation_goal(termination_impl):
+    """Adds termination by generation goal to the method."""
+
     def helper(ga):
 
         # If generation goal is set, check it.
@@ -30,6 +34,8 @@ def add_by_generation_goal(termination_impl):
 
 
 def add_by_tolerance_goal(termination_impl):
+    """Adds termination by tolerance goal to the method."""
+
     def helper(ga):
 
         # If tolerance is set, check it.
@@ -50,6 +56,7 @@ def add_by_tolerance_goal(termination_impl):
 class Termination_Methods:
     """Example functions that can be used to terminate the the algorithms loop"""
 
+    # Private method decorators, see above.
     def __add_by_fitness_goal(termination_impl):
         return add_by_fitness_goal(termination_impl)
     def __add_by_generation_goal(termination_impl):
