@@ -38,7 +38,7 @@ class Initialization_Methods:
 
         # Using the gene_impl to set every gene to be the same
         elif ga.gene_impl is not None:
-            for _ in range(ga.population_size):
+            for _ in range(ga.chromosome_length):
                 yield ga.gene_impl()
 
         # Exit because no gene creation method specified
