@@ -12,7 +12,7 @@ def loop_selections(selection_method):
 def loop_mutations(mutation_method):
     """Runs the mutation method until enough genes are mutated."""
     def helper(ga, old_chromosome):
-        chromosome = ga.make_chromosome(list(old_chromosome))
+        chromosome = ga.make_chromosome(old_chromosome.gene_list)
 
         for n in range(ceil(len(chromosome)*ga.gene_mutation_rate)):
             mutation_method(ga, chromosome)
