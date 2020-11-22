@@ -59,7 +59,7 @@ class SQL_Database:
         """ Insert one chromosome into the database"""
 
         # Structure the insert data
-        db_chromosome = (self.config_id,generation, chromosome.fitness, repr(chromosome))
+        db_chromosome = (self.config_id, generation, chromosome.fitness, repr(chromosome))
 
         # Create sql query structure
         sql = ''' INSERT INTO data(config_id, generation, fitness, chromosome)
@@ -76,13 +76,13 @@ class SQL_Database:
 
         # Structure the insert data
         db_chromosome_list = [
-        (
-        self.config_id,
-        ga.current_generation,
-        chromosome.fitness,
-        repr(chromosome)
-        )
-         for chromosome in ga.population.get_chromosome_list()
+                (
+                    self.config_id,
+                    ga.current_generation,
+                    chromosome.fitness,
+                    repr(chromosome)
+                )
+            for chromosome in ga.population
         ]
 
         # Create sql query structure
@@ -98,14 +98,11 @@ class SQL_Database:
     def get_var_names(self, ga):
         """Returns a list of the names of attributes of the ga."""
 
-        var_names = list(ga.__dict__.keys())
+        # Loop through all attributes
+        for var in ga.__dict__.keys():
 
-        # Remove leading underscores
-        for i in range(len(var_names)):
-            if var_names[i][0] == '_':
-                var_names[i] = var_names[i][1:]
-
-        return var_names
+            # Remove leading underscore
+            yield (var[1:] if (var[0] == '_') else var)
 
 
     def create_all_tables(self, ga):
@@ -128,21 +125,16 @@ class SQL_Database:
             # Creare config table
             self.create_table(self.create_config_table_string(ga))
         else:
-            print("Error! cannot create the database connection.")
+            raise Exception("Error! cannot create the database connection.")
 
 
     def create_config_table_string(self,ga):
         """Automate the table creation sql statement so that it takes all the
         attribute variables and adds them as columns in the database table config"""
 
-        # Retrieve variable names and assign sql data types
-        var_names = self.get_var_names(ga)
-        for i in range(len(var_names)):
-            var_names[i] += ' ' + self.sql_type_of(var_names[i])
-
         # Structure the config table
-        sql = "CREATE TABLE IF NOT EXISTS config (\nid INTEGER PRIMARY KEY,"
-        sql += "\n,".join(var_names)
+        sql = "CREATE TABLE IF NOT EXISTS config (id INTEGER PRIMARY KEY,"
+        sql += ",".join(var + ' ' + self.sql_type_of(var) for var in self.get_var_names(ga))
         sql += "); "
 
         return sql
@@ -163,7 +155,7 @@ class SQL_Database:
 
         # Create sql query structure
         sql = "INSERT INTO config ("
-        sql += ",\n".join(self.get_var_names(ga))
+        sql += ",".join(self.get_var_names(ga))
         sql += ") VALUES("
         sql += ( ",?"*len(db_config_list) )[1:]
         sql += ") "
@@ -206,13 +198,6 @@ class SQL_Database:
         print(query_data)
 
 
-    def get_most_recent_config_id(self):
-        """Function to get the most recent config_id from the database."""
-
-        query_data = self.query_one_item("SELECT max(config_id) FROM config")
-
-        return query_data
-
     def default_config_id(method):
         """Decorator used to set the default config_id"""
         def new_method(self, config_id = None):
@@ -221,48 +206,47 @@ class SQL_Database:
         return new_method
 
 
+    def format_query_data(method):
+        """Decorator used to format query data"""
+        return lambda self, config_id:\
+            [i[0] for i in method(self, config_id)]
+
+
+    def get_most_recent_config_id(self):
+        """Function to get the most recent config_id from the database."""
+
+        return self.query_one_item("SELECT max(config_id) FROM config")
+
+
     @default_config_id
-    def get_generation_total_fitness(self,config_id):
+    @format_query_data
+    def get_generation_total_fitness(self, config_id):
         """Get each generations total fitness sum from the database """
 
-        query_data = self.query_all(f"SELECT SUM(fitness) FROM data WHERE config_id={config_id} GROUP BY generation;")
-
-        return self.formated_query_data(query_data);
+        return self.query_all(f"SELECT SUM(fitness) FROM data WHERE config_id={config_id} GROUP BY generation;")
 
 
     @default_config_id
-    def get_total_generations(self,config_id):
+    def get_total_generations(self, config_id):
         """Get the total generations from the database"""
 
-        query_data = self.query_one_item(f"SELECT COUNT(DISTINCT generation) FROM data WHERE config_id={config_id};")
-
-        return query_data
+        return self.query_one_item(f"SELECT COUNT(DISTINCT generation) FROM data WHERE config_id={config_id};")
 
 
     @default_config_id
-    def get_highest_chromosome(self,config_id):
+    @format_query_data
+    def get_highest_chromosome(self, config_id):
         """Get the highest fitness of each generation"""
 
-        query_data = self.query_all(f"SELECT fitness, max(fitness) FROM data WHERE config_id={config_id} GROUP by generation;")
-
-        return self.formated_query_data(query_data);
+        return self.query_all(f"SELECT fitness, max(fitness) FROM data WHERE config_id={config_id} GROUP by generation;")
 
 
     @default_config_id
-    def get_lowest_chromosome(self,config_id):
+    @format_query_data
+    def get_lowest_chromosome(self, config_id):
         """Get the lowest fitness of each generation"""
 
-        query_data = self.query_all(f"SELECT fitness, min(fitness) FROM data WHERE config_id={config_id} GROUP by generation;")
-
-        return self.formated_query_data(query_data);
-
-
-    def formated_query_data(self,query_data):
-        """Format the query data so its in a proper list"""
-
-        formated_query_data = [i[0] for i in query_data]
-
-        return formated_query_data;
+        return self.query_all(f"SELECT fitness, min(fitness) FROM data WHERE config_id={config_id} GROUP by generation;")
 
 
     @property
@@ -299,6 +283,7 @@ class SQL_Database:
 
         # Set the name in the ga attribute
         self._conn = value_input
+
 
     @property
     def config_id(self):
