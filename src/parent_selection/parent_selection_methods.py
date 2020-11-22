@@ -65,7 +65,7 @@ class Parent_Selection:
                 tournament_size = 5
 
             # Repeat tournaments until the mating pool is large enough.
-            while (len(ga.population.get_mating_pool()) < len(ga.population)*ga.parent_ratio):
+            while True:
 
                 # Generate a random tournament group and sort by fitness.
                 tournament_group = sorted([random.randrange(len(ga.population)) for _ in range(tournament_size)])
@@ -81,9 +81,9 @@ class Parent_Selection:
                     if random.random() < ga.selection_probability * pow(1-ga.selection_probability, index):
                         ga.population.set_parent(tournament_group[index])
 
-                        # Stop if parent ratio reached
-                        if len(ga.population.get_mating_pool()) >= len(ga.population)*ga.parent_ratio:
-                            break
+                        # Stop tournament selection if enough parents are selected
+                        if len(ga.population.mating_pool) >= len(ga.population)*ga.parent_ratio:
+                            return
 
 
     class Fitness:
@@ -113,7 +113,7 @@ class Parent_Selection:
             probability = probability[1:]
 
             # Loops until it reaches a desired mating pool size
-            while (len(ga.population.get_mating_pool()) < len(ga.population)*ga.parent_ratio):
+            while (len(ga.population.mating_pool) < len(ga.population)*ga.parent_ratio):
 
                 # Spin the roulette
                 rand_number = random.random()
@@ -138,7 +138,7 @@ class Parent_Selection:
             max_fitness = ga.get_chromosome_fitness(0)
 
             # Loops until it reaches a desired mating pool size
-            while (len(ga.population.get_mating_pool()) < len(ga.population)*ga.parent_ratio):
+            while (len(ga.population.mating_pool) < len(ga.population)*ga.parent_ratio):
 
                 # Selected chromosome
                 index = random.randrange(len(ga.population))
