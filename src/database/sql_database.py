@@ -204,6 +204,13 @@ class SQL_Database:
         query_data = self.query_all(f"SELECT id,generation_goal,chromosome_length FROM config;")
         print(query_data)
 
+    def get_most_recent_config_id(self):
+        """Function to get the most recent config_id from the database."""
+
+        query_data = self.query_one_item("SELECT max(config_id) FROM config")
+
+        return query_data
+
     def get_generation_total_fitness(self,config_id = None):
         """Get each generations total fitness sum from the database """
 
@@ -275,7 +282,6 @@ class SQL_Database:
             try:
                 # Check if you can connect to the database
                 self._conn = self.create_connection()
-
             except:
                 # if the connection doesnt exist then print error
                 raise Exception("""You are required to run a ga before you
@@ -288,3 +294,28 @@ class SQL_Database:
 
         # Set the name in the ga attribute
         self._conn = value_input
+
+    @property
+    def config_id(self):
+      """Getter function for config_id"""
+      # Return if the config_id has already been set
+      if self._config_id is not None:
+          return self._config_id
+
+      else:
+          # If the config_id has not been set yet
+          try:
+              # Check if you can connect to the database
+              self._config_id = self.get_most_recent_config_id()
+          except:
+              # if the config_id doesnt exist then print error
+              raise Exception("""You are required to run a ga before you
+               can connect to the database. Run ga.evolve() or ga.active()""")
+
+
+    @config_id.setter
+    def config_id(self, value_input):
+      """Setter function for config_id"""
+
+      # Set the name in the ga attribute
+      self._config_id = value_input
