@@ -18,6 +18,7 @@ class SQL_Database:
         """Get the current config_id from the config table."""
         return self.query_one_item("SELECT MAX(id) FROM config")
 
+
     def sql_type_of(self, obj):
         """Returns the sql type for the object"""
 
@@ -196,11 +197,19 @@ class SQL_Database:
         return query_data[0]
 
 
-    def get_generation_total_fitness(self,config_id = None):
+    def past_runs(self,database_name = 'database.db'):
+        """Show a summerization of the past runs that the user has done."""
+
+        self.conn = self.create_connection(database_name)
+        query_data = self.query_all(f"SELECT id,generation_goal,chromosome_length FROM config;")
+        print(query_data)
+
+    def get_generation_total_fitness(self,config_id = None,database_name = 'database.db'):
         """Get each generations total fitness sum from the database """
 
         if config_id == None: config_id = self.config_id
 
+        self.conn = self.create_connection(database_name)
         query_data = self.query_all(f"SELECT SUM(fitness) FROM data WHERE config_id={config_id} GROUP BY generation;")
 
         # Format the fitness data into one list
@@ -209,21 +218,22 @@ class SQL_Database:
         return formated_query_data
 
 
-    def get_total_generations(self,config_id = None):
+    def get_total_generations(self,config_id = None,database_name = 'database.db'):
         """Get the total generations from the database"""
 
         if config_id == None: config_id = self.config_id
-
+        self.conn = self.create_connection(database_name)
         query_data = self.query_one_item(f"SELECT COUNT(DISTINCT generation) FROM data WHERE config_id={config_id};")
 
         return query_data
 
 
-    def get_highest_chromosome(self,config_id = None):
+    def get_highest_chromosome(self,config_id = None,database_name = 'database.db'):
         """Get the highest fitness of each generation"""
 
         if config_id == None: config_id = self.config_id
 
+        self.conn = self.create_connection(database_name)
         query_data = self.query_all(f"SELECT fitness, max(fitness) FROM data WHERE config_id={config_id} GROUP by generation;")
 
         # Format the fitness data into one list
@@ -232,14 +242,51 @@ class SQL_Database:
         return formated_query_data;
 
 
-    def get_lowest_chromosome(self,config_id = None):
+    def get_lowest_chromosome(self,config_id = None,database_name = 'database.db'):
         """Get the lowest fitness of each generation"""
 
         if config_id == None: config_id = self.config_id
 
+        self.conn = self.create_connection(database_name)
         query_data = self.query_all(f"SELECT fitness, min(fitness) FROM data WHERE config_id={config_id} GROUP by generation;")
 
         # Format the fitness data into one list
         formated_query_data = [i[0] for i in query_data]
 
         return formated_query_data;
+
+
+    # Getters and setter for class
+
+    def get_config_id(self):
+
+        try:
+            # return the config id if its already set
+            self.__config_id = "something"
+        except:
+            # Get the most resent run from config table.
+            pass
+        except:
+            # config_id and config table dont exist: Tell the user
+            print("""You are required to run a ga before you
+             can connect to the database. Run ga.evolve()""")
+            break
+
+
+    def get_conn(self):
+        """Conn """
+        try:
+            # Return if the connection has already been set
+            return self.__conn
+        except:
+            # Check if you can connect to the database named in ga
+            self.__conn = self.create_connection(ga.database_name)
+
+        except:
+            # See if the default database exists
+            self.__conn = self.create_connection("database.db")
+        except:
+            # if the connection
+            print("""You are required to run a ga before you
+             can connect to the database. Run ga.evolve()""")
+            break

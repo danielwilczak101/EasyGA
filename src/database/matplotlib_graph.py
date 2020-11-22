@@ -19,17 +19,17 @@ class Matplotlib_Graph:
         self.yscale = "linear"
 
 
-    def generation_total_fitness(self):
+    def generation_total_fitness(self, config_id = None):
         """Show a plot of generation by generation total fitness."""
 
         # Query the X data
-        generations = self.database.get_total_generations()
+        generations = self.database.get_total_generations(config_id)
 
         # Create the generations list - [0,1,2,etc]
         self.x = list(range(0, generations))
 
         # Query for Y data
-        self.y = self.database.get_generation_total_fitness()
+        self.y = self.database.get_generation_total_fitness(config_id)
 
         if self.yscale == "log":
             # If using log then the values have to be positive numbers
@@ -40,17 +40,17 @@ class Matplotlib_Graph:
         plt.ylabel('Generation Total Fitness')
         plt.title('Relationship Between Generations and Generation Total Fitness')
 
-    def highest_value_chromosome(self):
+    def highest_value_chromosome(self,config_id = None):
         """Generation by Max value chromosome """
 
         # Query the X data
-        generations = self.database.get_total_generations()
+        generations = self.database.get_total_generations(config_id)
 
         # Create the generations list - [0,1,2,etc]
         self.x  = list(range(0, generations))
 
         # Query for Y data
-        self.y = self.database.get_highest_chromosome()
+        self.y = self.database.get_highest_chromosome(config_id)
 
         if self.yscale == "log":
             # If using log then the values have to be positive numbers
@@ -62,17 +62,17 @@ class Matplotlib_Graph:
         plt.title('Relationship Between Generations and Highest Fitness')
 
 
-    def lowest_value_chromosome(self):
+    def lowest_value_chromosome(self,config_id = None):
         """Generation by Min value Chromosome """
 
         # Query the X data
-        generations = self.database.get_total_generations()
+        generations = self.database.get_total_generations(config_id)
 
         # Create the generations list - [0,1,2,etc]
         self.x = list(range(0, generations))
 
         # Query for Y data
-        self.y = self.database.get_lowest_chromosome()
+        self.y = self.database.get_lowest_chromosome(config_id)
 
         if self.yscale == "log":
             # If using log then the values have to be positive numbers
