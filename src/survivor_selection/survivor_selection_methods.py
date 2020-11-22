@@ -9,7 +9,7 @@ class Survivor_Selection:
     """Survivor selection determines which individuals should be brought to the next generation"""
 
     # Private method decorator, see above.
-    def __append_to_next_population(survivor_method):
+    def _append_to_next_population(survivor_method):
         return append_to_next_population(survivor_method)
 
 

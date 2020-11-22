@@ -9,7 +9,7 @@ def check_selection_probability(selection_method):
         if 0 < ga.selection_probability < 1:
             selection_method(ga)
         else:
-            raise Exception("Selection probability must be greater than 0 to select parents.")
+            raise Exception("Selection probability must be between 0 and 1 to select parents.")
     return helper
 
 
@@ -39,11 +39,11 @@ def ensure_sorted(selection_method):
 class Parent_Selection:
 
     # Private method decorators, see above.
-    def __check_selection_probability(selection_method):
+    def _check_selection_probability(selection_method):
         return check_selection_probability(selection_method)
-    def __check_positive_fitness(selection_method):
+    def _check_positive_fitness(selection_method):
         return check_positive_fitness(selection_method)
-    def __ensure_sorted(selection_method):
+    def _ensure_sorted(selection_method):
         return ensure_sorted(selection_method)
 
 

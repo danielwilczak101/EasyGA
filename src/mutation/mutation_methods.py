@@ -25,9 +25,9 @@ def loop_mutations(mutation_method):
 class Mutation_Methods:
 
     # Private method decorators, see above.
-    def __loop_selections(selection_method):
+    def _loop_selections(selection_method):
         return loop_selections(selection_method)
-    def __loop_mutations(mutation_method):
+    def _loop_mutations(mutation_method):
         return loop_mutations(mutation_method)
 
 

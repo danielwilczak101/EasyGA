@@ -57,11 +57,11 @@ class Termination_Methods:
     """Example functions that can be used to terminate the the algorithms loop"""
 
     # Private method decorators, see above.
-    def __add_by_fitness_goal(termination_impl):
+    def _add_by_fitness_goal(termination_impl):
         return add_by_fitness_goal(termination_impl)
-    def __add_by_generation_goal(termination_impl):
+    def _add_by_generation_goal(termination_impl):
         return add_by_generation_goal(termination_impl)
-    def __add_by_tolerance_goal(termination_impl):
+    def _add_by_tolerance_goal(termination_impl):
         return add_by_tolerance_goal(termination_impl)
 
 

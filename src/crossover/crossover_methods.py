@@ -1,6 +1,6 @@
 import random
 
-def append_children_from_mating_pool(crossover_method):
+def append_children_to_next_population(crossover_method):
     """Appends the new chromosomes to the next population."""
     return lambda ga:\
         ga.population.append_children(
@@ -29,11 +29,11 @@ def values_to_genes(crossover_method):
 class Crossover_Methods:
 
     # Private method decorators, see above.
-    def __append_children_from_mating_pool(crossover_method):
-        return append_children_from_mating_pool(crossover_method)
-    def __genes_to_chromosome(crossover_method):
+    def _append_children_to_next_population(crossover_method):
+        return append_children_to_next_population(crossover_method)
+    def _genes_to_chromosome(crossover_method):
         return values_to_chromosome(crossover_method)
-    def __values_to_genes(crossover_method):
+    def _values_to_genes(crossover_method):
         return values_to_genes(crossover_method)
 
 

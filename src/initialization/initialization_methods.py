@@ -22,11 +22,11 @@ class Initialization_Methods:
     """Initialization examples that are used as defaults and examples"""
 
     # Private method decorators, see above.
-    def __chromosomes_to_population(initialize):
+    def _chromosomes_to_population(initialize):
         return chromosomes_to_population(initialize)
-    def __genes_to_chromosome(initialize):
+    def _genes_to_chromosome(initialize):
         return genes_to_chromosome(initialize)
-    def __value_to_gene(initialize):
+    def _value_to_gene(initialize):
         return value_to_gene(initialize)
 
 
