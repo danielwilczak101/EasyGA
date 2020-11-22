@@ -257,36 +257,34 @@ class SQL_Database:
 
 
     # Getters and setter for class
-
     def get_config_id(self):
 
         try:
             # return the config id if its already set
-            self.__config_id = "something"
-        except:
-            # Get the most resent run from config table.
-            pass
+            self.config_id = "something"
+
         except:
             # config_id and config table dont exist: Tell the user
             print("""You are required to run a ga before you
              can connect to the database. Run ga.evolve()""")
-            break
 
 
     def get_conn(self):
         """Conn """
+
         try:
             # Return if the connection has already been set
-            return self.__conn
-        except:
-            # Check if you can connect to the database named in ga
-            self.__conn = self.create_connection(ga.database_name)
+            return self.conn
 
         except:
-            # See if the default database exists
-            self.__conn = self.create_connection("database.db")
-        except:
-            # if the connection
-            print("""You are required to run a ga before you
-             can connect to the database. Run ga.evolve()""")
-            break
+
+            try:
+                # Check if you can connect to the database named in ga
+                self.conn = self.create_connection(ga.database_name)
+                return self.conn
+
+            except:
+                # if the connection
+                print("""You are required to run a ga before you
+                 can connect to the database. Run ga.evolve()""")
+                return
