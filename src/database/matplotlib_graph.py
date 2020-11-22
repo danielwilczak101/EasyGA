@@ -26,7 +26,7 @@ class Matplotlib_Graph:
         generations = self.database.get_total_generations(config_id)
 
         # Create the generations list - [0,1,2,etc]
-        self.x = list(range(0, generations))
+        self.x = list(range(generations))
 
         # Query for Y data
         self.y = self.database.get_generation_total_fitness(config_id)
@@ -40,6 +40,7 @@ class Matplotlib_Graph:
         plt.ylabel('Generation Total Fitness')
         plt.title('Relationship Between Generations and Generation Total Fitness')
 
+
     def highest_value_chromosome(self,config_id = None):
         """Generation by Max value chromosome """
 
@@ -47,7 +48,7 @@ class Matplotlib_Graph:
         generations = self.database.get_total_generations(config_id)
 
         # Create the generations list - [0,1,2,etc]
-        self.x  = list(range(0, generations))
+        self.x  = list(range(generations))
 
         # Query for Y data
         self.y = self.database.get_highest_chromosome(config_id)
@@ -69,7 +70,7 @@ class Matplotlib_Graph:
         generations = self.database.get_total_generations(config_id)
 
         # Create the generations list - [0,1,2,etc]
-        self.x = list(range(0, generations))
+        self.x = list(range(generations))
 
         # Query for Y data
         self.y = self.database.get_lowest_chromosome(config_id)
@@ -83,9 +84,11 @@ class Matplotlib_Graph:
         plt.ylabel('Lowest Fitness')
         plt.title('Relationship Between Generations and Lowest Fitness')
 
+
     def show(self):
         """Used to show the matplot lib graph."""
         plt.show()
+
 
     # Getter and setters
     @property
