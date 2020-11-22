@@ -1,20 +1,21 @@
 import random
+from copy import deepcopy
 from math import ceil
 
 def loop_selections(selection_method):
     """Runs the selection method until enough chromosomes are mutated."""
     def helper(ga):
-        for n in range(ceil(len(ga.population)*ga.chromosome_mutation_rate)):
-              selection_method(ga)
+        for _ in range(ceil(len(ga.population)*ga.chromosome_mutation_rate)):
+            selection_method(ga)
     return helper
 
 
 def loop_mutations(mutation_method):
     """Runs the mutation method until enough genes are mutated."""
     def helper(ga, old_chromosome):
-        chromosome = ga.make_chromosome(old_chromosome.gene_list)
+        chromosome = ga.make_chromosome(deepcopy(old_chromosome.gene_list))
 
-        for n in range(ceil(len(chromosome)*ga.gene_mutation_rate)):
+        for _ in range(ceil(len(chromosome)*ga.gene_mutation_rate)):
             mutation_method(ga, chromosome)
 
         return chromosome
@@ -47,7 +48,9 @@ class Mutation_Methods:
 
             index = random.randrange(len(ga.population))
             chromosome = ga.population[index]
-            ga.population[index] = ga.crossover_individual_impl(ga, chromosome, ga.mutation_individual_impl(ga, chromosome))
+            ga.population[index] = ga.crossover_individual_impl(
+                                       ga, chromosome, ga.mutation_individual_impl(ga, chromosome)
+                                   )
 
 
     class Individual:
@@ -56,6 +59,7 @@ class Mutation_Methods:
         @loop_mutations
         def individual_genes(ga, chromosome):
             """Mutates a random gene in the chromosome."""
+
             index = random.randrange(len(chromosome))
 
             # Using the chromosome_impl
@@ -79,7 +83,9 @@ class Mutation_Methods:
             def swap_genes(ga, chromosome):
                 """Swaps two random genes in the chromosome."""
 
+                # Indexes of genes to swap
                 index_one = random.randrange(len(chromosome))
                 index_two = random.randrange(len(chromosome))
 
+                # Swap genes
                 chromosome[index_one], chromosome[index_two] = chromosome[index_two], chromosome[index_one]
