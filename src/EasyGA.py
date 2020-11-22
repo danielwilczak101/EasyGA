@@ -21,7 +21,7 @@ from attributes import Attributes
 
 # Database class
 from database import sql_database
-from sqlite3 import Error
+from sqlite3  import Error
 
 # Graphing package
 from database import matplotlib_graph
@@ -111,7 +111,7 @@ class GA(Attributes):
 
             # Update fitness if needed or asked by the user
             if chromosome.fitness is None or self.update_fitness:
-                chromosome.set_fitness(self.fitness_function_impl(chromosome))
+                chromosome.fitness = self.fitness_function_impl(chromosome)
 
 
     def sort_by_best_fitness(self, chromosome_list):
@@ -134,7 +134,7 @@ class GA(Attributes):
         on the target fitness type.
         """
         return self.convert_fitness(
-                   self.population[index].get_fitness()
+                   self.population[index].fitness
                )
 
 
@@ -147,8 +147,8 @@ class GA(Attributes):
         # No conversion needed
         if self.target_fitness_type == 'max': return fitness_value
 
-        max_fitness = self.population[-1].get_fitness()
-        min_fitness = self.population[0].get_fitness()
+        max_fitness = self.population[-1].fitness
+        min_fitness = self.population[0].fitness
 
         # Avoid catastrophic cancellation
         if min_fitness / max_fitness < 1e-5:
@@ -172,10 +172,10 @@ class GA(Attributes):
     def print_best_chromosome(self):
         """Prints the best chromosome and its fitness"""
         print(f"Best Chromosome \t: {self.population[0]}")
-        print(f"Best Fitness    \t: {self.population[0].get_fitness()}")
+        print(f"Best Fitness    \t: {self.population[0].fitness}")
 
 
     def print_worst_chromosome(self):
         """Prints the worst chromosome and its fitness"""
         print(f"Worst Chromosome \t: {self.population[-1]}")
-        print(f"Worst Fitness    \t: {self.population[-1].get_fitness()}")
+        print(f"Worst Fitness    \t: {self.population[-1].fitness}")
