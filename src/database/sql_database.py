@@ -12,6 +12,7 @@ class SQL_Database:
     def __init__(self):
         self.conn = None
         self.config_id = None
+        self.database_name = 'database.db'
 
 
     def get_current_config(self):
@@ -30,13 +31,13 @@ class SQL_Database:
             return 'TEXT'
 
 
-    def create_connection(self, db_file):
+    def create_connection(self):
         """Create a database connection to the SQLite database
          specified by db_file."""
 
         conn = None
         try:
-            conn = sqlite3.connect(db_file)
+            conn = sqlite3.connect(self.database_name)
             return conn
         except Error as e:
             print(e)
@@ -119,7 +120,7 @@ class SQL_Database:
             pass
 
         # Create the database connection
-        self.conn = self.create_connection(ga.database_name)
+        self.conn = self.create_connection()
 
         if self.conn is not None:
             # Create data table
@@ -197,19 +198,17 @@ class SQL_Database:
         return query_data[0]
 
 
-    def past_runs(self,database_name = 'database.db'):
+    def past_runs(self):
         """Show a summerization of the past runs that the user has done."""
 
-        self.conn = self.create_connection(database_name)
         query_data = self.query_all(f"SELECT id,generation_goal,chromosome_length FROM config;")
         print(query_data)
 
-    def get_generation_total_fitness(self,config_id = None,database_name = 'database.db'):
+    def get_generation_total_fitness(self,config_id = None):
         """Get each generations total fitness sum from the database """
 
         if config_id == None: config_id = self.config_id
 
-        self.conn = self.create_connection(database_name)
         query_data = self.query_all(f"SELECT SUM(fitness) FROM data WHERE config_id={config_id} GROUP BY generation;")
 
         # Format the fitness data into one list
@@ -218,22 +217,21 @@ class SQL_Database:
         return formated_query_data
 
 
-    def get_total_generations(self,config_id = None,database_name = 'database.db'):
+    def get_total_generations(self,config_id = None):
         """Get the total generations from the database"""
 
         if config_id == None: config_id = self.config_id
-        self.conn = self.create_connection(database_name)
+
         query_data = self.query_one_item(f"SELECT COUNT(DISTINCT generation) FROM data WHERE config_id={config_id};")
 
         return query_data
 
 
-    def get_highest_chromosome(self,config_id = None,database_name = 'database.db'):
+    def get_highest_chromosome(self,config_id = None):
         """Get the highest fitness of each generation"""
 
         if config_id == None: config_id = self.config_id
 
-        self.conn = self.create_connection(database_name)
         query_data = self.query_all(f"SELECT fitness, max(fitness) FROM data WHERE config_id={config_id} GROUP by generation;")
 
         # Format the fitness data into one list
@@ -242,12 +240,11 @@ class SQL_Database:
         return formated_query_data;
 
 
-    def get_lowest_chromosome(self,config_id = None,database_name = 'database.db'):
+    def get_lowest_chromosome(self,config_id = None):
         """Get the lowest fitness of each generation"""
 
         if config_id == None: config_id = self.config_id
 
-        self.conn = self.create_connection(database_name)
         query_data = self.query_all(f"SELECT fitness, min(fitness) FROM data WHERE config_id={config_id} GROUP by generation;")
 
         # Format the fitness data into one list
@@ -256,35 +253,28 @@ class SQL_Database:
         return formated_query_data;
 
 
-    # Getters and setter for class
-    def get_config_id(self):
+    @property
+    def conn(self):
+        """Getter function for conn"""
+        # Return if the connection has already been set
+        if self._conn is not None:
+            return self._conn
 
-        try:
-            # return the config id if its already set
-            self.config_id = "something"
-
-        except:
-            # config_id and config table dont exist: Tell the user
-            print("""You are required to run a ga before you
-             can connect to the database. Run ga.evolve()""")
-
-
-    def get_conn(self):
-        """Conn """
-
-        try:
-            # Return if the connection has already been set
-            return self.conn
-
-        except:
-
+        else:
+            # If the connection has not been set yet
             try:
-                # Check if you can connect to the database named in ga
-                self.conn = self.create_connection(ga.database_name)
-                return self.conn
+                # Check if you can connect to the database
+                self._conn = self.create_connection()
 
             except:
-                # if the connection
-                print("""You are required to run a ga before you
-                 can connect to the database. Run ga.evolve()""")
-                return
+                # if the connection doesnt exist then print error
+                raise Exception("""You are required to run a ga before you
+                 can connect to the database. Run ga.evolve() or ga.active()""")
+
+
+    @conn.setter
+    def conn(self, value_input):
+        """Setter function for conn"""
+
+        # Set the name in the ga attribute
+        self._conn = value_input

@@ -154,6 +154,25 @@ class Attributes:
 
 
     # Getter and setters for all required varibles
+
+    @property
+    def database_name(self):
+        """Getter function for the database name"""
+
+        return self._database_name
+
+
+    @database_name.setter
+    def database_name(self, value_input):
+        """Setter function with error checking for the database name"""
+
+        # Update the database class of the name change
+        self.database.database_name = value_input
+
+        # Set the name in the ga attribute
+        self._database_name = value_input
+
+
     @property
     def chromosome_length(self):
         """Getter function for chromosome length"""
