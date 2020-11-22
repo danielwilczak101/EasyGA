@@ -4,14 +4,20 @@ def append_children_from_mating_pool(crossover_method):
     """Appends the new chromosomes to the next population."""
     return lambda ga:\
         ga.population.append_children(
-            [chromosome for chromosome in crossover_method(ga, ga.population.mating_pool)]
+            list(crossover_method(ga, ga.population.mating_pool))
         )
 
 
 def genes_to_chromosome(crossover_method):
-    """Converts a collection of genes into a chromosome."""
+    """Converts a collection of genes into a chromosome.
+    Note: Will recreate the gene list if given gene list.
+          Methods used here do not construct gene lists
+          and use yield for efficiency.
+    """
     return lambda ga, parent_1, parent_2:\
-        ga.make_chromosome(crossover_method(ga, parent_1, parent_2))
+        ga.make_chromosome(
+            list(crossover_method(ga, parent_1, parent_2))
+        )
 
 
 def values_to_genes(crossover_method):
