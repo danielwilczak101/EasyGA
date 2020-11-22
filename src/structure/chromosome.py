@@ -13,40 +13,13 @@ class Chromosome:
     def add_gene(self, gene, index = None):
         """Add a gene to the chromosome at the specified index, defaulted to end of the chromosome"""
         if index is None:
-            index = self.size()
+            index = len(self)
         self.gene_list.insert(index, gene)
 
 
     def remove_gene(self, index):
         """Removes the gene at the given index"""
-        del self.gene_list[index]
-
-
-    def get_gene(self, index):
-        """Returns the gene at the given index"""
-        return self.gene_list[index]
-
-
-    def get_gene_list(self):
-        return self.gene_list
-
-
-    def get_fitness(self):
-        """Return the fitness of the chromosome"""
-        return self.fitness
-
-
-    def set_gene(self, gene, index):
-        self.gene_list[index] = gene
-
-
-    def set_gene_list(self, gene_list):
-        self.gene_list = gene_list
-
-
-    def set_fitness(self, fitness):
-        """Set the fitness value of the chromosome"""
-        self.fitness = fitness
+        return self.gene_list.pop(index)
 
 
     @property
