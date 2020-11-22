@@ -202,7 +202,9 @@ class SQL_Database:
         """Show a summerization of the past runs that the user has done."""
 
         query_data = self.query_all(f"SELECT id,generation_goal,chromosome_length FROM config;")
+
         print(query_data)
+
 
     def get_most_recent_config_id(self):
         """Function to get the most recent config_id from the database."""
@@ -211,50 +213,53 @@ class SQL_Database:
 
         return query_data
 
-    def get_generation_total_fitness(self,config_id = None):
-        """Get each generations total fitness sum from the database """
+    def default_config_id(method):
+        """Decorator used to set the default config_id"""
+        def new_method(self, config_id = None):
+            input_id = self.config_id if config_id is None else config_id
+            return method(self, input_id)
+        return new_method
 
-        if config_id == None: config_id = self.config_id
+
+    @default_config_id
+    def get_generation_total_fitness(self,config_id):
+        """Get each generations total fitness sum from the database """
 
         query_data = self.query_all(f"SELECT SUM(fitness) FROM data WHERE config_id={config_id} GROUP BY generation;")
 
-        # Format the fitness data into one list
-        formated_query_data = [i[0] for i in query_data]
-
-        return formated_query_data
+        return self.formated_query_data(query_data);
 
 
-    def get_total_generations(self,config_id = None):
+    @default_config_id
+    def get_total_generations(self,config_id):
         """Get the total generations from the database"""
-
-        if config_id == None: config_id = self.config_id
 
         query_data = self.query_one_item(f"SELECT COUNT(DISTINCT generation) FROM data WHERE config_id={config_id};")
 
         return query_data
 
 
-    def get_highest_chromosome(self,config_id = None):
+    @default_config_id
+    def get_highest_chromosome(self,config_id):
         """Get the highest fitness of each generation"""
-
-        if config_id == None: config_id = self.config_id
 
         query_data = self.query_all(f"SELECT fitness, max(fitness) FROM data WHERE config_id={config_id} GROUP by generation;")
 
-        # Format the fitness data into one list
-        formated_query_data = [i[0] for i in query_data]
-
-        return formated_query_data;
+        return self.formated_query_data(query_data);
 
 
-    def get_lowest_chromosome(self,config_id = None):
+    @default_config_id
+    def get_lowest_chromosome(self,config_id):
         """Get the lowest fitness of each generation"""
-
-        if config_id == None: config_id = self.config_id
 
         query_data = self.query_all(f"SELECT fitness, min(fitness) FROM data WHERE config_id={config_id} GROUP by generation;")
 
-        # Format the fitness data into one list
+        return self.formated_query_data(query_data);
+
+
+    def formated_query_data(self,query_data):
+        """Format the query data so its in a proper list"""
+
         formated_query_data = [i[0] for i in query_data]
 
         return formated_query_data;

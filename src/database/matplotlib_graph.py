@@ -101,4 +101,4 @@ class Matplotlib_Graph:
         if value_input in self.type_of_graph_dict.keys():
             self._type_of_graph = self.type_of_graph_dict[value_input]
         else:
-            self._type_of_plot = value_input
+            self._type_of_graph = value_input
