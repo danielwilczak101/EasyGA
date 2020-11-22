@@ -12,7 +12,7 @@ class SQL_Database:
     def __init__(self):
         self.conn = None
         self.config_id = None
-        self.database_name = 'database.db'
+        self._database_name = 'database.db'
 
 
     def get_current_config(self):
@@ -251,6 +251,16 @@ class SQL_Database:
         formated_query_data = [i[0] for i in query_data]
 
         return formated_query_data;
+
+
+    @property
+    def database_name(self):
+        return self._database_name
+
+
+    @database_name.setter
+    def database_name(self, value_input):
+        raise Exception("Invalid usage, please use ga.database_name instead.")
 
 
     @property

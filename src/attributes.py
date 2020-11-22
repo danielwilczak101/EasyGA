@@ -167,7 +167,7 @@ class Attributes:
         """Setter function with error checking for the database name"""
 
         # Update the database class of the name change
-        self.database.database_name = value_input
+        self.database._database_name = value_input
 
         # Set the name in the ga attribute
         self._database_name = value_input
