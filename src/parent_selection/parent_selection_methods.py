@@ -89,8 +89,8 @@ class Parent_Selection:
     class Fitness:
 
         @check_selection_probability
-        @check_positive_fitness
         @ensure_sorted
+        @check_positive_fitness
         def roulette(ga):
             """Roulette selection works based off of how strong the fitness is of the
             chromosomes in the population. The stronger the fitness the higher the probability
@@ -126,8 +126,8 @@ class Parent_Selection:
 
 
         @check_selection_probability
-        @check_positive_fitness
         @ensure_sorted
+        @check_positive_fitness
         def stochastic(ga):
             """Stochastic roulette selection works based off of how strong the fitness is of the
             chromosomes in the population. The stronger the fitness the higher the probability
