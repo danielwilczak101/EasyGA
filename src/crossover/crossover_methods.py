@@ -41,7 +41,7 @@ class Crossover_Methods:
         """Methods for selecting chromosomes to crossover."""
 
 
-        @append_children_from_mating_pool
+        @append_children_to_next_population
         def sequential_selection(ga, mating_pool):
             """Select sequential pairs from the mating pool.
             Every parent is paired with the previous parent.
@@ -56,7 +56,7 @@ class Crossover_Methods:
                       )
 
 
-        @append_children_from_mating_pool
+        @append_children_to_next_population
         def random_selection(ga, mating_pool):
             """Select random pairs from the mating pool.
             Every parent is paired with a random parent.
