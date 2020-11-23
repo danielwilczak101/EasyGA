@@ -76,7 +76,7 @@ class Attributes:
             crossover_population_impl   = Crossover_Methods.Population.sequential_selection,
             survivor_selection_impl     = Survivor_Selection.fill_in_best,
             mutation_individual_impl    = Mutation_Methods.Individual.individual_genes,
-            mutation_population_impl    = Mutation_Methods.Population.random_selection_then_cross,
+            mutation_population_impl    = Mutation_Methods.Population.random_avoid_best,
             termination_impl            = Termination_Methods.fitness_generation_tolerance,
             Database                    = sql_database.SQL_Database,
             database_name               = 'database.db',
