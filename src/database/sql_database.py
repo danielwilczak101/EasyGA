@@ -23,11 +23,11 @@ class SQL_Database:
             query = method(self, config_id)
 
             # Unpack elements if they are lists with only 1 element
-            if len(query[0]) == 1:
+            if type(query[0]) in (list, tuple) and len(query[0]) == 1:
                 query = [i[0] for i in query]
 
             # Unpack list if it is a list with only 1 element
-            if len(query) == 1:
+            if type(query) in (list, tuple) and len(query) == 1:
                 query = query[0]
 
             return query
@@ -212,9 +212,7 @@ class SQL_Database:
 
         cur = self.conn.cursor()
         cur.execute(query)
-        query_data = cur.fetchone()
-
-        return query_data
+        return cur.fetchone()
 
 
     def past_runs(self):
