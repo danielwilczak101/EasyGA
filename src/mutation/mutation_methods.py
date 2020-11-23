@@ -1,61 +1,105 @@
 import random
-from copy import deepcopy
 from math import ceil
 
-def loop_selections(selection_method):
-    """Runs the selection method until enough chromosomes are mutated."""
-    def helper(ga):
+def check_chromosome_mutation_rate(population_method):
+    """Checks if the chromosome mutation rate is a float between 0 and 1 before running."""
+
+    def new_population_method(ga):
+
+        if not isinstance(ga.chromosome_mutation_rate, float):
+            raise TypeError("Chromosome mutation rate must be a float.")
+
+        elif 0 < ga.chromosome_mutation_rate < 1:
+            population_method(ga)
+
+        else:
+            raise ValueError("Chromosome mutation rate must be between 0 and 1.")
+
+    return new_population_method
+
+
+def check_gene_mutation_rate(individual_method):
+    """Checks if the gene mutation rate is a float between 0 and 1 before running."""
+
+    def new_individual_method(ga, index):
+
+        if not isinstance(ga.gene_mutation_rate, float):
+            raise TypeError("Gene mutation rate must be a float.")
+
+        elif 0 < ga.gene_mutation_rate < 1:
+            individual_method(ga, index)
+
+        else:
+            raise ValueError("Gene mutation rate must be between 0 and 1.")
+
+    return new_individual_method
+
+
+def loop_selections(population_method):
+    """Runs the population method until enough chromosomes are mutated."""
+
+    def new_population_method(ga):
+
+        # Loop the population method until enough chromosomes are mutated.
         for _ in range(ceil(len(ga.population)*ga.chromosome_mutation_rate)):
-            selection_method(ga)
-    return helper
+            population_method(ga)
+
+    return new_population_method
 
 
-def loop_mutations(mutation_method):
-    """Runs the mutation method until enough genes are mutated."""
-    def helper(ga, old_chromosome):
-        chromosome = ga.make_chromosome(deepcopy(old_chromosome.gene_list))
+def loop_mutations(individual_method):
+    """Runs the individual method until enough
+    genes are mutated on the indexed chromosome.
+    """
 
-        for _ in range(ceil(len(chromosome)*ga.gene_mutation_rate)):
-            mutation_method(ga, chromosome)
+    # Change input from index to chromosome.
+    def new_individual_method(ga, index):
 
-        return chromosome
-    return helper
+        # Loop the individual method until enough genes are mutated.
+        for _ in range(ceil(len(ga.population[index])*ga.gene_mutation_rate)):
+            individual_method(ga, ga.population[index])
+
+    return new_individual_method
 
 
 class Mutation_Methods:
 
     # Private method decorators, see above.
-    def _loop_selections(selection_method):
-        return loop_selections(selection_method)
-    def _loop_mutations(mutation_method):
-        return loop_mutations(mutation_method)
+    def _check_chromosome_mutation_rate(population_method):
+        return check_chromosome_mutation_rate(population_method)
+    def _check_gene_mutation_rate(individual_method):
+        return check_gene_mutation_rate(individual_method)
+    def _loop_selections(population_method):
+        return loop_selections(population_method)
+    def _loop_mutations(individual_method):
+        return loop_mutations(individual_method)
 
 
     class Population:
         """Methods for selecting chromosomes to mutate"""
 
+        @check_chromosome_mutation_rate
         @loop_selections
         def random_selection(ga):
             """Selects random chromosomes."""
 
             index = random.randrange(len(ga.population))
-            ga.population[index] = ga.mutation_individual_impl(ga, ga.population[index])
+            ga.mutation_individual_impl(ga, index)
 
 
+        @check_chromosome_mutation_rate
         @loop_selections
-        def random_selection_then_cross(ga):
-            """Selects random chromosomes and self-crosses with parent."""
+        def random_avoid_best(ga):
+            """Selects random chromosomes while avoiding the best chromosomes. (Elitism)"""
 
-            index = random.randrange(len(ga.population))
-            chromosome = ga.population[index]
-            ga.population[index] = ga.crossover_individual_impl(
-                                       ga, chromosome, ga.mutation_individual_impl(ga, chromosome)
-                                   )
+            index = random.randrange(int(len(ga.population)*ga.gene_mutation_rate/2), len(ga.population))
+            ga.mutation_individual_impl(ga, index)
 
 
     class Individual:
         """Methods for mutating a single chromosome."""
 
+        @check_gene_mutation_rate
         @loop_mutations
         def individual_genes(ga, chromosome):
             """Mutates a random gene in the chromosome."""
@@ -79,6 +123,7 @@ class Mutation_Methods:
             """Methods for mutating a chromosome
             by changing the order of the genes."""
 
+            @check_gene_mutation_rate
             @loop_mutations
             def swap_genes(ga, chromosome):
                 """Swaps two random genes in the chromosome."""
