@@ -41,7 +41,7 @@ def add_by_tolerance_goal(termination_impl):
     def new_method(ga):
 
         # If tolerance is set, check it.
-        if ga.tolerance_goal is not None:
+        if ga.tolerance_goal is not None and ga.population is not None:
             best_fitness = ga.population[0].fitness
             threshhold_fitness = ga.population[round(ga.percent_converged*len(ga.population))].fitness
             tol = ga.tolerance_goal * (1 + abs(best_fitness))

@@ -165,7 +165,7 @@ class Crossover_Methods:
                         yield random.randint(*sorted([value_1, value_2]))
                     else:
                         try:
-                            yield random.uniform([value_1, value_2])
+                            yield random.uniform(value_1, value_2)
                         except:
                             yield ValueError("Unhandled gene type found. Use integer or float genes.")
 
