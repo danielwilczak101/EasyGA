@@ -32,7 +32,7 @@ class Initialization_Methods:
     # Private method decorators, see above.
     _chromosomes_to_population = chromosomes_to_population
     _genes_to_chromosome       = genes_to_chromosome
-    _value_to_gene             = value_to_gene
+    _values_to_genes           = values_to_genes
 
 
     @chromosomes_to_population
