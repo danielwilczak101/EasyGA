@@ -50,7 +50,7 @@ def compute_parent_amount(selection_method):
 
     def new_method(ga):
         parent_amount = max(2, len(ga.population)*ga.parent_ratio)
-        ga.parent_selection_impl(ga, parent_amount)
+        selection_method(ga, parent_amount)
 
     return new_method
 
