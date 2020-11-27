@@ -1,6 +1,6 @@
 import random
 
-def append_children_to_next_population(population_method):
+def append_to_next_population(population_method):
     """Appends the new chromosomes to the next population.
     Also modifies the input to include the mating pool.
     """
@@ -12,13 +12,13 @@ def append_children_to_next_population(population_method):
 
 
 def weak_check_exceptions(population_method):
-    """Checks if the first two chromosomes can be crossed."""
+    """Checks if the first and last chromosomes can be crossed."""
 
     def new_method(ga, mating_pool):
 
         # check if any genes are an Exception from
-        # crossing just the first two parents.
-        for gene in ga.crossover_individual_impl(ga, mating_pool[0], mating_pool[1]):
+        # crossing just the first and last parents.
+        for gene in ga.crossover_individual_impl(ga, mating_pool[0], mating_pool[-1]):
             if isinstance(gene.value, Exception):
                 raise gene.value
 
@@ -81,18 +81,18 @@ def values_to_genes(individual_method):
 class Crossover_Methods:
 
     # Private method decorators, see above.
-    _append_children_to_next_population = append_children_to_next_population
-    _weak_check_exceptions   = weak_check_exceptions
-    _strong_check_exceptions = strong_check_exceptions
-    _genes_to_chromosome     = genes_to_chromosome
-    _values_to_genes         = values_to_genes
+    _append_to_next_population = append_to_next_population
+    _weak_check_exceptions     = weak_check_exceptions
+    _strong_check_exceptions   = strong_check_exceptions
+    _genes_to_chromosome       = genes_to_chromosome
+    _values_to_genes           = values_to_genes
 
 
     class Population:
         """Methods for selecting chromosomes to crossover."""
 
 
-        @append_children_to_next_population
+        @append_to_next_population
         @weak_check_exceptions
         def sequential_selection(ga, mating_pool):
             """Select sequential pairs from the mating pool.
@@ -108,7 +108,7 @@ class Crossover_Methods:
                 )
 
 
-        @append_children_to_next_population
+        @append_to_next_population
         @weak_check_exceptions
         def random_selection(ga, mating_pool):
             """Select random pairs from the mating pool.
