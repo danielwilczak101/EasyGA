@@ -86,10 +86,10 @@ class Mutation_Methods:
         @check_chromosome_mutation_rate
         @loop_selections
         def random_avoid_best(ga):
-            """Selects random chromosomes while avoiding the best chromosomes. (Elitism)"""
+            """Selects random chromosomes while avoiding the best 25% chromosomes. (Elitism)"""
 
             index = random.randrange(
-                int(len(ga.population)*ga.gene_mutation_rate/2),
+                ceil(len(ga.population)/8),
                 len(ga.population)
             )
             ga.mutation_individual_impl(ga, index)
