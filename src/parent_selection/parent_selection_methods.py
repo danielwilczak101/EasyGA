@@ -42,19 +42,34 @@ def ensure_sorted(selection_method):
     return new_method
 
 
+def compute_parent_amount(selection_method):
+    """Computes the amount of parents
+    needed to be selected, and passes it
+    as another argument for the method.
+    """
+
+    def new_method(ga):
+        parent_amount = max(2, len(ga.population)*ga.parent_ratio)
+        ga.parent_selection_impl(ga, parent_amount)
+
+    return new_method
+
+
 class Parent_Selection:
 
     # Private method decorators, see above.
     _check_selection_probability = check_selection_probability
     _check_positive_fitness      = check_positive_fitness
     _ensure_sorted               = ensure_sorted
+    _compute_parent_amount       = compute_parent_amount
 
 
     class Rank:
 
         @check_selection_probability
         @ensure_sorted
-        def tournament(ga):
+        @compute_parent_amount
+        def tournament(ga, parent_amount):
             """
             Will make tournaments of size tournament_size and choose the winner (best fitness) 
             from the tournament and use it as a parent for the next generation. The total number 
@@ -88,7 +103,7 @@ class Parent_Selection:
                         ga.population.set_parent(tournament_group[index])
 
                         # Stop tournament selection if enough parents are selected
-                        if len(ga.population.mating_pool) >= len(ga.population)*ga.parent_ratio:
+                        if len(ga.population.mating_pool) >= parent_amount:
                             return
 
 
@@ -97,7 +112,8 @@ class Parent_Selection:
         @check_selection_probability
         @ensure_sorted
         @check_positive_fitness
-        def roulette(ga):
+        @compute_parent_amount
+        def roulette(ga, parent_amount):
             """Roulette selection works based off of how strong the fitness is of the
             chromosomes in the population. The stronger the fitness the higher the probability
             that it will be selected. Using the example of a casino roulette wheel.
@@ -123,7 +139,7 @@ class Parent_Selection:
             probability = probability[1:]
 
             # Loops until it reaches a desired mating pool size
-            while (len(ga.population.mating_pool) < len(ga.population)*ga.parent_ratio):
+            while len(ga.population.mating_pool) < parent_amount:
 
                 # Spin the roulette
                 rand_number = random.random()
@@ -138,17 +154,19 @@ class Parent_Selection:
         @check_selection_probability
         @ensure_sorted
         @check_positive_fitness
-        def stochastic(ga):
+        @compute_parent_amount
+        def stochastic(ga, parent_amount):
             """Stochastic roulette selection works based off of how strong the fitness is of the
             chromosomes in the population. The stronger the fitness the higher the probability
             that it will be selected. Instead of dividing the fitness by the sum of all fitnesses
             and incrementally increasing the chance something is selected, the stochastic method
-            just divides by the highest fitness and selects randomly."""
+            just divides by the highest fitness and selects randomly.
+            """
 
             max_fitness = ga.get_chromosome_fitness(0)
 
             # Loops until it reaches a desired mating pool size
-            while (len(ga.population.mating_pool) < len(ga.population)*ga.parent_ratio):
+            while len(ga.population.mating_pool) < parent_amount:
 
                 # Selected chromosome
                 index = random.randrange(len(ga.population))
