@@ -35,17 +35,17 @@ class Attributes:
     attributes have been catigorized to explain sections in the ga process."""
 
     target_fitness_type_dict = {
-            'min'          : 'min',
-            'minimize'     : 'min',
-            'minimise'     : 'min',
-            'minimization' : 'min',
-            'minimisation' : 'min',
-            'max'          : 'max',
-            'maximize'     : 'max',
-            'maximise'     : 'max',
-            'maximization' : 'max',
-            'maximisation' : 'max'
-        }
+        'min'          : 'min',
+        'minimize'     : 'min',
+        'minimise'     : 'min',
+        'minimization' : 'min',
+        'minimisation' : 'min',
+        'max'          : 'max',
+        'maximize'     : 'max',
+        'maximise'     : 'max',
+        'maximization' : 'max',
+        'maximisation' : 'max'
+    }
 
     def __init__(self,
             chromosome_length           = 10,

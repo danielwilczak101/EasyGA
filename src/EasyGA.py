@@ -80,14 +80,16 @@ class GA(Attributes):
             self.current_generation += 1
 
 
-    def evolve(self):
+    def evolve(self, number_of_generations = 1, consider_termination = True):
         """Runs the ga until the termination point has been satisfied."""
+
         while self.active():
-            self.evolve_generation()
+            self.evolve_generation(number_of_generations, consider_termination)
 
 
     def active(self):
         """Returns if the ga should terminate based on the termination implimented."""
+
         return self.termination_impl(self)
 
 
@@ -96,6 +98,7 @@ class GA(Attributes):
         the initialization implimentation
         that is currently set.
         """
+
         self.population = self.initialization_impl(self)
 
 
@@ -122,10 +125,10 @@ class GA(Attributes):
         """
 
         return sorted(
-                   chromosome_list,                               # list to be sorted
-                   key = lambda chromosome: chromosome.fitness,   # by fitness
-                   reverse = (self.target_fitness_type == 'max')  # ordered by fitness type
-               )
+            chromosome_list,                               # list to be sorted
+            key = lambda chromosome: chromosome.fitness,   # by fitness
+            reverse = (self.target_fitness_type == 'max')  # ordered by fitness type
+        )
 
 
     def get_chromosome_fitness(self, index):
@@ -133,9 +136,10 @@ class GA(Attributes):
         at the specified index after conversion based
         on the target fitness type.
         """
+
         return self.convert_fitness(
-                   self.population[index].fitness
-               )
+            self.population[index].fitness
+        )
 
 
     def convert_fitness(self, fitness_value):

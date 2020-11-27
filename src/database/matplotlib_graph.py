@@ -6,10 +6,10 @@ class Matplotlib_Graph:
 
     # Common graphing functions
     type_of_graph_dict = {
-            'line'    : plt.plot,
-            'scatter' : plt.scatter,
-            'bar'     : plt.bar
-        }
+        'line'    : plt.plot,
+        'scatter' : plt.scatter,
+        'bar'     : plt.bar
+    }
 
     def __init__(self, database):
         self.database = database
@@ -31,9 +31,9 @@ class Matplotlib_Graph:
         # Query for Y data
         self.y = self.database.get_generation_total_fitness(config_id)
 
+        # If using log then the values have to be positive numbers
         if self.yscale == "log":
-            # If using log then the values have to be positive numbers
-            self.y  =  [abs(ele) for ele in self.y]
+            self.y = [abs(ele) for ele in self.y]
 
         self.type_of_graph(self.x, self.y)
         plt.xlabel('Generation')
@@ -53,9 +53,9 @@ class Matplotlib_Graph:
         # Query for Y data
         self.y = self.database.get_highest_chromosome(config_id)
 
+        # If using log then the values have to be positive numbers
         if self.yscale == "log":
-            # If using log then the values have to be positive numbers
-            self.y  =  [abs(ele) for ele in self.y]
+            self.y = [abs(ele) for ele in self.y]
 
         self.type_of_graph(self.x, self.y)
         plt.xlabel('Generation')
@@ -75,9 +75,9 @@ class Matplotlib_Graph:
         # Query for Y data
         self.y = self.database.get_lowest_chromosome(config_id)
 
+        # If using log then the values have to be positive numbers
         if self.yscale == "log":
-            # If using log then the values have to be positive numbers
-            self.y  =  [abs(ele) for ele in self.y]
+            self.y = [abs(ele) for ele in self.y]
 
         self.type_of_graph(self.x, self.y)
         plt.xlabel('Generation')

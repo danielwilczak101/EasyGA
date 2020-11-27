@@ -1,7 +1,7 @@
 def add_by_fitness_goal(termination_impl):
     """Adds termination by fitness goal to the method."""
 
-    def helper(ga):
+    def new_method(ga):
 
         # If fitness goal is set, check it.
         if ga.fitness_goal is not None:
@@ -16,13 +16,14 @@ def add_by_fitness_goal(termination_impl):
 
         # Check other termination methods
         return termination_impl(ga)
-    return helper
+
+    return new_method
 
 
 def add_by_generation_goal(termination_impl):
     """Adds termination by generation goal to the method."""
 
-    def helper(ga):
+    def new_method(ga):
 
         # If generation goal is set, check it.
         if ga.generation_goal is not None and ga.current_generation >= ga.generation_goal:
@@ -30,18 +31,19 @@ def add_by_generation_goal(termination_impl):
 
         # Check other termination methods
         return termination_impl(ga)
-    return helper
+
+    return new_method
 
 
 def add_by_tolerance_goal(termination_impl):
     """Adds termination by tolerance goal to the method."""
 
-    def helper(ga):
+    def new_method(ga):
 
         # If tolerance is set, check it.
         if ga.tolerance_goal is not None:
             best_fitness = ga.population[0].fitness
-            threshhold_fitness = ga.population[int(ga.percent_converged*len(ga.population))].fitness
+            threshhold_fitness = ga.population[round(ga.percent_converged*len(ga.population))].fitness
             tol = ga.tolerance_goal * (1 + abs(best_fitness))
 
             # Terminate if the specified amount of the population has converged to the specified tolerance
@@ -50,19 +52,17 @@ def add_by_tolerance_goal(termination_impl):
 
         # Check other termination methods
         return termination_impl(ga)
-    return helper
+
+    return new_method
 
 
 class Termination_Methods:
     """Example functions that can be used to terminate the the algorithms loop"""
 
     # Private method decorators, see above.
-    def _add_by_fitness_goal(termination_impl):
-        return add_by_fitness_goal(termination_impl)
-    def _add_by_generation_goal(termination_impl):
-        return add_by_generation_goal(termination_impl)
-    def _add_by_tolerance_goal(termination_impl):
-        return add_by_tolerance_goal(termination_impl)
+    _add_by_fitness_goal    = add_by_fitness_goal
+    _add_by_generation_goal = add_by_generation_goal
+    _add_by_tolerance_goal  = add_by_tolerance_goal
 
 
     @add_by_fitness_goal

@@ -11,14 +11,17 @@ class SQL_Database:
 
     def default_config_id(method):
         """Decorator used to set the default config_id"""
+
         def new_method(self, config_id = None):
             input_id = self.config_id if config_id is None else config_id
             return method(self, input_id)
+
         return new_method
 
 
     def format_query_data(method):
         """Decorator used to format query data"""
+
         def new_method(self, config_id):
             query = method(self, config_id)
 
@@ -31,6 +34,7 @@ class SQL_Database:
                 query = query[0]
 
             return query
+
         return new_method
 
 
@@ -48,9 +52,9 @@ class SQL_Database:
     def sql_type_of(self, obj):
         """Returns the sql type for the object"""
 
-        if type(obj) == int:
+        if isinstance(obj, int):
             return 'INT'
-        elif type(obj) == float:
+        elif isinstance(obj, float):
             return 'REAL'
         else:
             return 'TEXT'
@@ -84,7 +88,12 @@ class SQL_Database:
         """ Insert one chromosome into the database"""
 
         # Structure the insert data
-        db_chromosome = (self.config_id, generation, chromosome.fitness, repr(chromosome))
+        db_chromosome = (
+            self.config_id,
+            generation,
+            chromosome.fitness,
+            repr(chromosome)
+        )
 
         # Create sql query structure
         sql = ''' INSERT INTO data(config_id, generation, fitness, chromosome)
@@ -101,13 +110,14 @@ class SQL_Database:
 
         # Structure the insert data
         db_chromosome_list = [
-                (
-                    self.config_id,
-                    ga.current_generation,
-                    chromosome.fitness,
-                    repr(chromosome)
-                )
-            for chromosome in ga.population
+            (
+                self.config_id,
+                ga.current_generation,
+                chromosome.fitness,
+                repr(chromosome)
+            )
+            for chromosome
+            in ga.population
         ]
 
         # Create sql query structure
@@ -158,9 +168,12 @@ class SQL_Database:
         attribute variables and adds them as columns in the database table config"""
 
         # Structure the config table
-        sql = "CREATE TABLE IF NOT EXISTS config (id INTEGER PRIMARY KEY,"
-        sql += ",".join(var + ' ' + self.sql_type_of(var) for var in self.get_var_names(ga))
-        sql += "); "
+        sql = "CREATE TABLE IF NOT EXISTS config (id INTEGER PRIMARY KEY," \
+              + ",".join(
+                  var + ' ' + self.sql_type_of(var)
+                  for var
+                  in self.get_var_names(ga)
+              ) + "); "
 
         return sql
 
@@ -179,11 +192,11 @@ class SQL_Database:
                 db_config_list[i] = str(db_config_list[i])
 
         # Create sql query structure
-        sql = "INSERT INTO config ("
-        sql += ",".join(self.get_var_names(ga))
-        sql += ") VALUES("
-        sql += ( ",?"*len(db_config_list) )[1:]
-        sql += ") "
+        sql = "INSERT INTO config ("             \
+              + ",".join(self.get_var_names(ga)) \
+              + ") VALUES("                      \
+              + ( ",?"*len(db_config_list) )[1:] \
+              + ") "
 
         # For some reason it has to be in var = array(tuple()) form
         db_config_list = [tuple(db_config_list)]
@@ -202,7 +215,6 @@ class SQL_Database:
 
         cur = self.conn.cursor()
         cur.execute(query)
-
         return cur.fetchall()
 
 
@@ -270,6 +282,7 @@ class SQL_Database:
     @property
     def conn(self):
         """Getter function for conn"""
+
         # Return if the connection has already been set
         if self._conn is not None:
             return self._conn
@@ -279,6 +292,7 @@ class SQL_Database:
             try:
                 # Check if you can connect to the database
                 self._conn = self.create_connection()
+
             except:
                 # if the connection doesnt exist then print error
                 raise Exception("""You are required to run a ga before you
@@ -296,6 +310,7 @@ class SQL_Database:
     @property
     def config_id(self):
       """Getter function for config_id"""
+
       # Return if the config_id has already been set
       if self._config_id is not None:
           return self._config_id
@@ -305,10 +320,11 @@ class SQL_Database:
           try:
               # Check if you can connect to the database
               self._config_id = self.get_most_recent_config_id()
+
           except:
               # if the config_id doesnt exist then print error
               raise Exception("""You are required to run a ga before you
-               can connect to the database. Run ga.evolve() or ga.active()""")
+                 can connect to the database. Run ga.evolve() or ga.active()""")
 
 
     @config_id.setter

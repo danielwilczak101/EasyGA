@@ -4,7 +4,7 @@ from math import ceil
 def check_chromosome_mutation_rate(population_method):
     """Checks if the chromosome mutation rate is a float between 0 and 1 before running."""
 
-    def new_population_method(ga):
+    def new_method(ga):
 
         if not isinstance(ga.chromosome_mutation_rate, float):
             raise TypeError("Chromosome mutation rate must be a float.")
@@ -15,13 +15,13 @@ def check_chromosome_mutation_rate(population_method):
         else:
             raise ValueError("Chromosome mutation rate must be between 0 and 1.")
 
-    return new_population_method
+    return new_method
 
 
 def check_gene_mutation_rate(individual_method):
     """Checks if the gene mutation rate is a float between 0 and 1 before running."""
 
-    def new_individual_method(ga, index):
+    def new_method(ga, index):
 
         if not isinstance(ga.gene_mutation_rate, float):
             raise TypeError("Gene mutation rate must be a float.")
@@ -32,19 +32,19 @@ def check_gene_mutation_rate(individual_method):
         else:
             raise ValueError("Gene mutation rate must be between 0 and 1.")
 
-    return new_individual_method
+    return new_method
 
 
 def loop_selections(population_method):
     """Runs the population method until enough chromosomes are mutated."""
 
-    def new_population_method(ga):
+    def new_method(ga):
 
         # Loop the population method until enough chromosomes are mutated.
         for _ in range(ceil(len(ga.population)*ga.chromosome_mutation_rate)):
             population_method(ga)
 
-    return new_population_method
+    return new_method
 
 
 def loop_mutations(individual_method):
@@ -53,26 +53,22 @@ def loop_mutations(individual_method):
     """
 
     # Change input from index to chromosome.
-    def new_individual_method(ga, index):
+    def new_method(ga, index):
 
         # Loop the individual method until enough genes are mutated.
         for _ in range(ceil(len(ga.population[index])*ga.gene_mutation_rate)):
             individual_method(ga, ga.population[index])
 
-    return new_individual_method
+    return new_method
 
 
 class Mutation_Methods:
 
     # Private method decorators, see above.
-    def _check_chromosome_mutation_rate(population_method):
-        return check_chromosome_mutation_rate(population_method)
-    def _check_gene_mutation_rate(individual_method):
-        return check_gene_mutation_rate(individual_method)
-    def _loop_selections(population_method):
-        return loop_selections(population_method)
-    def _loop_mutations(individual_method):
-        return loop_mutations(individual_method)
+    _check_chromosome_mutation_rate = check_chromosome_mutation_rate
+    _check_gene_mutation_rate       = check_gene_mutation_rate
+    _loop_selections = loop_selections
+    _loop_mutations  = loop_mutations
 
 
     class Population:
@@ -92,7 +88,10 @@ class Mutation_Methods:
         def random_avoid_best(ga):
             """Selects random chromosomes while avoiding the best chromosomes. (Elitism)"""
 
-            index = random.randrange(int(len(ga.population)*ga.gene_mutation_rate/2), len(ga.population))
+            index = random.randrange(
+                int(len(ga.population)*ga.gene_mutation_rate/2),
+                len(ga.population)
+            )
             ga.mutation_individual_impl(ga, index)
 
 

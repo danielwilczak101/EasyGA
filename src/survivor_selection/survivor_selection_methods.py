@@ -2,15 +2,16 @@ import random
 
 def append_to_next_population(survivor_method):
     """Appends the selected chromosomes to the next population."""
-    return lambda ga: ga.population.append_children(survivor_method(ga))
+
+    return lambda ga:\
+        ga.population.append_children(survivor_method(ga))
 
 
 class Survivor_Selection:
     """Survivor selection determines which individuals should be brought to the next generation"""
 
     # Private method decorator, see above.
-    def _append_to_next_population(survivor_method):
-        return append_to_next_population(survivor_method)
+    _append_to_next_population = append_to_next_population
 
 
     @append_to_next_population
@@ -33,8 +34,11 @@ class Survivor_Selection:
     def fill_in_parents_then_random(ga):
         """Fills in the next population with all parents followed by random chromosomes from the last population"""
 
+        # Remove dupes from the mating pool
+        mating_pool = set(ga.population.mating_pool)
+
         needed_amount = len(ga.population) - len(ga.population.next_population)
-        parent_amount = min(len(ga.population.mating_pool), needed_amount)
+        parent_amount = min(needed_amount, len(mating_pool))
         random_amount = needed_amount - parent_amount
 
         # Only parents are used.
@@ -43,5 +47,8 @@ class Survivor_Selection:
 
         # Parents need to be removed from the random sample to avoid dupes.
         else:
-            return ga.population.mating_pool +\
-                   random.sample(set(ga.population)-set(ga.population.mating_pool), random_amount)
+            return mating_pool \
+                   + random.sample(
+                       set(ga.population) - mating_pool,
+                       random_amount
+                   )

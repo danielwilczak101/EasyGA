@@ -5,12 +5,14 @@ def check_selection_probability(selection_method):
     is not between 0 and 1. Otherwise runs the selection
     method.
     """
-    def helper(ga):
+
+    def new_method(ga):
         if 0 < ga.selection_probability < 1:
             selection_method(ga)
         else:
             raise Exception("Selection probability must be between 0 and 1 to select parents.")
-    return helper
+
+    return new_method
 
 
 def check_positive_fitness(selection_method):
@@ -18,33 +20,34 @@ def check_positive_fitness(selection_method):
     chromosome with negative fitness. Otherwise runs
     the selection method.
     """
-    def helper(ga):
+
+    def new_method(ga):
         if ga.get_chromosome_fitness(0) > 0 and ga.get_chromosome_fitness(-1) >= 0:
             selection_method(ga)
         else:
             raise Exception("Converted fitness values must be all positive. Consider using rank selection instead.")
-    return helper
+
+    return new_method
 
 
 def ensure_sorted(selection_method):
     """Sorts the population by fitness
     and then runs the selection method.
     """
-    def helper(ga):
+
+    def new_method(ga):
         ga.population.sort_by_best_fitness(ga)
         selection_method(ga)
-    return helper
+
+    return new_method
 
 
 class Parent_Selection:
 
     # Private method decorators, see above.
-    def _check_selection_probability(selection_method):
-        return check_selection_probability(selection_method)
-    def _check_positive_fitness(selection_method):
-        return check_positive_fitness(selection_method)
-    def _ensure_sorted(selection_method):
-        return ensure_sorted(selection_method)
+    _check_selection_probability = check_selection_probability
+    _check_positive_fitness      = check_positive_fitness
+    _ensure_sorted               = ensure_sorted
 
 
     class Rank:
@@ -62,13 +65,16 @@ class Parent_Selection:
             # Use no less than 5 chromosomes per tournament.
             tournament_size = int(len(ga.population)*ga.tournament_size_ratio)
             if tournament_size < 5:
-                tournament_size = 5
+                tournament_size = min(5, len(ga.population))
 
             # Repeat tournaments until the mating pool is large enough.
             while True:
 
                 # Generate a random tournament group and sort by fitness.
-                tournament_group = sorted([random.randrange(len(ga.population)) for _ in range(tournament_size)])
+                tournament_group = sorted(random.sample(
+                    range(len(ga.population)),
+                    k = tournament_size
+                ))
 
                 # For each chromosome, add it to the mating pool based on its rank in the tournament.
                 for index in range(tournament_size):
@@ -101,7 +107,11 @@ class Parent_Selection:
             """
 
             # The sum of all the fitnessess in a population
-            fitness_sum = sum(ga.get_chromosome_fitness(index) for index in range(len(ga.population)))
+            fitness_sum = sum(
+                ga.get_chromosome_fitness(index)
+                for index
+                in range(len(ga.population))
+            )
 
             # A list of ranges that represent the probability of a chromosome getting chosen
             probability = [ga.selection_probability]

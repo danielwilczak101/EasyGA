@@ -150,7 +150,7 @@ class Population:
         to get a backend representation of the population.
         """
         return ''.join(
-                f'Chromosome - {index} {chromosome} ' + 
-                f'/ Fitness = {chromosome.fitness}\n'
-            for index, chromosome in enumerate(self)
+            f'Chromosome - {index} {chromosome} / Fitness = {chromosome.fitness}\n'
+            for index, chromosome
+            in enumerate(self)
         )
