@@ -28,6 +28,12 @@ class Chromosome:
         return [gene.value for gene in self]
 
 
+    @property
+    def gene_value_iter(self):
+        """Returns an iterable of gene values"""
+        return (gene.value for gene in self)
+
+
     def __iter__(self):
         """
         Allows the user to use
@@ -38,6 +44,10 @@ class Chromosome:
                 for gene in chromosome
 
         to loop through the chromosome.
+
+        Note: using list(chromosome) creates a copy of
+              the gene_list. Altering this will not
+              alter the original gene_list.
         """
         return iter(self.gene_list)
 
