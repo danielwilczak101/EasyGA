@@ -35,29 +35,38 @@ def check_gene_mutation_rate(individual_method):
     return new_method
 
 
-def loop_selections(population_method):
-    """Runs the population method until enough chromosomes are mutated."""
+def loop_random_selections(population_method):
+    """Runs the population method until enough chromosomes are mutated.
+    Provides the indexes of selected chromosomes to mutate using
+    random.sample to get all indexes fast.
+    """
 
     def new_method(ga):
 
+        sample_space = range(len(ga.population))
+        sample_size  = ceil(len(ga.population)*ga.chromosome_mutation_rate)
+
         # Loop the population method until enough chromosomes are mutated.
-        for _ in range(ceil(len(ga.population)*ga.chromosome_mutation_rate)):
-            population_method(ga)
+        for index in random.sample(sample_space, sample_size):
+            population_method(ga, index)
 
     return new_method
 
 
-def loop_mutations(individual_method):
+def loop_random_mutations(individual_method):
     """Runs the individual method until enough
     genes are mutated on the indexed chromosome.
     """
 
     # Change input from index to chromosome.
-    def new_method(ga, index):
+    def new_method(ga, chromosome):
+
+        sample_space = range(len(chromosome))
+        sample_size  = ceil(len(chromosome)*ga.gene_mutation_rate)
 
         # Loop the individual method until enough genes are mutated.
-        for _ in range(ceil(len(ga.population[index])*ga.gene_mutation_rate)):
-            individual_method(ga, ga.population[index])
+        for index in random.sample(sample_space, sample_size):
+            individual_method(ga, chromosome, index)
 
     return new_method
 
@@ -67,43 +76,37 @@ class Mutation_Methods:
     # Private method decorators, see above.
     _check_chromosome_mutation_rate = check_chromosome_mutation_rate
     _check_gene_mutation_rate       = check_gene_mutation_rate
-    _loop_selections = loop_selections
-    _loop_mutations  = loop_mutations
+    _loop_random_selections = loop_random_selections
+    _loop_random_mutations  = loop_random_mutations
 
 
     class Population:
         """Methods for selecting chromosomes to mutate"""
 
         @check_chromosome_mutation_rate
-        @loop_selections
-        def random_selection(ga):
+        @loop_random_selections
+        def random_selection(ga, index):
             """Selects random chromosomes."""
 
-            index = random.randrange(len(ga.population))
-            ga.mutation_individual_impl(ga, index)
+            ga.mutation_individual_impl(ga, ga.population[index])
 
 
         @check_chromosome_mutation_rate
-        @loop_selections
-        def random_avoid_best(ga):
+        @loop_random_selections
+        def random_avoid_best(ga, index):
             """Selects random chromosomes while avoiding the best chromosomes. (Elitism)"""
 
-            index = random.randrange(
-                ceil(ga.percent_converged*len(ga.population)*3/16),
-                len(ga.population)
-            )
-            ga.mutation_individual_impl(ga, index)
+            if index > ga.percent_converged*len(ga.population)*3/16:
+                ga.mutation_individual_impl(ga, ga.population[index])
 
 
     class Individual:
         """Methods for mutating a single chromosome."""
 
         @check_gene_mutation_rate
-        @loop_mutations
-        def individual_genes(ga, chromosome):
+        @loop_random_mutations
+        def individual_genes(ga, chromosome, index):
             """Mutates a random gene in the chromosome."""
-
-            index = random.randrange(len(chromosome))
 
             # Using the chromosome_impl
             if ga.chromosome_impl is not None:
@@ -123,13 +126,13 @@ class Mutation_Methods:
             by changing the order of the genes."""
 
             @check_gene_mutation_rate
-            @loop_mutations
-            def swap_genes(ga, chromosome):
+            @loop_random_mutations
+            def swap_genes(ga, chromosome, index):
                 """Swaps two random genes in the chromosome."""
 
                 # Indexes of genes to swap
-                index_one = random.randrange(len(chromosome))
-                index_two = random.randrange(len(chromosome))
+                index_one = index
+                index_two = random.randrange(index_one)
 
                 # Swap genes
                 chromosome[index_one], chromosome[index_two] = chromosome[index_two], chromosome[index_one]
