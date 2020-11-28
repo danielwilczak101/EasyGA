@@ -141,7 +141,7 @@ class GA(Attributes):
             threshhold_fitness = self.population[round(self.percent_converged*len(self.population)/2)].fitness
 
             # Way too many converged
-            if abs(best_fitness - threshhold_fitness) > tol:
+            if abs(best_fitness - threshhold_fitness) < tol:
                 multiplier **= 2
                 limit = max_val / multiplier
 
