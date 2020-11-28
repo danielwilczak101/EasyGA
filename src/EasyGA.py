@@ -120,7 +120,7 @@ class GA(Attributes):
 
         # Minimum and maximum rates allowed
         min_val = 0.05
-        max_val = 0.75
+        max_val = 0.25
         limit = max_val / multiplier
 
         # Too few converged: cross more and mutate less
@@ -133,7 +133,6 @@ class GA(Attributes):
                 multiplier **= 2
                 limit = max_val / multiplier
 
-            self.parent_ratio             = min(max_val, self.parent_ratio             * multiplier)
             self.selection_probability    = min(max_val, self.selection_probability    * multiplier)
             self.chromosome_mutation_rate = max(min_val, self.chromosome_mutation_rate / multiplier)
             self.gene_mutation_rate       = max(min_val, self.gene_mutation_rate       / multiplier)
@@ -148,12 +147,9 @@ class GA(Attributes):
                 multiplier **= 2
                 limit = max_val / multiplier
 
-            self.parent_ratio             = max(min_val, self.parent_ratio             / multiplier)
             self.selection_probability    = max(min_val, self.selection_probability    / multiplier)
             self.chromosome_mutation_rate = min(max_val, self.chromosome_mutation_rate * multiplier)
             self.gene_mutation_rate       = min(max_val, self.gene_mutation_rate       * multiplier)
-
-        
 
 
     def initialize_population(self):
