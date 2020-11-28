@@ -98,6 +98,9 @@ class GA(Attributes):
     def adapt(self):
         """Modifies the parent ratio and mutation rates
         based on the adapt rate and percent converged.
+        Attempts to balance out so that 25% of the desired
+        percent converged (50%*25% = 12.5% default)
+        is the amount converged at all times.
         """
 
         # Don't adapt
@@ -125,30 +128,30 @@ class GA(Attributes):
 
             threshhold_fitness = self.population[round(self.percent_converged*len(self.population)/8)].fitness
 
-            # Way too few converged
+            # Way too few converged, adapt twice as fast
             if abs(best_fitness - threshhold_fitness) > tol:
                 multiplier **= 2
                 limit = max_val / multiplier
 
-            self.parent_ratio             = min(max_val, self.parent_ratio*multiplier)
-            self.selection_probability    = min(max_val, self.selection_probability*multiplier)
-            self.chromosome_mutation_rate = max(min_val, self.chromosome_mutation_rate/multiplier)
-            self.gene_mutation_rate       = max(min_val, self.gene_mutation_rate/multiplier)
+            self.parent_ratio             = min(max_val, self.parent_ratio             * multiplier)
+            self.selection_probability    = min(max_val, self.selection_probability    * multiplier)
+            self.chromosome_mutation_rate = max(min_val, self.chromosome_mutation_rate / multiplier)
+            self.gene_mutation_rate       = max(min_val, self.gene_mutation_rate       / multiplier)
 
         # Too many converged: cross less and mutate more
         else:
 
-            threshhold_fitness = self.population[round(self.percent_converged*len(self.population)/2)].fitness
+            threshhold_fitness = self.population[round(self.percent_converged*len(self.population)*3/8)].fitness
 
-            # Way too many converged
+            # Way too many converged, adapt twice as fast
             if abs(best_fitness - threshhold_fitness) < tol:
                 multiplier **= 2
                 limit = max_val / multiplier
 
-            self.parent_ratio             = max(min_val, self.parent_ratio/multiplier)
-            self.selection_probability    = max(min_val, self.selection_probability/multiplier)
-            self.chromosome_mutation_rate = min(max_val, self.chromosome_mutation_rate*multiplier)
-            self.gene_mutation_rate       = min(max_val, self.gene_mutation_rate*multiplier)
+            self.parent_ratio             = max(min_val, self.parent_ratio             / multiplier)
+            self.selection_probability    = max(min_val, self.selection_probability    / multiplier)
+            self.chromosome_mutation_rate = min(max_val, self.chromosome_mutation_rate * multiplier)
+            self.gene_mutation_rate       = min(max_val, self.gene_mutation_rate       * multiplier)
 
         
 
