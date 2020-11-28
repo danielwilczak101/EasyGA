@@ -173,7 +173,7 @@ class Crossover_Methods:
             @genes_to_chromosome
             @values_to_genes
             def average(ga, parent_1, parent_2):
-                """Cross two parents by taking a a weighted average of the genes."""
+                """Cross two parents by taking the average of the genes."""
 
                 value_iter_1 = parent_1.gene_value_iter
                 value_iter_2 = parent_2.gene_value_iter
@@ -184,5 +184,31 @@ class Crossover_Methods:
                     else:
                         try:
                             yield (value_1+value_2)/2
+                        except:
+                            raise ValueError("Could not take the average of the gene values. Use integer or float genes.")
+
+
+            @genes_to_chromosome
+            @values_to_genes
+            def extrapolate(ga, parent_1, parent_2):
+                """Cross two parents by extrapolating towards the better parent.
+                May result in gene values outside the expected domain.
+                """
+
+                # Swap so that parent 1 is the better parent.
+                if ga.target_fitness_type == 'min' and parent_1.fitness > parent_2.fitness:
+                    parent_1, parent_2 = parent_2, parent_1
+                if ga.target_fitness_type == 'max' and parent_1.fitness < parent_2.fitness:
+                    parent_1, parent_2 = parent_2, parent_1
+
+                value_iter_1 = parent_1.gene_value_iter
+                value_iter_2 = parent_2.gene_value_iter
+
+                for value_1, value_2 in zip(value_iter_1, value_iter_2):
+                    if type(value_1) == type(value_2) == int:
+                        yield value_1 + (value_1-value_2)//4
+                    else:
+                        try:
+                            yield value_1 + (value_1-value_2)/4
                         except:
                             raise ValueError("Could not take the average of the gene values. Use integer or float genes.")
