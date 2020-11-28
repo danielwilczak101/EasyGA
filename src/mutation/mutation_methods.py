@@ -89,7 +89,7 @@ class Mutation_Methods:
             """Selects random chromosomes while avoiding the best chromosomes. (Elitism)"""
 
             index = random.randrange(
-                ceil(len(ga.population)/8),
+                ceil(ga.percent_converged*len(ga.population)*3/16),
                 len(ga.population)
             )
             ga.mutation_individual_impl(ga, index)
