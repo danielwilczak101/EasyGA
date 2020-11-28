@@ -79,6 +79,8 @@ class GA(Attributes):
             number_of_generations -= 1
             self.current_generation += 1
 
+        self.adapt()
+
 
     def evolve(self, number_of_generations = 1, consider_termination = True):
         """Runs the ga until the termination point has been satisfied."""
@@ -91,6 +93,64 @@ class GA(Attributes):
         """Returns if the ga should terminate based on the termination implimented."""
 
         return self.termination_impl(self)
+
+
+    def adapt(self):
+        """Modifies the parent ratio and mutation rates
+        based on the adapt rate and percent converged.
+        """
+
+        # Don't adapt
+        if self.adapt_rate is None or self.adapt_rate <= 0:
+            return
+
+        # How much converged
+        best_fitness = self.population[0].fitness
+        threshhold_fitness = self.population[round(self.percent_converged*len(self.population)/4)].fitness
+
+        # Closeness required for convergence
+        tol = 0.01 if self.tolerance_goal is None else self.tolerance_goal
+        tol *= 1 + abs(best_fitness)
+
+        # Change rates with:
+        multiplier = 1 + self.adapt_rate
+
+        # Minimum and maximum rates allowed
+        min_val = 0.05
+        max_val = 0.75
+        limit = max_val / multiplier
+
+        # Too few converged: cross more and mutate less
+        if abs(best_fitness - threshhold_fitness) > tol:
+
+            threshhold_fitness = self.population[round(self.percent_converged*len(self.population)/8)].fitness
+
+            # Way too few converged
+            if abs(best_fitness - threshhold_fitness) > tol:
+                multiplier **= 2
+                limit = max_val / multiplier
+
+            self.parent_ratio             = min(max_val, self.parent_ratio*multiplier)
+            self.selection_probability    = min(max_val, self.selection_probability*multiplier)
+            self.chromosome_mutation_rate = max(min_val, self.chromosome_mutation_rate/multiplier)
+            self.gene_mutation_rate       = max(min_val, self.gene_mutation_rate/multiplier)
+
+        # Too many converged: cross less and mutate more
+        else:
+
+            threshhold_fitness = self.population[round(self.percent_converged*len(self.population)/2)].fitness
+
+            # Way too many converged
+            if abs(best_fitness - threshhold_fitness) > tol:
+                multiplier **= 2
+                limit = max_val / multiplier
+
+            self.parent_ratio             = max(min_val, self.parent_ratio/multiplier)
+            self.selection_probability    = max(min_val, self.selection_probability/multiplier)
+            self.chromosome_mutation_rate = min(max_val, self.chromosome_mutation_rate*multiplier)
+            self.gene_mutation_rate       = min(max_val, self.gene_mutation_rate*multiplier)
+
+        
 
 
     def initialize_population(self):
@@ -117,18 +177,25 @@ class GA(Attributes):
                 chromosome.fitness = self.fitness_function_impl(chromosome)
 
 
-    def sort_by_best_fitness(self, chromosome_list):
+    def sort_by_best_fitness(self, chromosome_list, in_place = False):
         """Sorts the chromosome list by fitness based on fitness type.
         1st element has best fitness.
         2nd element has second best fitness.
         etc.
         """
 
-        return sorted(
-            chromosome_list,                               # list to be sorted
-            key = lambda chromosome: chromosome.fitness,   # by fitness
-            reverse = (self.target_fitness_type == 'max')  # ordered by fitness type
-        )
+        if in_place:
+            return chromosome_list.sort(                       # list to be sorted
+                key = lambda chromosome: chromosome.fitness,   # by fitness
+                reverse = (self.target_fitness_type == 'max')  # ordered by fitness type
+            )
+
+        else:
+            return sorted(
+                chromosome_list,                               # list to be sorted
+                key = lambda chromosome: chromosome.fitness,   # by fitness
+                reverse = (self.target_fitness_type == 'max')  # ordered by fitness type
+            )
 
 
     def get_chromosome_fitness(self, index):

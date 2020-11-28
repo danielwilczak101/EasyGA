@@ -66,6 +66,7 @@ class Attributes:
             percent_converged           = 0.50,
             chromosome_mutation_rate    = 0.15,
             gene_mutation_rate          = 0.05,
+            adapt_rate                  = 0.05,
             initialization_impl         = Initialization_Methods.random_initialization,
             fitness_function_impl       = Fitness_Examples.is_it_5,
             make_population             = create_population,
@@ -111,6 +112,7 @@ class Attributes:
         self.fitness_goal       = deepcopy(fitness_goal)
         self.tolerance_goal     = deepcopy(tolerance_goal)
         self.percent_converged  = deepcopy(percent_converged)
+        self.adapt_rate         = deepcopy(adapt_rate)
 
         # Mutation variables
         self.chromosome_mutation_rate = deepcopy(chromosome_mutation_rate)

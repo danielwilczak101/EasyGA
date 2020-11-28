@@ -46,13 +46,16 @@ class Population:
 
 
     def append_children(self, chromosome_list):
-        """Appends a list of chromosomes to the next population"""
-        self.next_population += chromosome_list
+        """Appends a list of chromosomes to the next population.
+        Appends to the front so that chromosomes with fitness
+        values already will stay sorted.
+        """
+        self.next_population = chromosome_list + self.next_population
 
 
     def sort_by_best_fitness(self, ga):
         """Sorts the population by fitness"""
-        self.chromosome_list = ga.sort_by_best_fitness(self.chromosome_list)
+        ga.sort_by_best_fitness(self.chromosome_list, in_place = True)
 
 
     def add_chromosome(self, chromosome, index = None):
