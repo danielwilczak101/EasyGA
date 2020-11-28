@@ -35,6 +35,17 @@ def check_gene_mutation_rate(individual_method):
     return new_method
 
 
+def ensure_sorted(population_method):
+    """Sorts the population by fitness before running."""
+
+    def new_method(ga):
+
+        ga.population.sort_by_best_fitness(ga)
+        population_method(ga)
+
+    return new_method
+
+
 def loop_selections(population_method):
     """Runs the population method until enough chromosomes are mutated."""
 
@@ -67,6 +78,7 @@ class Mutation_Methods:
     # Private method decorators, see above.
     _check_chromosome_mutation_rate = check_chromosome_mutation_rate
     _check_gene_mutation_rate       = check_gene_mutation_rate
+    _ensure_sorted   = ensure_sorted
     _loop_selections = loop_selections
     _loop_mutations  = loop_mutations
 
@@ -84,12 +96,13 @@ class Mutation_Methods:
 
 
         @check_chromosome_mutation_rate
+        @ensure_sorted
         @loop_selections
         def random_avoid_best(ga):
-            """Selects random chromosomes while avoiding the best 25% chromosomes. (Elitism)"""
+            """Selects random chromosomes while avoiding the best chromosomes. (Elitism)"""
 
             index = random.randrange(
-                ceil(len(ga.population)/8),
+                len(ga.population)/8,
                 len(ga.population)
             )
             ga.mutation_individual_impl(ga, index)
