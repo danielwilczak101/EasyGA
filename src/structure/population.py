@@ -2,11 +2,11 @@ from copy import deepcopy
 
 class Population:
 
-    def __init__(self, chromosome_list = []):
+    def __init__(self, chromosome_list):
         """Initialize the population with fitness of value None, and a
         set of chromosomes dependant on user-passed parameter."""
 
-        self.chromosome_list = deepcopy(chromosome_list)
+        self.chromosome_list = [deepcopy(chromosome) for chromosome in chromosome_list]
         self.fitness = None
         self.mating_pool = []
         self.next_population = []
@@ -50,6 +50,9 @@ class Population:
         Appends to the front so that chromosomes with fitness
         values already will stay sorted.
         """
+
+        if not isinstance(chromosome_list, list):
+            chromosome_list = list(chromosome_list)
         self.next_population = chromosome_list + self.next_population
 
 
