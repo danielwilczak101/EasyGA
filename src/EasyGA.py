@@ -98,58 +98,70 @@ class GA(Attributes):
     def adapt(self):
         """Modifies the parent ratio and mutation rates
         based on the adapt rate and percent converged.
-        Attempts to balance out so that 25% of the desired
-        percent converged (50%*25% = 12.5% default)
-        is the amount converged at all times.
+        Attempts to balance out so that a portion of the
+        population gradually approaches the solution.
+
+        Afterwards also heavily crosses the worst chromosomes
+        with the best chromosome, depending on how well the
+        overall population is doing.
         """
 
         # Don't adapt
         if self.adapt_rate is None or self.adapt_rate <= 0:
             return
 
-        # How much converged
+        # Amount of the population desired to converge (default 50%)
+        amount_converged = round(self.percent_converged*len(self.population))
+
+        # How much converged halfway
         best_fitness = self.population[0].fitness
-        threshhold_fitness = self.population[round(self.percent_converged*len(self.population)/4)].fitness
+        threshhold_fitness = self.population[amount_converged//2].fitness
 
         # Closeness required for convergence
-        tol = 0.01 if self.tolerance_goal is None else self.tolerance_goal
-        tol *= 1 + abs(best_fitness)
+        tol_half = abs(best_fitness - threshhold_fitness)/2
+
+        # How much converged a quarter of the way
+        threshhold_fitness = self.population[amount_converged//4].fitness
+
+        # Tolerance result
+        tol_quar = abs(best_fitness - threshhold_fitness)
 
         # Change rates with:
         multiplier = 1 + self.adapt_rate
 
-        # Minimum and maximum rates allowed
-        min_val = 0.05
-        max_val = 0.25
-        limit = max_val / multiplier
+        # Minimum and maximum mutation rates
+        min_rate = 0.05
+        max_rate = 0.25
+
+        # Adapt twice as fast if it's really bad
+        if tol_quar < tol_half/2 or tol_quar > tol_half*2:
+            multiplier **= 2
 
         # Too few converged: cross more and mutate less
-        if abs(best_fitness - threshhold_fitness) > tol:
+        if tol_quar > tol_half:
 
-            threshhold_fitness = self.population[round(self.percent_converged*len(self.population)/8)].fitness
-
-            # Way too few converged, adapt twice as fast
-            if abs(best_fitness - threshhold_fitness) > tol:
-                multiplier **= 2
-                limit = max_val / multiplier
-
-            self.selection_probability    = min(max_val, self.selection_probability    * multiplier)
-            self.chromosome_mutation_rate = max(min_val, self.chromosome_mutation_rate / multiplier)
-            self.gene_mutation_rate       = max(min_val, self.gene_mutation_rate       / multiplier)
+            self.selection_probability    = min(0.75    , self.selection_probability    * multiplier)
+            self.chromosome_mutation_rate = max(min_rate, self.chromosome_mutation_rate / multiplier)
+            self.gene_mutation_rate       = max(min_rate, self.gene_mutation_rate       / multiplier)
 
         # Too many converged: cross less and mutate more
         else:
 
-            threshhold_fitness = self.population[round(self.percent_converged*len(self.population)*3/8)].fitness
+            self.selection_probability    = max(0.25    , self.selection_probability    / multiplier)
+            self.chromosome_mutation_rate = min(max_rate, self.chromosome_mutation_rate * multiplier)
+            self.gene_mutation_rate       = min(max_rate, self.gene_mutation_rate       * multiplier)
 
-            # Way too many converged, adapt twice as fast
-            if abs(best_fitness - threshhold_fitness) < tol:
-                multiplier **= 2
-                limit = max_val / multiplier
+        # Strongly cross the best chromosome with the worst chromosomes
+        for n in range(1, amount_converged//4):
+            self.population[-n] = self.crossover_individual_impl(
+                self,
+                self.population[-n],
+                self.population[0],
+                min(0.5, tol_half)
+            )
+            self.population[-n].fitness = self.fitness_function_impl(self.population[-n])
 
-            self.selection_probability    = max(min_val, self.selection_probability    / multiplier)
-            self.chromosome_mutation_rate = min(max_val, self.chromosome_mutation_rate * multiplier)
-            self.gene_mutation_rate       = min(max_val, self.gene_mutation_rate       * multiplier)
+        self.population.sort_by_best_fitness(self)
 
 
     def initialize_population(self):
