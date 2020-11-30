@@ -7,49 +7,8 @@ def append_to_next_population(population_method):
 
     return lambda ga:\
         ga.population.append_children(
-            list(population_method(ga, ga.population.mating_pool))
+            population_method(ga, ga.population.mating_pool)
         )
-
-
-def weak_check_exceptions(population_method):
-    """Checks if the first and last chromosomes can be crossed."""
-
-    def new_method(ga, mating_pool):
-
-        # check if any genes are an Exception from
-        # crossing just the first and last parents.
-        for gene in ga.crossover_individual_impl(ga, mating_pool[0], mating_pool[-1]):
-            if isinstance(gene.value, Exception):
-                raise gene.value
-
-        # continue if no Exceptions found.
-        else:
-            return population_method(ga, ga.population.mating_pool)
-
-    return new_method
-
-
-def strong_check_exceptions(population_method):
-    """Checks if every pair of selected chromosomes can be crossed.
-    Warning: Very slow, consider comparing the types of genes
-             allowed to the method used beforehand instead.
-    """
-
-    def new_method(ga, mating_pool):
-
-        next_population = list(population_method(ga, ga.population.mating_pool))
-
-        # check if any genes are an Exception.
-        for chromosome in next_population:
-            for gene in chromosome:
-                if isinstance(gene.value, Exception):
-                    raise gene.value
-
-        # continue if no Exceptions found.
-        else:
-            return next_population
-
-    return new_method
 
 
 def genes_to_chromosome(individual_method):
@@ -59,9 +18,9 @@ def genes_to_chromosome(individual_method):
           and use yield for efficiency.
     """
 
-    return lambda ga, parent_1, parent_2:\
+    return lambda ga, parent_1, parent_2, weight:\
         ga.make_chromosome(
-            list(individual_method(ga, parent_1, parent_2))
+            individual_method(ga, parent_1, parent_2, weight)
         )
 
 
@@ -70,11 +29,11 @@ def values_to_genes(individual_method):
     Returns a generator of genes to avoid storing a new list.
     """
 
-    return lambda ga, parent_1, parent_2:\
+    return lambda ga, parent_1, parent_2, weight:\
         (
             ga.make_gene(value)
             for value
-            in individual_method(ga, parent_1, parent_2)
+            in individual_method(ga, parent_1, parent_2, weight)
         )
 
 
@@ -82,8 +41,6 @@ class Crossover_Methods:
 
     # Private method decorators, see above.
     _append_to_next_population = append_to_next_population
-    _weak_check_exceptions     = weak_check_exceptions
-    _strong_check_exceptions   = strong_check_exceptions
     _genes_to_chromosome       = genes_to_chromosome
     _values_to_genes           = values_to_genes
 
@@ -93,7 +50,6 @@ class Crossover_Methods:
 
 
         @append_to_next_population
-        @weak_check_exceptions
         def sequential_selection(ga, mating_pool):
             """Select sequential pairs from the mating pool.
             Every parent is paired with the previous parent.
@@ -104,12 +60,12 @@ class Crossover_Methods:
                 yield ga.crossover_individual_impl(  #     apply crossover to
                     ga,                              # 
                     mating_pool[index],              #         the parent and
-                    mating_pool[index-1]             #         the previous parent
+                    mating_pool[index-1],            #         the previous parent
+                    0.5                              #         with equal weight
                 )
 
 
         @append_to_next_population
-        @weak_check_exceptions
         def random_selection(ga, mating_pool):
             """Select random pairs from the mating pool.
             Every parent is paired with a random parent.
@@ -119,7 +75,8 @@ class Crossover_Methods:
                 yield ga.crossover_individual_impl(  #     apply crossover to
                     ga,                              # 
                     parent,                          #         the parent and
-                    random.choice(mating_pool)       #         a random parent
+                    random.choice(mating_pool),      #         a random parent
+                    0.5                              #         with equal weight
                 )
 
 
@@ -128,25 +85,36 @@ class Crossover_Methods:
 
 
         @genes_to_chromosome
-        def single_point(ga, parent_1, parent_2):
+        def single_point(ga, parent_1, parent_2, weight = 0.5):
             """Cross two parents by swapping genes at one random point."""
 
-            swap_index = random.randrange(len(parent_1))
+            N = min(len(parent_1), len(parent_2))
+
+            if weight == 0.5:
+                swap_index = random.randrange(N)
+            else:
+                weights = [
+                    weight*n + (1-weight)*(N-n)
+                    for n
+                    in range(N)
+                ]
+                swap_index = random.choices(range(N), weights)[0]
+
             return parent_1[:swap_index] + parent_2[swap_index:]
 
 
         @genes_to_chromosome
-        def multi_point(ga, parent_1, parent_2):
+        def multi_point(ga, parent_1, parent_2, weight = 0.5):
             """Cross two parents by swapping genes at multiple points."""
             pass
 
 
         @genes_to_chromosome
-        def uniform(ga, parent_1, parent_2):
+        def uniform(ga, parent_1, parent_2, weight = 0.5):
             """Cross two parents by swapping all genes randomly."""
 
             for gene_pair in zip(parent_1, parent_2):
-                yield random.choice(gene_pair)
+                yield random.choice(gene_pair, [weight, 1-weight])
 
 
         class Arithmetic:
@@ -154,61 +122,56 @@ class Crossover_Methods:
 
             @genes_to_chromosome
             @values_to_genes
-            def random(ga, parent_1, parent_2):
+            def random(ga, parent_1, parent_2, weight = 0.5):
                 """Cross two parents by taking a random integer or float value between each of the genes."""
 
-                value_iter_1 = parent_1.gene_value_iter
-                value_iter_2 = parent_2.gene_value_iter
+                values_1 = parent_1.gene_value_iter
+                values_2 = parent_2.gene_value_iter
 
-                for value_1, value_2 in zip(value_iter_1, value_iter_2):
+                for value_1, value_2 in zip(values_1, values_2):
+
+                    value = weight*values_1 + (1-weight)*random.uniform(value_1, value_2)
+
                     if type(value_1) == type(value_2) == int:
-                        yield random.randint(*sorted([value_1, value_2]))
-                    else:
-                        try:
-                            yield random.uniform(value_1, value_2)
-                        except:
-                            yield ValueError("Unhandled gene type found. Use integer or float genes.")
+                        value = round(value)
+
+                    yield value
 
 
             @genes_to_chromosome
             @values_to_genes
-            def average(ga, parent_1, parent_2):
+            def average(ga, parent_1, parent_2, weight = 0.5):
                 """Cross two parents by taking the average of the genes."""
 
-                value_iter_1 = parent_1.gene_value_iter
-                value_iter_2 = parent_2.gene_value_iter
+                values_1 = parent_1.gene_value_iter
+                values_2 = parent_2.gene_value_iter
 
-                for value_1, value_2 in zip(value_iter_1, value_iter_2):
+                for value_1, value_2 in zip(values_1, values_2):
+
+                    value = weight*value_1 + (1-weight)*value_2
+
                     if type(value_1) == type(value_2) == int:
-                        yield (value_1+value_2)//2
-                    else:
-                        try:
-                            yield (value_1+value_2)/2
-                        except:
-                            raise ValueError("Could not take the average of the gene values. Use integer or float genes.")
+                        value = round(value)
+
+                    yield value
 
 
             @genes_to_chromosome
             @values_to_genes
-            def extrapolate(ga, parent_1, parent_2):
-                """Cross two parents by extrapolating towards the better parent.
+            def extrapolate(ga, parent_1, parent_2, weight = 0.5):
+
+                """Cross two parents by extrapolating towards the first parent.
                 May result in gene values outside the expected domain.
                 """
 
-                # Swap so that parent 1 is the better parent.
-                if ga.target_fitness_type == 'min' and parent_1.fitness > parent_2.fitness:
-                    parent_1, parent_2 = parent_2, parent_1
-                if ga.target_fitness_type == 'max' and parent_1.fitness < parent_2.fitness:
-                    parent_1, parent_2 = parent_2, parent_1
+                values_1 = parent_1.gene_value_iter
+                values_2 = parent_2.gene_value_iter
 
-                value_iter_1 = parent_1.gene_value_iter
-                value_iter_2 = parent_2.gene_value_iter
+                for value_1, value_2 in zip(values_1, values_2):
 
-                for value_1, value_2 in zip(value_iter_1, value_iter_2):
+                    value = (2-weight)*value_1 + (weight-1)*value_2
+
                     if type(value_1) == type(value_2) == int:
-                        yield value_1 + (value_1-value_2)//4
-                    else:
-                        try:
-                            yield value_1 + (value_1-value_2)/4
-                        except:
-                            raise ValueError("Could not take the average of the gene values. Use integer or float genes.")
+                        value = round(value)
+
+                    yield value
