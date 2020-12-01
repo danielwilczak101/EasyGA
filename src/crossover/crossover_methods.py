@@ -90,11 +90,14 @@ class Crossover_Methods:
 
             N = min(len(parent_1), len(parent_2))
 
+            # Equally weighted indexes
             if weight == 0.5:
                 swap_index = random.randrange(N)
+
+            # Use weighted random index.
             else:
                 weights = [
-                    weight*n + (1-weight)*(N-n)
+                    weight*(n+1) + (1-weight)*(N-n)
                     for n
                     in range(N)
                 ]
@@ -114,7 +117,7 @@ class Crossover_Methods:
             """Cross two parents by swapping all genes randomly."""
 
             for gene_pair in zip(parent_1, parent_2):
-                yield random.choice(gene_pair, [weight, 1-weight])
+                yield random.choice(gene_pair, cum_weights = [weight, 1])
 
 
         class Arithmetic:
