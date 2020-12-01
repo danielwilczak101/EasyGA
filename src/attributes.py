@@ -66,7 +66,7 @@ class Attributes:
             percent_converged           = 0.50,
             chromosome_mutation_rate    = 0.15,
             gene_mutation_rate          = 0.05,
-            adapt_rate                  = 0.05,
+            adapt_rate                  = 0.15,
             initialization_impl         = Initialization_Methods.random_initialization,
             fitness_function_impl       = Fitness_Examples.is_it_5,
             make_population             = create_population,
