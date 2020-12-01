@@ -125,25 +125,21 @@ class GA(Attributes):
         # Change rates with:
         multiplier = 1 + self.adapt_rate
 
-        # Minimum and maximum mutation rates
-        min_rate = 0.05
-        max_rate = 0.25
-
         self.parent_ratio = min(self.percent_converged, self.parent_ratio * multiplier)
 
         # Too few converged: cross more and mutate less
         if tol(amount_converged//2) > tol(amount_converged//2)*4:
 
-            self.selection_probability    = min(0.75    , self.selection_probability    * multiplier)
-            self.chromosome_mutation_rate = max(min_rate, self.chromosome_mutation_rate / multiplier)
-            self.gene_mutation_rate       = max(min_rate, self.gene_mutation_rate       / multiplier)
+            self.selection_probability    = min(0.75, self.selection_probability    * multiplier)
+            self.chromosome_mutation_rate = max(0.05, self.chromosome_mutation_rate / multiplier)
+            self.gene_mutation_rate       = max(0.05, self.gene_mutation_rate       / multiplier)
 
         # Too many converged: cross less and mutate more
         else:
 
-            self.selection_probability    = max(0.25    , self.selection_probability    / multiplier)
-            self.chromosome_mutation_rate = min(max_rate, self.chromosome_mutation_rate * multiplier)
-            self.gene_mutation_rate       = min(max_rate, self.gene_mutation_rate       * multiplier)
+            self.selection_probability    = max(0.25, self.selection_probability    / multiplier)
+            self.chromosome_mutation_rate = min(0.25, self.chromosome_mutation_rate * multiplier)
+            self.gene_mutation_rate       = min(0.25, self.gene_mutation_rate       * multiplier)
 
         # First non-zero tolerance after amount_converged/8
         for i in range(amount_converged//8, len(self.population)):
@@ -165,7 +161,7 @@ class GA(Attributes):
                     self,
                     self.population[n],
                     best_chromosome,
-                    min(0.25, (tol(n) - tol(j)/4) / tol(n))
+                    min(0.25, (4*tol(n) - tol(j)) / tol(n))
                 )
 
             # If negative weights can't be used,
@@ -175,7 +171,7 @@ class GA(Attributes):
                     self,
                     self.population[n],
                     self.population[j],
-                    0.5
+                    0.75
                 )
 
             # Update fitnesses
