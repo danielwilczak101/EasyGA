@@ -1,3 +1,6 @@
+# Import square root function for ga.adapt()
+from math import sqrt
+
 # Import all the data structure prebuilt modules
 from structure import Population as create_population
 from structure import Chromosome as create_chromosome
@@ -101,9 +104,11 @@ class GA(Attributes):
         Attempts to balance out so that a portion of the
         population gradually approaches the solution.
 
-        Afterwards also heavily crosses the worst chromosomes
-        with the best chromosome, depending on how well the
-        overall population is doing.
+        Afterwards also performs weighted crossover between
+        the best chromosome and the rest of the chromosomes,
+        using negative weights to push away chromosomes that
+        are too similar and small positive weights to pull
+        in chromosomes that are too different.
         """
 
         # Don't adapt
@@ -113,18 +118,9 @@ class GA(Attributes):
         # Amount of the population desired to converge (default 50%)
         amount_converged = round(self.percent_converged*len(self.population))
 
-        # How much converged halfway
-        best_fitness = self.population[0].fitness
-        threshhold_fitness = self.population[amount_converged//2].fitness
-
-        # Closeness required for convergence
-        tol_half = abs(best_fitness - threshhold_fitness)/2
-
-        # How much converged a quarter of the way
-        threshhold_fitness = self.population[amount_converged//4].fitness
-
-        # Tolerance result
-        tol_quar = abs(best_fitness - threshhold_fitness)
+        # Difference between best and i-th chromosomes
+        best_chromosome = self.population[0]
+        tol = lambda i: sqrt(abs(best_chromosome.fitness - self.population[i].fitness))
 
         # Change rates with:
         multiplier = 1 + self.adapt_rate
@@ -133,12 +129,10 @@ class GA(Attributes):
         min_rate = 0.05
         max_rate = 0.25
 
-        # Adapt twice as fast if it's really bad
-        if tol_quar < tol_half/2 or tol_quar > tol_half*2:
-            multiplier **= 2
+        self.parent_ratio = min(self.percent_converged, self.parent_ratio * multiplier)
 
         # Too few converged: cross more and mutate less
-        if tol_quar > tol_half:
+        if tol(amount_converged//2) > tol(amount_converged//2)*4:
 
             self.selection_probability    = min(0.75    , self.selection_probability    * multiplier)
             self.chromosome_mutation_rate = max(min_rate, self.chromosome_mutation_rate / multiplier)
@@ -151,15 +145,47 @@ class GA(Attributes):
             self.chromosome_mutation_rate = min(max_rate, self.chromosome_mutation_rate * multiplier)
             self.gene_mutation_rate       = min(max_rate, self.gene_mutation_rate       * multiplier)
 
+        # First non-zero tolerance after amount_converged/8
+        for i in range(amount_converged//8, len(self.population)):
+            if tol(i) > 0:
+                break
+
+        # First significantly different tolerance
+        for j in range(i, len(self.population)):
+            if tol(j) > 4*tol(i):
+                break
+
         # Strongly cross the best chromosome with the worst chromosomes
-        for n in range(1, amount_converged//4):
-            self.population[-n] = self.crossover_individual_impl(
-                self,
-                self.population[-n],
-                self.population[0],
-                min(0.5, tol_half)
-            )
-            self.population[-n].fitness = self.fitness_function_impl(self.population[-n])
+        for n in range(i, len(self.population)):
+
+            # Strongly cross with the best chromosome
+            # May reject negative weight
+            try:
+                self.population[n] = self.crossover_individual_impl(
+                    self,
+                    self.population[n],
+                    best_chromosome,
+                    min(0.25, (tol(n) - tol(j)/4) / tol(n))
+                )
+
+            # If negative weights can't be used,
+            # Cross with j-th chromosome instead
+            except:
+                self.population[n] = self.crossover_individual_impl(
+                    self,
+                    self.population[n],
+                    self.population[j],
+                    0.5
+                )
+
+            # Update fitnesses
+            self.population[n].fitness = self.fitness_function_impl(self.population[n])
+
+            if self.target_fitness_type == 'max' and self.population[n].fitness > best_chromosome.fitness:
+                best_chromosome = self.population[n]
+
+            elif self.target_fitness_type == 'min' and self.population[n].fitness < best_chromosome.fitness:
+                best_chromosome = self.population[n]
 
         self.population.sort_by_best_fitness(self)
 
