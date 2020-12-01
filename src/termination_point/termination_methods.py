@@ -4,7 +4,7 @@ def add_by_fitness_goal(termination_impl):
     def new_method(ga):
 
         # If fitness goal is set, check it.
-        if ga.fitness_goal is not None:
+        if ga.fitness_goal is not None and ga.population is not None:
 
             # If minimum fitness goal reached, stop ga.
             if ga.target_fitness_type == 'min' and ga.population[0].fitness <= ga.fitness_goal:
