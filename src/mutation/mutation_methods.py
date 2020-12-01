@@ -133,6 +133,21 @@ class Mutation_Methods:
                 raise Exception("Did not specify any initialization constraints.")
 
 
+        class Arithmetic:
+            """Methods for mutating a chromosome
+            by numerically modifying the genes."""
+
+            @check_gene_mutation_rate
+            @reset_fitness
+            @loop_random_mutations
+            def reflect_genes(ga, chromosome, index):
+                """Reflects genes against the best chromosome."""
+
+                difference = ga.population[0][index].value - chromosome[index].value
+                value = ga.population[0][index].value + difference * len(chromosome)**2
+                chromosome[index] = ga.make_gene(value)
+
+
         class Permutation:
             """Methods for mutating a chromosome
             by changing the order of the genes."""
