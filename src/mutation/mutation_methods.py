@@ -35,6 +35,16 @@ def check_gene_mutation_rate(individual_method):
     return new_method
 
 
+def reset_fitness(individual_method):
+    """Resets the fitness value of the chromosome."""
+
+    def new_method(ga, chromosome):
+        chromosome.fitness = None
+        individual_method(ga, chromosome)
+
+    return new_method
+
+
 def loop_random_selections(population_method):
     """Runs the population method until enough chromosomes are mutated.
     Provides the indexes of selected chromosomes to mutate using
@@ -58,7 +68,7 @@ def loop_random_mutations(individual_method):
     genes are mutated on the indexed chromosome.
     """
 
-    # Change input from index to chromosome.
+    # Change input to include the gene index being mutated.
     def new_method(ga, chromosome):
 
         sample_space = range(len(chromosome))
@@ -76,6 +86,7 @@ class Mutation_Methods:
     # Private method decorators, see above.
     _check_chromosome_mutation_rate = check_chromosome_mutation_rate
     _check_gene_mutation_rate       = check_gene_mutation_rate
+    _reset_fitness = reset_fitness
     _loop_random_selections = loop_random_selections
     _loop_random_mutations  = loop_random_mutations
 
@@ -104,6 +115,7 @@ class Mutation_Methods:
         """Methods for mutating a single chromosome."""
 
         @check_gene_mutation_rate
+        @reset_fitness
         @loop_random_mutations
         def individual_genes(ga, chromosome, index):
             """Mutates a random gene in the chromosome."""
@@ -126,6 +138,7 @@ class Mutation_Methods:
             by changing the order of the genes."""
 
             @check_gene_mutation_rate
+            @reset_fitness
             @loop_random_mutations
             def swap_genes(ga, chromosome, index):
                 """Swaps two random genes in the chromosome."""
