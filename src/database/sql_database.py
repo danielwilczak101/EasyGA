@@ -9,6 +9,11 @@ class SQL_Database:
 
     sql_type_list = [int, float, str]
 
+    def __init__(self):
+        self.conn = None
+        self.config_id = None
+        self._database_name = 'database.db'
+
     def default_config_id(method):
         """Decorator used to set the default config_id"""
 
@@ -36,13 +41,6 @@ class SQL_Database:
             return query
 
         return new_method
-
-
-    def __init__(self):
-        self.conn = None
-        self.config_id = None
-        self._database_name = 'database.db'
-
 
     def get_current_config(self):
         """Get the current config_id from the config table."""
@@ -225,6 +223,10 @@ class SQL_Database:
         cur = self.conn.cursor()
         cur.execute(query)
         return cur.fetchone()
+
+    def remove_database(self):
+        """Remove the current database file using the database_name attribute."""
+        os.remove(self._database_name)
 
 
     def past_runs(self):
