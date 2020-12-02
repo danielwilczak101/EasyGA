@@ -144,7 +144,7 @@ class Mutation_Methods:
                 """Reflects genes against the best chromosome."""
 
                 difference = ga.population[0][index].value - chromosome[index].value
-                value = ga.population[0][index].value + difference * len(chromosome)**2
+                value = ga.population[0][index].value + 2*difference
                 chromosome[index] = ga.make_gene(value)
 
 
