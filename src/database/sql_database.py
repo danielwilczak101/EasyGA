@@ -224,6 +224,7 @@ class SQL_Database:
         cur.execute(query)
         return cur.fetchone()
 
+
     def remove_database(self):
         """Remove the current database file using the database_name attribute."""
         os.remove(self._database_name)
@@ -235,11 +236,16 @@ class SQL_Database:
         query_data = self.query_all(f"SELECT id,chromosome_length,population_size,generation_goal FROM config;")
 
         print(
-            tabulate(query_data, headers=['id',
-                                    'chromosome_length',
-                                    'population_size',
-                                    'generation_goal'])
+            tabulate(
+                query_data,
+                headers = [
+                    'id',
+                    'chromosome_length',
+                    'population_size',
+                    'generation_goal'
+                ]
             )
+        )
 
 
     def get_most_recent_config_id(self):
