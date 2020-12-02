@@ -254,13 +254,7 @@ class GA(Attributes):
         max_fitness = self.population[-1].fitness
         min_fitness = self.population[0].fitness
 
-        # Avoid catastrophic cancellation
-        if min_fitness / max_fitness < 1e-5:
-            return -fitness_value
-
-        # Otherwise flip values
-        else:
-            return max_fitness - fitness_value + min_fitness
+        return max_fitness - fitness_value + min_fitness
 
 
     def print_generation(self):
