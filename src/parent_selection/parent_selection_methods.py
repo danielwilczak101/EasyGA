@@ -25,7 +25,7 @@ def check_positive_fitness(selection_method):
         if ga.get_chromosome_fitness(0) > 0 and ga.get_chromosome_fitness(-1) >= 0:
             selection_method(ga)
         else:
-            raise Exception("Converted fitness values must be all positive. Consider using rank selection instead.")
+            raise Exception("Converted fitness values can't have negative values or be all 0. Consider using rank selection or stochastic selection instead.")
 
     return new_method
 
@@ -49,7 +49,7 @@ def compute_parent_amount(selection_method):
     """
 
     def new_method(ga):
-        parent_amount = max(2, len(ga.population)*ga.parent_ratio)
+        parent_amount = max(2, round(len(ga.population)*ga.parent_ratio))
         selection_method(ga, parent_amount)
 
     return new_method
@@ -65,6 +65,9 @@ class Parent_Selection:
 
 
     class Rank:
+        """Methods for selecting parents based on their rankings in the population
+        i.e. the n-th best chromosome has a fixed probability of being selected,
+        regardless of their chances"""
 
         @check_selection_probability
         @ensure_sorted
@@ -105,6 +108,25 @@ class Parent_Selection:
                         # Stop tournament selection if enough parents are selected
                         if len(ga.population.mating_pool) >= parent_amount:
                             return
+
+
+        @check_selection_probability
+        @ensure_sorted
+        @compute_parent_amount
+        def stochastic(ga, parent_amount):
+            """
+            Selects parents using the same probability approach as tournament selection,
+            but doesn't create tournaments. Uses random.choices with weighted values to
+            select parents and may produce duplicate parents.
+            """
+
+            weights = [
+                (1-ga.selection_probability) ** i
+                for i
+                in range(len(ga.population))
+            ]
+
+            ga.population.mating_pool = random.choices(ga.population, weights, k = parent_amount)
 
 
     class Fitness:
@@ -153,24 +175,25 @@ class Parent_Selection:
 
         @check_selection_probability
         @ensure_sorted
-        @check_positive_fitness
         @compute_parent_amount
         def stochastic(ga, parent_amount):
-            """Stochastic roulette selection works based off of how strong the fitness is of the
-            chromosomes in the population. The stronger the fitness the higher the probability
-            that it will be selected. Instead of dividing the fitness by the sum of all fitnesses
-            and incrementally increasing the chance something is selected, the stochastic method
-            just divides by the highest fitness and selects randomly.
+            """
+            Selects parents using the same probability approach as roulette selection,
+            but doesn't spin a roulette for every selection. Uses random.choices with
+            weighted values to select parents and may produce duplicate parents.
             """
 
-            max_fitness = ga.get_chromosome_fitness(0)
+            if ga.get_chromosome_fitness(-1) == ga.get_chromosome_fitness(0):
+                offset = 1-ga.get_chromosome_fitness(-1)
+            elif ga.get_chromosome_fitness(-1) < 0:
+                offset = -ga.get_chromosome_fitness(-1)
+            else:
+                offset = 0
 
-            # Loops until it reaches a desired mating pool size
-            while len(ga.population.mating_pool) < parent_amount:
+            weights = [
+                ga.get_chromosome_fitness(index) + offset
+                for index
+                in range(len(ga.population))
+            ]
 
-                # Selected chromosome
-                index = random.randrange(len(ga.population))
-
-                # Probability of becoming a parent is fitness/max_fitness
-                if random.uniform(ga.selection_probability, 1) < ga.get_chromosome_fitness(index)/max_fitness:
-                    ga.population.set_parent(index)
+            ga.population.mating_pool = random.choices(ga.population, weights, k = parent_amount)
