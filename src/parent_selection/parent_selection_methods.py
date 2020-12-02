@@ -204,16 +204,15 @@ class Parent_Selection:
                 in range(len(ga.population))
             ]
 
-            sum_weights = sum(weights)
+            offset = sum(weights) * (1 - ga.selection_probability)
 
-            # Rescale and adjust using selection_probability
-            # so that
-            #   if selection_probability is high,
-            #     parents are more likely selected based on fitness.
-            #   if selection_probability is low,
-            #     parents are more likely selected based on randomness.
+            # Rescale and adjust using selection_probability so that
+            #   if selection_probability is high, a low offset is used,
+            #     making selection mostly based on fitness.
+            #   if selection_probability is low, a high offset is used,
+            #     inflating the weights so that everyone has a more equal chance.
             weights = [
-                weight / sum_weights - ga.selection_probability + 1
+                weight + offset
                 for weight
                 in weights
             ]
