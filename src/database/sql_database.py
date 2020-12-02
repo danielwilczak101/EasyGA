@@ -1,7 +1,7 @@
 import sqlite3
 from sqlite3 import Error
 import os
-
+from tabulate import tabulate
 
 class SQL_Database:
     """Main database class that controls all the functionality for input /
@@ -232,9 +232,14 @@ class SQL_Database:
     def past_runs(self):
         """Show a summerization of the past runs that the user has done."""
 
-        query_data = self.query_all(f"SELECT id,generation_goal,chromosome_length FROM config;")
+        query_data = self.query_all(f"SELECT id,chromosome_length,population_size,generation_goal FROM config;")
 
-        print(query_data)
+        print(
+            tabulate(query_data, headers=['id',
+                                    'chromosome_length',
+                                    'population_size',
+                                    'generation_goal'])
+            )
 
 
     def get_most_recent_config_id(self):
@@ -294,6 +299,7 @@ class SQL_Database:
             try:
                 # Check if you can connect to the database
                 self._conn = self.create_connection()
+                return self._conn
 
             except:
                 # if the connection doesnt exist then print error
