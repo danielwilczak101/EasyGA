@@ -204,5 +204,19 @@ class Parent_Selection:
                 in range(len(ga.population))
             ]
 
+            sum_weights = sum(weights)
+
+            # Rescale and adjust using selection_probability
+            # so that
+            #   if selection_probability is high,
+            #     parents are more likely selected based on fitness.
+            #   if selection_probability is low,
+            #     parents are more likely selected based on randomness.
+            weights = [
+                weight / sum_weights - ga.selection_probability + 1
+                for weight
+                in weights
+            ]
+
             # Set the mating pool.
             ga.population.mating_pool = random.choices(ga.population, weights, k = parent_amount)
