@@ -130,16 +130,16 @@ class GA(Attributes):
         # Too few converged: cross more and mutate less
         if tol(amount_converged//2) > tol(amount_converged//2)*4:
 
-            self.selection_probability    = min(0.75, self.selection_probability    * multiplier)
+            self.selection_probability    = min(0.99, self.selection_probability    * multiplier)
             self.chromosome_mutation_rate = max(0.05, self.chromosome_mutation_rate / multiplier)
-            self.gene_mutation_rate       = max(0.05, self.gene_mutation_rate       / multiplier)
+            self.gene_mutation_rate       = max(0.01, self.gene_mutation_rate       / multiplier)
 
         # Too many converged: cross less and mutate more
         else:
 
-            self.selection_probability    = max(0.25, self.selection_probability    / multiplier)
+            self.selection_probability    = max(0.01, self.selection_probability    / multiplier)
             self.chromosome_mutation_rate = min(0.25, self.chromosome_mutation_rate * multiplier)
-            self.gene_mutation_rate       = min(0.25, self.gene_mutation_rate       * multiplier)
+            self.gene_mutation_rate       = min(0.99, self.gene_mutation_rate       * multiplier)
 
         # First non-zero tolerance after amount_converged/8
         for i in range(amount_converged//8, len(self.population)):
