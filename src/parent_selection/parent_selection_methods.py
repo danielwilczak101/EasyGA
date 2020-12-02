@@ -98,10 +98,8 @@ class Parent_Selection:
                 for index in range(tournament_size):
 
                     # Probability required is selection_probability * (1-selection_probability) ^ index
-                    # e.g. top ranked fitness has probability: selection_probability
-                    #   second ranked fitness has probability: selection_probability * (1-selection_probability)
-                    #   third  ranked fitness has probability: selection_probability * (1-selection_probability)^2
-                    # etc.
+                    # Each chromosome is (1-selection_probability) times
+                    # more likely to become a parent than the next ranked.
                     if random.random() < ga.selection_probability * pow(1-ga.selection_probability, index):
                         ga.population.set_parent(tournament_group[index])
 
@@ -120,12 +118,16 @@ class Parent_Selection:
             select parents and may produce duplicate parents.
             """
 
+            # Set the weights of each parent based on their rank.
+            # Each chromosome is (1-selection_probability) times
+            # more likely to become a parent than the next ranked.
             weights = [
                 (1-ga.selection_probability) ** i
                 for i
                 in range(len(ga.population))
             ]
 
+            # Set the mating pool.
             ga.population.mating_pool = random.choices(ga.population, weights, k = parent_amount)
 
 
@@ -183,17 +185,24 @@ class Parent_Selection:
             weighted values to select parents and may produce duplicate parents.
             """
 
+            # All fitnesses are the same, select randomly.
             if ga.get_chromosome_fitness(-1) == ga.get_chromosome_fitness(0):
                 offset = 1-ga.get_chromosome_fitness(-1)
+
+            # Some chromosomes have negative fitness, shift them all into positives.
             elif ga.get_chromosome_fitness(-1) < 0:
                 offset = -ga.get_chromosome_fitness(-1)
+
+            # No change needed.
             else:
                 offset = 0
 
+            # Set the weights of each parent based on their fitness + offset.
             weights = [
                 ga.get_chromosome_fitness(index) + offset
                 for index
                 in range(len(ga.population))
             ]
 
+            # Set the mating pool.
             ga.population.mating_pool = random.choices(ga.population, weights, k = parent_amount)
