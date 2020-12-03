@@ -142,7 +142,7 @@ class Crossover_Methods:
             """Cross two parents by swapping all genes randomly."""
 
             for gene_pair in zip(parent_1, parent_2):
-                yield random.choice(gene_pair, cum_weights = [weight, 1])
+                yield random.choices(gene_pair, cum_weights = [weight, 1])[0]
 
 
         class Arithmetic:
