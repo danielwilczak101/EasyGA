@@ -103,7 +103,11 @@ class Crossover_Methods:
                 ]
                 swap_index = random.choices(range(N), weights)[0]
 
-            return parent_1[:swap_index] + parent_2[swap_index:]
+            # Randomly choose which parent's genes are selected first.
+            if random.choice([True, False]):
+                return parent_1[:swap_index] + parent_2[swap_index:]
+            else:
+                return parent_2[:-swap_index] + parent_1[-swap_index:]
 
 
         @genes_to_chromosome
@@ -136,7 +140,7 @@ class Crossover_Methods:
                     value = weight*values_1 + (1-weight)*random.uniform(value_1, value_2)
 
                     if type(value_1) == type(value_2) == int:
-                        value = round(value)
+                        value = round(value + random.uniform(-0.5, 0.5))
 
                     yield value
 
@@ -154,7 +158,7 @@ class Crossover_Methods:
                     value = weight*value_1 + (1-weight)*value_2
 
                     if type(value_1) == type(value_2) == int:
-                        value = round(value)
+                        value = round(value + random.uniform(-0.5, 0.5))
 
                     yield value
 
@@ -175,6 +179,6 @@ class Crossover_Methods:
                     value = (2-weight)*value_1 + (weight-1)*value_2
 
                     if type(value_1) == type(value_2) == int:
-                        value = round(value)
+                        value = round(value + random.uniform(-0.5, 0.5))
 
                     yield value
