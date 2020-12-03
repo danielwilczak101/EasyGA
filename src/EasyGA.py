@@ -66,6 +66,7 @@ class GA(Attributes):
 
             # Otherwise evolve the population.
             else:
+
                 self.parent_selection_impl(self)
                 self.crossover_population_impl(self)
                 self.survivor_selection_impl(self)
@@ -79,13 +80,17 @@ class GA(Attributes):
             # Save the population to the database
             self.save_population()
 
+            # Adapt the ga if the generation times the adapt rate
+            # passes through an integer value.
+            adapt_counter = self.adapt_rate*self.current_generation
+            if int(adapt_counter) > int(adapt_counter - self.adapt_rate):
+                self.adapt()
+
             number_of_generations -= 1
             self.current_generation += 1
 
-        self.adapt()
 
-
-    def evolve(self, number_of_generations = 1, consider_termination = True):
+    def evolve(self, number_of_generations = 100, consider_termination = True):
         """Runs the ga until the termination point has been satisfied."""
 
         while self.active():
@@ -99,20 +104,21 @@ class GA(Attributes):
 
 
     def adapt(self):
+        """Adapts the ga to hopefully get better results."""
+
+        self.adapt_probabilities()
+        self.adapt_population()
+
+
+    def adapt_probabilities(self):
         """Modifies the parent ratio and mutation rates
         based on the adapt rate and percent converged.
         Attempts to balance out so that a portion of the
         population gradually approaches the solution.
-
-        Afterwards also performs weighted crossover between
-        the best chromosome and the rest of the chromosomes,
-        using negative weights to push away chromosomes that
-        are too similar and small positive weights to pull
-        in chromosomes that are too different.
         """
 
         # Don't adapt
-        if self.adapt_rate is None or self.adapt_rate <= 0:
+        if self.adapt_probability_rate is None or self.adapt_probability_rate <= 0:
             return
 
         # Amount of the population desired to converge (default 50%)
@@ -123,32 +129,77 @@ class GA(Attributes):
         tol = lambda i: sqrt(abs(best_chromosome.fitness - self.population[i].fitness))
 
         # Change rates with:
-        multiplier = 1 + self.adapt_rate
-
-        self.parent_ratio = min(self.percent_converged, self.parent_ratio * multiplier)
+        multiplier = 1 + self.adapt_probability_rate
 
         # Too few converged: cross more and mutate less
-        if tol(amount_converged//2) > tol(amount_converged//2)*4:
+        if tol(amount_converged//2) > tol(amount_converged//4)*2:
 
-            self.selection_probability    = min(0.99, self.selection_probability    * multiplier)
-            self.chromosome_mutation_rate = max(0.05, self.chromosome_mutation_rate / multiplier)
-            self.gene_mutation_rate       = max(0.01, self.gene_mutation_rate       / multiplier)
+            self.selection_probability = min(
+                self.max_selection_probability,
+                self.selection_probability * multiplier
+            )
+
+            self.chromosome_mutation_rate = max(
+                self.min_chromosome_mutation_rate,
+                self.chromosome_mutation_rate / multiplier
+            )
+
+            self.gene_mutation_rate = max(
+                self.min_gene_mutation_rate,
+                self.gene_mutation_rate / multiplier
+            )
 
         # Too many converged: cross less and mutate more
         else:
 
-            self.selection_probability    = max(0.01, self.selection_probability    / multiplier)
-            self.chromosome_mutation_rate = min(0.25, self.chromosome_mutation_rate * multiplier)
-            self.gene_mutation_rate       = min(0.99, self.gene_mutation_rate       * multiplier)
+            self.selection_probability = max(
+                self.min_selection_probability,
+                self.selection_probability / multiplier
+            )
 
-        # First non-zero tolerance after amount_converged/8
-        for i in range(amount_converged//8, len(self.population)):
+            self.chromosome_mutation_rate = min(
+                self.max_chromosome_mutation_rate,
+                self.chromosome_mutation_rate * multiplier
+            )
+
+            self.gene_mutation_rate = min(
+                self.max_gene_mutation_rate,
+                self.gene_mutation_rate * multiplier
+            )
+
+
+    def adapt_population(self):
+        """
+        Performs weighted crossover between the best chromosome and
+        the rest of the chromosomes, using negative weights to push
+        away chromosomes that are too similar and small positive
+        weights to pull in chromosomes that are too different.
+        """
+
+        # Don't adapt the population.
+        if self.adapt_population_flag == False:
+            return
+
+        # Amount of the population desired to converge (default 50%)
+        amount_converged = round(self.percent_converged*len(self.population))
+
+        # Difference between best and i-th chromosomes
+        best_chromosome = self.population[0]
+        tol = lambda i: sqrt(abs(best_chromosome.fitness - self.population[i].fitness))
+
+        # First non-zero tolerance after amount_converged/4
+        for i in range(amount_converged//4, len(self.population)):
             if tol(i) > 0:
                 break
 
         # First significantly different tolerance
         for j in range(i, len(self.population)):
-            if tol(j) > 4*tol(i):
+            if tol(j) > 2*tol(i):
+                break
+
+        # Second significantly different tolerance
+        for k in range(j, len(self.population)):
+            if tol(k) > 2*tol(j):
                 break
 
         # Strongly cross the best chromosome with the worst chromosomes
@@ -161,7 +212,7 @@ class GA(Attributes):
                     self,
                     self.population[n],
                     best_chromosome,
-                    min(0.25, (4*tol(n) - tol(j)) / tol(n))
+                    min(0.25, (2*tol(n) - tol(j)) / tol(n))
                 )
 
             # If negative weights can't be used,
@@ -170,7 +221,7 @@ class GA(Attributes):
                 self.population[n] = self.crossover_individual_impl(
                     self,
                     self.population[n],
-                    self.population[j],
+                    self.population[k],
                     0.75
                 )
 

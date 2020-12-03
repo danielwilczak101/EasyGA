@@ -48,47 +48,55 @@ class Attributes:
     }
 
     def __init__(self,
-            chromosome_length           = 10,
-            population_size             = 10,
-            chromosome_impl             = None,
-            gene_impl                   = lambda: random.randint(1, 10),
-            population                  = None,
-            target_fitness_type         = 'max',
-            update_fitness              = True,
-            parent_ratio                = 0.10,
-            selection_probability       = 0.50,
-            tournament_size_ratio       = 0.10,
-            current_generation          = 0,
-            current_fitness             = 0,
-            generation_goal             = 15,
-            fitness_goal                = None,
-            tolerance_goal              = None,
-            percent_converged           = 0.50,
-            chromosome_mutation_rate    = 0.15,
-            gene_mutation_rate          = 0.05,
-            adapt_rate                  = 0.15,
-            initialization_impl         = Initialization_Methods.random_initialization,
-            fitness_function_impl       = Fitness_Examples.is_it_5,
-            make_population             = create_population,
-            make_chromosome             = create_chromosome,
-            make_gene                   = create_gene,
-            parent_selection_impl       = Parent_Selection.Rank.tournament,
-            crossover_individual_impl   = Crossover_Methods.Individual.single_point,
-            crossover_population_impl   = Crossover_Methods.Population.sequential_selection,
-            survivor_selection_impl     = Survivor_Selection.fill_in_best,
-            mutation_individual_impl    = Mutation_Methods.Individual.individual_genes,
-            mutation_population_impl    = Mutation_Methods.Population.random_avoid_best,
-            termination_impl            = Termination_Methods.fitness_generation_tolerance,
-            Database                    = sql_database.SQL_Database,
-            database_name               = 'database.db',
-            sql_create_data_structure   = """CREATE TABLE IF NOT EXISTS data (
-                                                id INTEGER PRIMARY KEY,
-                                                config_id INTEGER DEFAULT NULL,
-                                                generation INTEGER NOT NULL,
-                                                fitness REAL,
-                                                chromosome TEXT
-                                            ); """,
-            Graph                       = matplotlib_graph.Matplotlib_Graph
+            chromosome_length            = 10,
+            population_size              = 10,
+            chromosome_impl              = None,
+            gene_impl                    = lambda: random.randint(1, 10),
+            population                   = None,
+            target_fitness_type          = 'max',
+            update_fitness               = True,
+            parent_ratio                 = 0.10,
+            selection_probability        = 0.50,
+            tournament_size_ratio        = 0.10,
+            current_generation           = 0,
+            current_fitness              = 0,
+            generation_goal              = 15,
+            fitness_goal                 = None,
+            tolerance_goal               = None,
+            percent_converged            = 0.50,
+            chromosome_mutation_rate     = 0.15,
+            gene_mutation_rate           = 0.05,
+            adapt_rate                   = 0.20,
+            adapt_probability_rate       = 0.15,
+            adapt_population_flag        = True,
+            max_selection_probability    = 0.99,
+            max_chromosome_mutation_rate = 0.20,
+            max_gene_mutation_rate       = None,
+            min_selection_probability    = 0.01,
+            min_chromosome_mutation_rate = 0.01,
+            min_gene_mutation_rate       = None,
+            initialization_impl          = Initialization_Methods.random_initialization,
+            fitness_function_impl        = Fitness_Examples.is_it_5,
+            make_population              = create_population,
+            make_chromosome              = create_chromosome,
+            make_gene                    = create_gene,
+            parent_selection_impl        = Parent_Selection.Rank.tournament,
+            crossover_individual_impl    = Crossover_Methods.Individual.single_point,
+            crossover_population_impl    = Crossover_Methods.Population.sequential_selection,
+            survivor_selection_impl      = Survivor_Selection.fill_in_best,
+            mutation_individual_impl     = Mutation_Methods.Individual.individual_genes,
+            mutation_population_impl     = Mutation_Methods.Population.random_avoid_best,
+            termination_impl             = Termination_Methods.fitness_generation_tolerance,
+            Database                     = sql_database.SQL_Database,
+            database_name                = 'database.db',
+            sql_create_data_structure    = """CREATE TABLE IF NOT EXISTS data (
+                                                  id INTEGER PRIMARY KEY,
+                                                  config_id INTEGER DEFAULT NULL,
+                                                  generation INTEGER NOT NULL,
+                                                  fitness REAL,
+                                                  chromosome TEXT
+                                              ); """,
+            Graph                        = matplotlib_graph.Matplotlib_Graph
         ):
 
         # Initilization variables
@@ -113,6 +121,16 @@ class Attributes:
         self.tolerance_goal     = deepcopy(tolerance_goal)
         self.percent_converged  = deepcopy(percent_converged)
         self.adapt_rate         = deepcopy(adapt_rate)
+        self.adapt_probability_rate = deepcopy(adapt_probability_rate)
+        self.adapt_population_flag  = deepcopy(adapt_population_flag)
+
+        # Bounds on probabilities when adapting
+        self.max_selection_probability    = max_selection_probability
+        self.max_chromosome_mutation_rate = max_chromosome_mutation_rate
+        self.max_gene_mutation_rate       = gene_mutation_rate if (max_gene_mutation_rate is None) else max_gene_mutation_rate
+        self.min_selection_probability    = min_selection_probability
+        self.min_chromosome_mutation_rate = min_chromosome_mutation_rate
+        self.min_gene_mutation_rate       = gene_mutation_rate if (min_gene_mutation_rate is None) else min_gene_mutation_rate
 
         # Mutation variables
         self.chromosome_mutation_rate = deepcopy(chromosome_mutation_rate)
