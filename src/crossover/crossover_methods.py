@@ -11,6 +11,22 @@ def append_to_next_population(population_method):
         )
 
 
+def check_weight(individual_method):
+    """Checks if the weight is between 0 and 1 before running.
+    Exception may occur when using ga.adapt, which will catch
+    the error and try again with valid weight.
+    """
+
+    def new_method(ga, parent_1, parent_2, weight):
+
+        if 0 < weight < 1:
+            return individual_method(ga, parent_1, parent_2, weight)
+        else:
+            raise ValueError("Weight must be between 0 and 1 when using the given crossover method.")
+
+    return new_method
+
+
 def genes_to_chromosome(individual_method):
     """Converts a collection of genes into a chromosome.
     Note: Will recreate the gene list if given gene list.
@@ -41,6 +57,7 @@ class Crossover_Methods:
 
     # Private method decorators, see above.
     _append_to_next_population = append_to_next_population
+    _check_weight              = check_weight
     _genes_to_chromosome       = genes_to_chromosome
     _values_to_genes           = values_to_genes
 
@@ -84,11 +101,10 @@ class Crossover_Methods:
         """Methods for crossing parents."""
 
 
+        @check_weight
         @genes_to_chromosome
         def single_point(ga, parent_1, parent_2, weight = 0.5):
             """Cross two parents by swapping genes at one random point."""
-
-            N = min(len(parent_1), len(parent_2))
 
             # Equally weighted indexes
             if weight == 0.5:
@@ -96,12 +112,10 @@ class Crossover_Methods:
 
             # Use weighted random index.
             else:
-                weights = [
-                    weight*(n+1) + (1-weight)*(N-n)
-                    for n
-                    in range(N)
-                ]
-                swap_index = random.choices(range(N), weights)[0]
+                n = min(len(parent_1), len(parent_2))
+                t = 2*weight if (weight < 0.5) else 0.5 / (1-weight)
+                x = random.random()
+                swap_index = int(n * (1-(1-x)**t)**(1/t))
 
             # Randomly choose which parent's genes are selected first.
             if random.choice([True, False]):
@@ -110,12 +124,14 @@ class Crossover_Methods:
                 return parent_2[:-swap_index] + parent_1[-swap_index:]
 
 
+        @check_weight
         @genes_to_chromosome
         def multi_point(ga, parent_1, parent_2, weight = 0.5):
             """Cross two parents by swapping genes at multiple points."""
             pass
 
 
+        @check_weight
         @genes_to_chromosome
         def uniform(ga, parent_1, parent_2, weight = 0.5):
             """Cross two parents by swapping all genes randomly."""
@@ -126,24 +142,6 @@ class Crossover_Methods:
 
         class Arithmetic:
             """Crossover methods for numerical genes."""
-
-            @genes_to_chromosome
-            @values_to_genes
-            def random(ga, parent_1, parent_2, weight = 0.5):
-                """Cross two parents by taking a random integer or float value between each of the genes."""
-
-                values_1 = parent_1.gene_value_iter
-                values_2 = parent_2.gene_value_iter
-
-                for value_1, value_2 in zip(values_1, values_2):
-
-                    value = weight*values_1 + (1-weight)*random.uniform(value_1, value_2)
-
-                    if type(value_1) == type(value_2) == int:
-                        value = round(value + random.uniform(-0.5, 0.5))
-
-                    yield value
-
 
             @genes_to_chromosome
             @values_to_genes
@@ -177,6 +175,35 @@ class Crossover_Methods:
                 for value_1, value_2 in zip(values_1, values_2):
 
                     value = (2-weight)*value_1 + (weight-1)*value_2
+
+                    if type(value_1) == type(value_2) == int:
+                        value = round(value + random.uniform(-0.5, 0.5))
+
+                    yield value
+
+
+            @check_weight
+            @genes_to_chromosome
+            @values_to_genes
+            def random(ga, parent_1, parent_2, weight = 0.5):
+                """Cross two parents by taking a random integer or float value between each of the genes."""
+
+                values_1 = parent_1.gene_value_iter
+                values_2 = parent_2.gene_value_iter
+
+                for value_1, value_2 in zip(values_1, values_2):
+
+                    # Use equally weighted values.
+                    if weight == 0.5:
+                        value = random.uniform(value_1, value_2)
+
+                    # Use weighted random value, which gives values closer
+                    # to value_1 if weight < 0.5 or values closer to value_2
+                    # if weight > 0.5.
+                    else:
+                        t = 2*weight if (weight < 0.5) else 0.5 / (1-weight)
+                        x = random.random()
+                        value = value_1 + (value_2-value_1) * (1-(1-x)**t)**(1/t)
 
                     if type(value_1) == type(value_2) == int:
                         value = round(value + random.uniform(-0.5, 0.5))
