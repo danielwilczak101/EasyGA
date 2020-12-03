@@ -31,11 +31,8 @@ class Matplotlib_Graph:
         # Query for Y data
         self.y = self.database.get_generation_total_fitness(config_id)
 
-        # If using log then the values have to be positive numbers
-        if self.yscale == "log":
-            self.y = [abs(ele) for ele in self.y]
-
         self.type_of_graph(self.x, self.y)
+        plt.yscale(self.yscale)
         plt.xlabel('Generation')
         plt.ylabel('Generation Total Fitness')
         plt.title('Relationship Between Generations and Generation Total Fitness')
@@ -53,11 +50,8 @@ class Matplotlib_Graph:
         # Query for Y data
         self.y = self.database.get_highest_chromosome(config_id)
 
-        # If using log then the values have to be positive numbers
-        if self.yscale == "log":
-            self.y = [abs(ele) for ele in self.y]
-
         self.type_of_graph(self.x, self.y)
+        plt.yscale(self.yscale)
         plt.xlabel('Generation')
         plt.ylabel('Highest Fitness')
         plt.title('Relationship Between Generations and Highest Fitness')
@@ -75,11 +69,8 @@ class Matplotlib_Graph:
         # Query for Y data
         self.y = self.database.get_lowest_chromosome(config_id)
 
-        # If using log then the values have to be positive numbers
-        if self.yscale == "log":
-            self.y = [abs(ele) for ele in self.y]
-
         self.type_of_graph(self.x, self.y)
+        plt.yscale(self.yscale)
         plt.xlabel('Generation')
         plt.ylabel('Lowest Fitness')
         plt.title('Relationship Between Generations and Lowest Fitness')
