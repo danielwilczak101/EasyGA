@@ -22,7 +22,8 @@ def _check_weight(individual_method):
         if 0 < weight < 1:
             return individual_method(ga, parent_1, parent_2, weight)
         else:
-            raise ValueError("Weight must be between 0 and 1 when using the given crossover method.")
+            raise ValueError("""Weight must be between 0 and 1 when using
+             the given crossover method.""")
 
     return new_method
 
@@ -75,7 +76,7 @@ class Crossover_Methods:
 
             for index in range(len(mating_pool)):    # for each parent in the mating pool
                 yield ga.crossover_individual_impl(  #     apply crossover to
-                    ga,                              # 
+                    ga,                              #
                     mating_pool[index],              #         the parent and
                     mating_pool[index-1],            #         the previous parent
                     0.5                              #         with equal weight
@@ -90,7 +91,7 @@ class Crossover_Methods:
 
             for parent in mating_pool:               # for each parent in the mating pool
                 yield ga.crossover_individual_impl(  #     apply crossover to
-                    ga,                              # 
+                    ga,                              #
                     parent,                          #         the parent and
                     random.choice(mating_pool),      #         a random parent
                     0.5                              #         with equal weight
@@ -106,16 +107,20 @@ class Crossover_Methods:
         def single_point(ga, parent_1, parent_2, weight = 0.5):
             """Cross two parents by swapping genes at one random point."""
 
+            minimum_parent_length = min(len(parent_1), len(parent_2))
+
             # Equally weighted indexes
             if weight == 0.5:
-                swap_index = random.randrange(N)
+                swap_index = random.randrange(minimum_parent_length)
 
             # Use weighted random index.
             else:
-                n = min(len(parent_1), len(parent_2))
-                t = 2*weight if (weight < 0.5) else 0.5 / (1-weight)
-                x = random.random()
-                swap_index = int(n * (1-(1-x)**t)**(1/t))
+                weight_conversion = 2*weight if (weight < 0.5) else 0.5 / (1-weight)
+                rand_num = random.random()
+                swap_index = int(
+                    minimum_parent_length *
+                        (1-(1-rand_num)**weight_conversion)**(1/weight_conversion)
+                    )
 
             # Randomly choose which parent's genes are selected first.
             if random.choice([True, False]):
