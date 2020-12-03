@@ -1,4 +1,4 @@
-def add_by_fitness_goal(termination_impl):
+def _add_by_fitness_goal(termination_impl):
     """Adds termination by fitness goal to the method."""
 
     def new_method(ga):
@@ -20,7 +20,7 @@ def add_by_fitness_goal(termination_impl):
     return new_method
 
 
-def add_by_generation_goal(termination_impl):
+def _add_by_generation_goal(termination_impl):
     """Adds termination by generation goal to the method."""
 
     def new_method(ga):
@@ -35,7 +35,7 @@ def add_by_generation_goal(termination_impl):
     return new_method
 
 
-def add_by_tolerance_goal(termination_impl):
+def _add_by_tolerance_goal(termination_impl):
     """Adds termination by tolerance goal to the method."""
 
     def new_method(ga):
@@ -59,15 +59,15 @@ def add_by_tolerance_goal(termination_impl):
 class Termination_Methods:
     """Example functions that can be used to terminate the the algorithms loop"""
 
-    # Private method decorators, see above.
-    _add_by_fitness_goal    = add_by_fitness_goal
-    _add_by_generation_goal = add_by_generation_goal
-    _add_by_tolerance_goal  = add_by_tolerance_goal
+    # Allowing access to decorators when importing class
+    _add_by_fitness_goal    = _add_by_fitness_goal
+    _add_by_generation_goal = _add_by_generation_goal
+    _add_by_tolerance_goal  = _add_by_tolerance_goal
 
 
-    @add_by_fitness_goal
-    @add_by_generation_goal
-    @add_by_tolerance_goal
+    @_add_by_fitness_goal
+    @_add_by_generation_goal
+    @_add_by_tolerance_goal
     def fitness_generation_tolerance(ga):
         """Terminate GA when any of the
         - fitness,

@@ -1,6 +1,6 @@
 import random
 
-def append_to_next_population(population_method):
+def _append_to_next_population(population_method):
     """Appends the new chromosomes to the next population.
     Also modifies the input to include the mating pool.
     """
@@ -11,7 +11,7 @@ def append_to_next_population(population_method):
         )
 
 
-def check_weight(individual_method):
+def _check_weight(individual_method):
     """Checks if the weight is between 0 and 1 before running.
     Exception may occur when using ga.adapt, which will catch
     the error and try again with valid weight.
@@ -27,7 +27,7 @@ def check_weight(individual_method):
     return new_method
 
 
-def genes_to_chromosome(individual_method):
+def _genes_to_chromosome(individual_method):
     """Converts a collection of genes into a chromosome.
     Note: Will recreate the gene list if given gene list.
           Built-in methods do not construct gene lists
@@ -40,7 +40,7 @@ def genes_to_chromosome(individual_method):
         )
 
 
-def values_to_genes(individual_method):
+def _values_to_genes(individual_method):
     """Converts a collection of values into genes.
     Returns a generator of genes to avoid storing a new list.
     """
@@ -55,18 +55,18 @@ def values_to_genes(individual_method):
 
 class Crossover_Methods:
 
-    # Private method decorators, see above.
-    _append_to_next_population = append_to_next_population
-    _check_weight              = check_weight
-    _genes_to_chromosome       = genes_to_chromosome
-    _values_to_genes           = values_to_genes
+    # Allowing access to decorators when importing class
+    _append_to_next_population = _append_to_next_population
+    _check_weight              = _check_weight
+    _genes_to_chromosome       = _genes_to_chromosome
+    _values_to_genes           = _values_to_genes
 
 
     class Population:
         """Methods for selecting chromosomes to crossover."""
 
 
-        @append_to_next_population
+        @_append_to_next_population
         def sequential_selection(ga, mating_pool):
             """Select sequential pairs from the mating pool.
             Every parent is paired with the previous parent.
@@ -82,7 +82,7 @@ class Crossover_Methods:
                 )
 
 
-        @append_to_next_population
+        @_append_to_next_population
         def random_selection(ga, mating_pool):
             """Select random pairs from the mating pool.
             Every parent is paired with a random parent.
@@ -101,8 +101,8 @@ class Crossover_Methods:
         """Methods for crossing parents."""
 
 
-        @check_weight
-        @genes_to_chromosome
+        @_check_weight
+        @_genes_to_chromosome
         def single_point(ga, parent_1, parent_2, weight = 0.5):
             """Cross two parents by swapping genes at one random point."""
 
@@ -124,15 +124,15 @@ class Crossover_Methods:
                 return parent_2[:-swap_index] + parent_1[-swap_index:]
 
 
-        @check_weight
-        @genes_to_chromosome
+        @_check_weight
+        @_genes_to_chromosome
         def multi_point(ga, parent_1, parent_2, weight = 0.5):
             """Cross two parents by swapping genes at multiple points."""
             pass
 
 
-        @check_weight
-        @genes_to_chromosome
+        @_check_weight
+        @_genes_to_chromosome
         def uniform(ga, parent_1, parent_2, weight = 0.5):
             """Cross two parents by swapping all genes randomly."""
 
@@ -143,8 +143,8 @@ class Crossover_Methods:
         class Arithmetic:
             """Crossover methods for numerical genes."""
 
-            @genes_to_chromosome
-            @values_to_genes
+            @_genes_to_chromosome
+            @_values_to_genes
             def average(ga, parent_1, parent_2, weight = 0.5):
                 """Cross two parents by taking the average of the genes."""
 
@@ -161,8 +161,8 @@ class Crossover_Methods:
                     yield value
 
 
-            @genes_to_chromosome
-            @values_to_genes
+            @_genes_to_chromosome
+            @_values_to_genes
             def extrapolate(ga, parent_1, parent_2, weight = 0.5):
 
                 """Cross two parents by extrapolating towards the first parent.
@@ -182,9 +182,9 @@ class Crossover_Methods:
                     yield value
 
 
-            @check_weight
-            @genes_to_chromosome
-            @values_to_genes
+            @_check_weight
+            @_genes_to_chromosome
+            @_values_to_genes
             def random(ga, parent_1, parent_2, weight = 0.5):
                 """Cross two parents by taking a random integer or float value between each of the genes."""
 

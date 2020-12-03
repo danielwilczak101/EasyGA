@@ -1,6 +1,6 @@
 import random
 
-def check_selection_probability(selection_method):
+def _check_selection_probability(selection_method):
     """Raises an exception if the selection_probability
     is not between 0 and 1. Otherwise runs the selection
     method.
@@ -15,7 +15,7 @@ def check_selection_probability(selection_method):
     return new_method
 
 
-def check_positive_fitness(selection_method):
+def _check_positive_fitness(selection_method):
     """Raises an exception if the population contains a
     chromosome with negative fitness. Otherwise runs
     the selection method.
@@ -30,7 +30,7 @@ def check_positive_fitness(selection_method):
     return new_method
 
 
-def ensure_sorted(selection_method):
+def _ensure_sorted(selection_method):
     """Sorts the population by fitness
     and then runs the selection method.
     """
@@ -42,7 +42,7 @@ def ensure_sorted(selection_method):
     return new_method
 
 
-def compute_parent_amount(selection_method):
+def _compute_parent_amount(selection_method):
     """Computes the amount of parents
     needed to be selected, and passes it
     as another argument for the method.
@@ -57,11 +57,11 @@ def compute_parent_amount(selection_method):
 
 class Parent_Selection:
 
-    # Private method decorators, see above.
-    _check_selection_probability = check_selection_probability
-    _check_positive_fitness      = check_positive_fitness
-    _ensure_sorted               = ensure_sorted
-    _compute_parent_amount       = compute_parent_amount
+    # Allowing access to decorators when importing class
+    _check_selection_probability = _check_selection_probability
+    _check_positive_fitness      = _check_positive_fitness
+    _ensure_sorted               = _ensure_sorted
+    _compute_parent_amount       = _compute_parent_amount
 
 
     class Rank:
@@ -69,9 +69,9 @@ class Parent_Selection:
         i.e. the n-th best chromosome has a fixed probability of being selected,
         regardless of their chances"""
 
-        @check_selection_probability
-        @ensure_sorted
-        @compute_parent_amount
+        @_check_selection_probability
+        @_ensure_sorted
+        @_compute_parent_amount
         def tournament(ga, parent_amount):
             """
             Will make tournaments of size tournament_size and choose the winner (best fitness) 
@@ -108,9 +108,9 @@ class Parent_Selection:
                             return
 
 
-        @check_selection_probability
-        @ensure_sorted
-        @compute_parent_amount
+        @_check_selection_probability
+        @_ensure_sorted
+        @_compute_parent_amount
         def stochastic(ga, parent_amount):
             """
             Selects parents using the same probability approach as tournament selection,
@@ -133,10 +133,10 @@ class Parent_Selection:
 
     class Fitness:
 
-        @check_selection_probability
-        @ensure_sorted
-        @check_positive_fitness
-        @compute_parent_amount
+        @_check_selection_probability
+        @_ensure_sorted
+        @_check_positive_fitness
+        @_compute_parent_amount
         def roulette(ga, parent_amount):
             """Roulette selection works based off of how strong the fitness is of the
             chromosomes in the population. The stronger the fitness the higher the probability
@@ -175,9 +175,9 @@ class Parent_Selection:
                         break
 
 
-        @check_selection_probability
-        @ensure_sorted
-        @compute_parent_amount
+        @_check_selection_probability
+        @_ensure_sorted
+        @_compute_parent_amount
         def stochastic(ga, parent_amount):
             """
             Selects parents using the same probability approach as roulette selection,
