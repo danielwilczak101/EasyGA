@@ -28,6 +28,7 @@ setup(
         ],
     install_requires = ["matplotlib ~= 3.3.2",
                         "pyserial ~= 3.4",
-                        "pytest>=3.7"
+                        "pytest>=3.7",
+                        "tabulate >=0.8.7"
                         ],
     )
