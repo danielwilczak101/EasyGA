@@ -126,7 +126,7 @@ class GA(Attributes):
 
         # Difference between best and i-th chromosomes
         best_chromosome = self.population[0]
-        tol = lambda i: sqrt(abs(best_chromosome.fitness - self.population[i].fitness))
+        tol = lambda i: self.dist(best_chromosome, self.population[i])
 
         # Change rates with:
         multiplier = 1 + self.adapt_probability_rate
@@ -185,7 +185,7 @@ class GA(Attributes):
 
         # Difference between best and i-th chromosomes
         best_chromosome = self.population[0]
-        tol = lambda i: sqrt(abs(best_chromosome.fitness - self.population[i].fitness))
+        tol = lambda i: self.dist(best_chromosome, self.population[i])
 
         # First non-zero tolerance after amount_converged/4
         for i in range(amount_converged//4, len(self.population)):

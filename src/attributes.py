@@ -1,3 +1,6 @@
+# Import square root function for ga.adapt()
+from math import sqrt
+
 import random
 import sqlite3
 from copy import deepcopy
@@ -75,6 +78,7 @@ class Attributes:
             min_selection_probability    = 0.01,
             min_chromosome_mutation_rate = 0.01,
             min_gene_mutation_rate       = None,
+            dist                         = None,
             initialization_impl          = Initialization_Methods.random_initialization,
             fitness_function_impl        = Fitness_Examples.is_it_5,
             make_population              = create_population,
@@ -131,6 +135,13 @@ class Attributes:
         self.min_selection_probability    = min_selection_probability
         self.min_chromosome_mutation_rate = min_chromosome_mutation_rate
         self.min_gene_mutation_rate       = gene_mutation_rate if (min_gene_mutation_rate is None) else min_gene_mutation_rate
+
+        # Distance between two chromosomes
+        if dist is None:
+            self.dist = lambda chromosome_1, chromosome_2:\
+                sqrt(abs(chromosome_1.fitness - chromosome_2.fitness))
+        else:
+            self.dist = dist
 
         # Mutation variables
         self.chromosome_mutation_rate = deepcopy(chromosome_mutation_rate)
