@@ -63,7 +63,7 @@ class Attributes:
             tournament_size_ratio        = 0.10,
             current_generation           = 0,
             current_fitness              = 0,
-            generation_goal              = 15,
+            generation_goal              = 100,
             fitness_goal                 = None,
             tolerance_goal               = None,
             percent_converged            = 0.50,
