@@ -66,7 +66,7 @@ class Attributes:
             percent_converged            = 0.50,
             chromosome_mutation_rate     = 0.15,
             gene_mutation_rate           = 0.05,
-            adapt_rate                   = 0.20,
+            adapt_rate                   = 0.0,
             adapt_probability_rate       = 0.15,
             adapt_population_flag        = True,
             max_selection_probability    = 0.99,
