@@ -100,6 +100,17 @@ class Chromosome:
         return self.gene_list.index(searched_gene)
 
 
+    def __eq__(self, chromosome):
+        """
+        Allows the user to use
+                chromosome_1 == chromosome_2
+                chromosome_1 != chromosome_2
+        to compare two chromosomes based on their genes.
+        """
+
+        return all(gene_1 == gene_2 for gene_1, gene_2 in zip(self, chromosome))
+
+
     def __repr__(self):
         """
         Allows the user to use
