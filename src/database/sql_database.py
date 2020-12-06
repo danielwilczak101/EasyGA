@@ -14,6 +14,7 @@ class SQL_Database:
         self.config_id = None
         self._database_name = 'database.db'
 
+
     def default_config_id(method):
         """Decorator used to set the default config_id"""
 
@@ -42,6 +43,7 @@ class SQL_Database:
 
         return new_method
 
+
     def get_current_config(self):
         """Get the current config_id from the config table."""
         return self.query_one_item("SELECT MAX(id) FROM config")
@@ -62,14 +64,11 @@ class SQL_Database:
         """Create a database connection to the SQLite database
          specified by db_file."""
 
-        conn = None
         try:
-            conn = sqlite3.connect(self.database_name)
-            return conn
+            self.conn = sqlite3.connect(self.database_name)
         except Error as e:
+            self.conn = None
             print(e)
-
-        self.conn = conn
 
 
     def create_table(self, create_table_sql):
@@ -94,8 +93,10 @@ class SQL_Database:
         )
 
         # Create sql query structure
-        sql = ''' INSERT INTO data(config_id, generation, fitness, chromosome)
-         VALUES(?,?,?,?) '''
+        sql = '''
+            INSERT INTO data(config_id, generation, fitness, chromosome)
+            VALUES(?,?,?,?)
+        '''
 
         cur = self.conn.cursor()
         cur.execute(sql, db_chromosome)
@@ -119,8 +120,10 @@ class SQL_Database:
         ]
 
         # Create sql query structure
-        sql = ''' INSERT INTO data(config_id,generation,fitness,chromosome)
-         VALUES(?,?,?,?) '''
+        sql = '''
+            INSERT INTO data(config_id, generation, fitness, chromosome)
+            VALUES(?,?,?,?)
+        '''
 
         cur = self.conn.cursor()
         cur.executemany(sql, db_chromosome_list)
@@ -142,23 +145,25 @@ class SQL_Database:
         """Create the database if it doenst exist and then the data and config
         tables."""
 
+        # if the database file already exists.
         try:
-            # if the database file already exists.
             self.config = self.get_current_config()
+
+        # If the database does not exist continue
         except:
-            # If the database does not exist continue
             pass
 
         # Create the database connection
-        self.conn = self.create_connection()
+        self.create_connection()
 
         if self.conn is not None:
             # Create data table
             self.create_table(ga.sql_create_data_structure)
             # Creare config table
             self.create_table(self.create_config_table_string(ga))
+
         else:
-            raise Exception("Error! cannot create the database connection.")
+            raise Exception("Error! Cannot create the database connection.")
 
 
     def create_config_table_string(self,ga):
@@ -300,17 +305,16 @@ class SQL_Database:
         if self._conn is not None:
             return self._conn
 
-        else:
-            # If the connection has not been set yet
-            try:
-                # Check if you can connect to the database
-                self._conn = self.create_connection()
-                return self._conn
+        # If the connection has not been set yet
+        try:
+            # Check if you can connect to the database
+            self.create_connection()
+            return self._conn
 
-            except:
-                # if the connection doesnt exist then print error
-                raise Exception("""You are required to run a ga before you
-                 can connect to the database. Run ga.evolve() or ga.active()""")
+        # If the connection doesnt exist then print error
+        except:
+            raise Exception("""You are required to run a ga before you
+                can connect to the database. Run ga.evolve() or ga.active()""")
 
 
     @conn.setter
@@ -329,16 +333,16 @@ class SQL_Database:
       if self._config_id is not None:
           return self._config_id
 
-      else:
-          # If the config_id has not been set yet
-          try:
-              # Check if you can connect to the database
-              self._config_id = self.get_most_recent_config_id()
+      # If the config_id has not been set yet
+      try:
+          # Check if you can connect to the database
+          self._config_id = self.get_most_recent_config_id()
+          return self._config_id
 
-          except:
-              # if the config_id doesnt exist then print error
-              raise Exception("""You are required to run a ga before you
-                 can connect to the database. Run ga.evolve() or ga.active()""")
+      # If the config_id doesnt exist then print error
+      except:
+          raise Exception("""You are required to run a ga before you
+              can connect to the database. Run ga.evolve() or ga.active()""")
 
 
     @config_id.setter
