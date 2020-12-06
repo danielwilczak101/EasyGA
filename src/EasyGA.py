@@ -204,14 +204,13 @@ class GA(Attributes):
         for n in range(i, len(self.population)):
 
             # Strongly cross with the best chromosome
-            # May reject negative weight
+            # May reject negative weight or division by 0
             try:
-                tol_n = tol(n)
                 self.population[n] = self.crossover_individual_impl(
                     self,
                     self.population[n],
                     best_chromosome,
-                    min(0.25, (2*tol_n - tol_j) / tol_n)
+                    min(0.25, 2 * tol_j / (tol(n) - tol_j))
                 )
 
             # If negative weights can't be used,
