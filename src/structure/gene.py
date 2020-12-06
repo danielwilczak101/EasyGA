@@ -3,9 +3,13 @@ from copy import deepcopy
 class Gene:
 
     def __init__(self, value):
-        """Initialize a gene with fitness of value None and the input value"""
+        """Initialize a gene with fitness of value None and the input value."""
         self.value = deepcopy(value)
-        self.fitness = None
+
+
+    def __eq__(self, gene):
+        """Comparing two genes by their value."""
+        return self.value == gene.value
 
 
     def __repr__(self):
