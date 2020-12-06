@@ -214,3 +214,98 @@ class Crossover_Methods:
                         value = round(value + random.uniform(-0.5, 0.5))
 
                     yield value
+
+        class Permutation:
+            """Crossover methods for permutation based chromosomes."""
+
+            @_check_weight
+            @_genes_to_chromosome
+            def ox1(ga, parent_1, parent_2, weight = 0.5):
+                """Cross two parents by slicing out a random part of one parent
+                and then filling in the rest of the genes from the second parent."""
+
+                # Swap with weighted probability so that most of the genes
+                # are taken directly from parent 1.
+                if random.choices([0, 1], cum_weights = [weight, 1]) == 1:
+                    parent_1, parent_2 = parent_2, parent_1
+
+                # Extract genes from parent 1 between two random indexes
+                index_2 = random.randrange(1, len(parent_1))
+                index_1 = random.randrange(index_2)
+
+                # Create copies of the gene lists
+                gene_list_1 = [None]*index_1 + parent_1[index_1:index_2] + [None]*(len(parent_1)-index_2)
+                gene_list_2 = list(parent_2)
+
+                input_index = 0
+
+                # For each gene from the second parent
+                for _ in range(len(gene_list_2)):
+
+                    # Remove it if it is already used
+                    for i in range(len(gene_list_1)):
+                        if gene_list_1[i] == gene_list_2[-1]:
+                            gene_list_2.pop(-1)
+                            break
+
+                    # Add it if it has not been used
+                    else:
+                        gene_list_1[input_index] = gene_list_2.pop(-1)
+                        input_index += 1
+                        if input_index == index_1:
+                            input_index = index_2
+
+                return gene_list_1
+
+
+            @_check_weight
+            @_genes_to_chromosome
+            def partially_mapped(ga, parent_1, parent_2, weight = 0.5):
+                """Cross two parents by slicing out a random part of one parent
+                and then filling in the rest of the genes from the second parent,
+                preserving the ordering of genes wherever possible."""
+
+                # Swap with weighted probability so that most of the genes
+                # are taken directly from parent 1.
+                if random.choices([0, 1], cum_weights = [weight, 1]) == 1:
+                    parent_1, parent_2 = parent_2, parent_1
+
+                # Extract genes from parent 1 between two random indexes
+                index_2 = random.randrange(1, len(parent_1))
+                index_1 = random.randrange(index_2)
+
+                # Create copies of the gene lists
+                gene_list_1 = [None]*index_1 + parent_1[index_1:index_2] + [None]*(len(parent_1)-index_2)
+                gene_list_2 = list(parent_2)
+
+                # Create hash for gene list 2
+                hash = {gene:index for index, gene in enumerate(gene_list_2)}
+
+                # For each gene in the copied segment from parent 2
+                for i in range(index_1, index_2):
+
+                    # If it is not already copied,
+                    # find where it got displaced to
+                    j = i
+                    while gene_list_1[(j := hash[gene_list_1[j]])] is not None:
+                        pass
+                    gene_list_1[j] = gene_list_2[i]
+
+                # Fill in whatever is leftover (copied from ox1).
+                # For each gene from the second parent
+                for _ in range(len(gene_list_2)):
+
+                    # Remove it if it is already used
+                    for i in range(len(gene_list_1)):
+                        if gene_list_1[i] == gene_list_2[-1]:
+                            gene_list_2.pop(-1)
+                            break
+
+                    # Add it if it has not been used
+                    else:
+                        gene_list_1[input_index] = gene_list_2.pop(-1)
+                        input_index += 1
+                        if input_index == index_1:
+                            input_index = index_2
+
+                return gene_list_1
