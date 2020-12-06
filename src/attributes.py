@@ -73,10 +73,10 @@ class Attributes:
             adapt_probability_rate       = 0.15,
             adapt_population_flag        = True,
             max_selection_probability    = 0.99,
-            max_chromosome_mutation_rate = 0.20,
-            max_gene_mutation_rate       = None,
             min_selection_probability    = 0.01,
+            max_chromosome_mutation_rate = 0.20,
             min_chromosome_mutation_rate = 0.01,
+            max_gene_mutation_rate       = None,
             min_gene_mutation_rate       = None,
             dist                         = None,
             initialization_impl          = Initialization_Methods.random_initialization,
@@ -131,10 +131,10 @@ class Attributes:
         # Bounds on probabilities when adapting
         self.max_selection_probability    = max_selection_probability
         self.max_chromosome_mutation_rate = max_chromosome_mutation_rate
-        self.max_gene_mutation_rate       = gene_mutation_rate if (max_gene_mutation_rate is None) else max_gene_mutation_rate
+        self.max_gene_mutation_rate       = (gene_mutation_rate+1)/2 if (max_gene_mutation_rate is None) else max_gene_mutation_rate
         self.min_selection_probability    = min_selection_probability
         self.min_chromosome_mutation_rate = min_chromosome_mutation_rate
-        self.min_gene_mutation_rate       = gene_mutation_rate if (min_gene_mutation_rate is None) else min_gene_mutation_rate
+        self.min_gene_mutation_rate       = gene_mutation_rate/2 if (min_gene_mutation_rate is None) else min_gene_mutation_rate
 
         # Distance between two chromosomes
         if dist is None:
@@ -218,6 +218,7 @@ class Attributes:
         # If the chromosome length is less then or equal 0 throw error
         if(not isinstance(value_input, int) or value_input <= 0):
             raise ValueError("Chromosome length must be integer greater then 0")
+
         self._chromosome_length = value_input
 
 
@@ -235,6 +236,7 @@ class Attributes:
         # If the population size is less then or equal 0 throw error
         if(not isinstance(value_input, int) or value_input <= 0):
             raise ValueError("Population length must be integer greater then 0")
+
         self._population_size = value_input
 
 
@@ -252,5 +254,7 @@ class Attributes:
 
         if value_input in self.target_fitness_type_dict.keys():
             self._target_fitness_type = self.target_fitness_type_dict[value_input]
+
+        # Custom input
         else:
             self._target_fitness_type = value_input
