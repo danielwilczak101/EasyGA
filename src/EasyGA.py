@@ -1,5 +1,8 @@
-# Import square root function for ga.adapt()
-from math import sqrt
+# Import math for square root (ga.dist()) and ceil (crossover methods)
+import math
+
+# Import random for many methods
+import random
 
 # Import all the data structure prebuilt modules
 from structure import Population as create_population
@@ -189,17 +192,12 @@ class GA(Attributes):
 
         # First non-zero tolerance after amount_converged/4
         for i in range(amount_converged//4, len(self.population)):
-            if tol(i) > 0:
+            if (tol_i := tol(i)) > 0:
                 break
 
         # First significantly different tolerance
         for j in range(i, len(self.population)):
-            if tol(j) > 2*tol(i):
-                break
-
-        # Second significantly different tolerance
-        for k in range(j, len(self.population)):
-            if tol(k) > 2*tol(j):
+            if (tol_j := tol(j)) > 2*tol_i:
                 break
 
         # Strongly cross the best chromosome with the worst chromosomes
@@ -208,11 +206,12 @@ class GA(Attributes):
             # Strongly cross with the best chromosome
             # May reject negative weight
             try:
+                tol_n = tol(n)
                 self.population[n] = self.crossover_individual_impl(
                     self,
                     self.population[n],
                     best_chromosome,
-                    min(0.25, (2*tol(n) - tol(j)) / tol(n))
+                    min(0.25, (2*tol_n - tol_j) / tol_n)
                 )
 
             # If negative weights can't be used,
@@ -221,17 +220,22 @@ class GA(Attributes):
                 self.population[n] = self.crossover_individual_impl(
                     self,
                     self.population[n],
-                    self.population[k],
+                    self.population[j],
                     0.75
                 )
 
             # Update fitnesses
             self.population[n].fitness = self.fitness_function_impl(self.population[n])
 
-            if self.target_fitness_type == 'max' and self.population[n].fitness > best_chromosome.fitness:
-                best_chromosome = self.population[n]
+            # Update best chromosome
+            if self.target_fitness_type == 'max':
+                cond = (self.population[n].fitness > best_chromosome.fitness)
 
-            elif self.target_fitness_type == 'min' and self.population[n].fitness < best_chromosome.fitness:
+            if self.target_fitness_type == 'min':
+                cond = (self.population[n].fitness < best_chromosome.fitness)
+
+            if cond:
+                tol_j = tol(j)
                 best_chromosome = self.population[n]
 
         self.population.sort_by_best_fitness(self)
@@ -269,10 +273,11 @@ class GA(Attributes):
         """
 
         if in_place:
-            return chromosome_list.sort(                       # list to be sorted
+            chromosome_list.sort(                       # list to be sorted
                 key = lambda chromosome: chromosome.fitness,   # by fitness
                 reverse = (self.target_fitness_type == 'max')  # ordered by fitness type
             )
+            return chromosome_list
 
         else:
             return sorted(
