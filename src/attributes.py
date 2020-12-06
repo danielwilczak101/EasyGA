@@ -184,6 +184,32 @@ class Attributes:
         self.database.insert_current_chromosome(self.current_generation, chromosome)
 
 
+    def numeric_chromosomes(self):
+        """Sets default numerical based methods"""
+
+        self.crossover_individual_impl = Crossover_Methods.Individual.Arithmetic.average
+        self.dist = lambda chromosome_1, chromosome_2:\
+            sqrt(sum(
+                (gene_1.value - gene_2.value) ** 2
+                for gene_1, gene_2
+                in chromosome_1, chromosome_2
+            ))
+
+
+    def permutation_chromosomes(self):
+        """Sets default permutation based methods"""
+
+        self.crossover_individual_impl = Crossover_Methods.Individual.Permutation.ox1
+        self.mutation_individual_impl = Mutation_Methods.Individual.Permutation.swap_genes
+        self.dist = lambda chromosome_1, chromosome_2:\
+            sum(
+                1
+                for gene_1, gene_2
+                in chromosome_1, chromosome_2
+                if gene_1 == gene_2
+            )
+
+
     # Getter and setters for all required varibles
 
     @property
