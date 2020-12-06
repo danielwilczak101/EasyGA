@@ -192,7 +192,7 @@ class Attributes:
             sqrt(sum(
                 (gene_1.value - gene_2.value) ** 2
                 for gene_1, gene_2
-                in chromosome_1, chromosome_2
+                in zip(chromosome_1, chromosome_2)
             ))
 
 
@@ -205,7 +205,7 @@ class Attributes:
             sum(
                 1
                 for gene_1, gene_2
-                in chromosome_1, chromosome_2
+                in zip(chromosome_1, chromosome_2)
                 if gene_1 == gene_2
             )
 
