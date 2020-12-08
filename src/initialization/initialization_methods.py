@@ -1,4 +1,4 @@
-def chromosomes_to_population(initialize):
+def _chromosomes_to_population(initialize):
     """Makes a population from chromosomes."""
     return lambda ga:\
         ga.make_population(
@@ -9,14 +9,14 @@ def chromosomes_to_population(initialize):
             ]
         )
 
-def genes_to_chromosome(initialize):
+def _genes_to_chromosome(initialize):
     """Converts a collection of genes to a chromosome."""
     return lambda ga:\
         ga.make_chromosome(
             list(initialize(ga))
         )
 
-def values_to_genes(initialize):
+def _values_to_genes(initialize):
     """Converts a collection of values to genes."""
     return lambda ga:\
         (
@@ -30,14 +30,14 @@ class Initialization_Methods:
     """Initialization examples that are used as defaults and examples"""
 
     # Private method decorators, see above.
-    _chromosomes_to_population = chromosomes_to_population
-    _genes_to_chromosome       = genes_to_chromosome
-    _values_to_genes           = values_to_genes
+    _chromosomes_to_population = _chromosomes_to_population
+    _genes_to_chromosome       = _genes_to_chromosome
+    _values_to_genes           = _values_to_genes
 
 
-    @chromosomes_to_population
-    @genes_to_chromosome
-    @values_to_genes
+    @_chromosomes_to_population
+    @_genes_to_chromosome
+    @_values_to_genes
     def random_initialization(ga):
         """Takes the initialization inputs and returns a collection of values.
         Method decorators convert them to a GA population object.
