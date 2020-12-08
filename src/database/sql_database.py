@@ -206,7 +206,13 @@ class SQL_Database:
 
         # Execute sql query
         cur = self.conn.cursor()
-        cur.executemany(sql, db_config_list)
+        try:
+            cur.executemany(sql, db_config_list)
+        except:
+            self.remove_database()
+            cur = self.conn.cursor()
+            cur.executemany(sql, db_config_list)
+
         self.conn.commit()
         self.config_id = self.get_current_config()
         return cur.lastrowid
