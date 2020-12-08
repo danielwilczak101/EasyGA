@@ -243,17 +243,15 @@ class Crossover_Methods:
                 for _ in range(len(gene_list_2)):
 
                     # Remove it if it is already used
-                    for i in range(len(gene_list_1)):
-                        if gene_list_1[i] == gene_list_2[-1]:
-                            gene_list_2.pop(-1)
-                            break
+                    if gene_list_2[-1] in gene_list_1:
+                        gene_list_2.pop(-1)
 
                     # Add it if it has not been used
                     else:
-                        gene_list_1[input_index] = gene_list_2.pop(-1)
-                        input_index += 1
                         if input_index == index_1:
                             input_index = index_2
+                        gene_list_1[input_index] = gene_list_2.pop(-1)
+                        input_index += 1
 
                 return gene_list_1
 
@@ -296,16 +294,14 @@ class Crossover_Methods:
                 for _ in range(len(gene_list_2)):
 
                     # Remove it if it is already used
-                    for i in range(len(gene_list_1)):
-                        if gene_list_1[i] == gene_list_2[-1]:
-                            gene_list_2.pop(-1)
-                            break
+                    if gene_list_2[-1] in gene_list_1:
+                        gene_list_2.pop(-1)
 
                     # Add it if it has not been used
                     else:
-                        gene_list_1[input_index] = gene_list_2.pop(-1)
-                        input_index += 1
                         if input_index == index_1:
                             input_index = index_2
+                        gene_list_1[input_index] = gene_list_2.pop(-1)
+                        input_index += 1
 
                 return gene_list_1

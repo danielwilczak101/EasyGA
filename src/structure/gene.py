@@ -7,9 +7,14 @@ class Gene:
         self.value = deepcopy(value)
 
 
-    def __eq__(self, gene):
-        """Comparing two genes by their value."""
-        return self.value == gene.value
+    def __eq__(self, other_gene):
+        """Comparing two genes by their value.
+        Returns False if either gene is None."""
+
+        if (self is None) or (other_gene is None):
+            return False
+        else:
+            return self.value == other_gene.value
 
 
     def __repr__(self):

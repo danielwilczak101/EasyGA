@@ -159,7 +159,7 @@ class Mutation_Methods:
 
                 # Indexes of genes to swap
                 index_one = index
-                index_two = random.randrange(index_one)
+                index_two = random.randrange(len(chromosome))
 
                 # Swap genes
                 chromosome[index_one], chromosome[index_two] = chromosome[index_two], chromosome[index_one]
