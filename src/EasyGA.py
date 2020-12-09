@@ -134,38 +134,38 @@ class GA(Attributes):
         # Too few converged: cross more and mutate less
         if tol(amount_converged//2) > tol(amount_converged//4)*2:
 
-            self.selection_probability = sum(
+            self.selection_probability = sum((
                 self.adapt_probability_rate * self.max_selection_probability,
                 (1-self.adapt_probability_rate) * self.selection_probability
-            )
+            ))
 
-            self.chromosome_mutation_rate = sum(
+            self.chromosome_mutation_rate = sum((
                 self.adapt_probability_rate * self.min_chromosome_mutation_rate,
                 (1-self.adapt_probability_rate) * self.chromosome_mutation_rate
-            )
+            ))
 
-            self.gene_mutation_rate = sum(
+            self.gene_mutation_rate = sum((
                 self.adapt_probability_rate * self.min_gene_mutation_rate,
                 (1-self.adapt_probability_rate) * self.gene_mutation_rate
-            )
+            ))
 
         # Too many converged: cross less and mutate more
         else:
 
-            self.selection_probability = sum(
+            self.selection_probability = sum((
                 self.adapt_probability_rate * self.min_selection_probability,
                 (1-self.adapt_probability_rate) * self.selection_probability
-            )
+            ))
 
-            self.chromosome_mutation_rate = sum(
+            self.chromosome_mutation_rate = sum((
                 self.adapt_probability_rate * self.max_chromosome_mutation_rate,
                 (1-self.adapt_probability_rate) * self.chromosome_mutation_rate
-            )
+            ))
 
-            self.gene_mutation_rate = sum(
+            self.gene_mutation_rate = sum((
                 self.adapt_probability_rate * self.max_gene_mutation_rate,
                 (1-self.adapt_probability_rate) * self.gene_mutation_rate
-            )
+            ))
 
 
     def adapt_population(self):
