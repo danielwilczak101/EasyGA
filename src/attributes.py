@@ -69,13 +69,13 @@ class Attributes:
             percent_converged            = 0.50,
             chromosome_mutation_rate     = 0.15,
             gene_mutation_rate           = 0.05,
-            adapt_rate                   = 0,
-            adapt_probability_rate       = 0.15,
-            adapt_population_flag        = False,
-            max_selection_probability    = 0.99,
-            min_selection_probability    = 0.01,
-            max_chromosome_mutation_rate = 0.20,
-            min_chromosome_mutation_rate = 0.01,
+            adapt_rate                   = 0.05,
+            adapt_probability_rate       = 0.05,
+            adapt_population_flag        = True,
+            max_selection_probability    = 0.75,
+            min_selection_probability    = 0.25,
+            max_chromosome_mutation_rate = None,
+            min_chromosome_mutation_rate = None,
             max_gene_mutation_rate       = None,
             min_gene_mutation_rate       = None,
             dist                         = None,
@@ -130,11 +130,11 @@ class Attributes:
 
         # Bounds on probabilities when adapting
         self.max_selection_probability    = max_selection_probability
-        self.max_chromosome_mutation_rate = max_chromosome_mutation_rate
-        self.max_gene_mutation_rate       = (gene_mutation_rate+1)/2 if (max_gene_mutation_rate is None) else max_gene_mutation_rate
         self.min_selection_probability    = min_selection_probability
-        self.min_chromosome_mutation_rate = min_chromosome_mutation_rate
-        self.min_gene_mutation_rate       = gene_mutation_rate/2 if (min_gene_mutation_rate is None) else min_gene_mutation_rate
+        self.max_chromosome_mutation_rate = chromosome_mutation_rate if (max_chromosome_mutation_rate is None) else max_chromosome_mutation_rate
+        self.min_chromosome_mutation_rate = chromosome_mutation_rate if (min_chromosome_mutation_rate is None) else min_chromosome_mutation_rate
+        self.max_gene_mutation_rate       = gene_mutation_rate if (max_gene_mutation_rate is None) else max_gene_mutation_rate
+        self.min_gene_mutation_rate       = gene_mutation_rate if (min_gene_mutation_rate is None) else min_gene_mutation_rate
 
         # Distance between two chromosomes
         if dist is None:
@@ -201,13 +201,24 @@ class Attributes:
 
         self.crossover_individual_impl = Crossover_Methods.Individual.Permutation.ox1
         self.mutation_individual_impl = Mutation_Methods.Individual.Permutation.swap_genes
-        self.dist = lambda chromosome_1, chromosome_2:\
-            sum(
-                1
-                for gene_1, gene_2
-                in zip(chromosome_1, chromosome_2)
-                if gene_1 == gene_2
-            )
+
+        # Count the number of gene pairs they have in common
+        def dist(chromosome_1, chromosome_2):
+            gene_list_1 = list(chromosome_1)
+            gene_list_2 = list(chromosome_2)
+
+            count = 0
+
+            for i in range(len(gene_list_1)-1):
+                for j in range(len(gene_list_2)-1):
+                    if gene_list_1[i] == gene_list_2[j]:
+                        if gene_list_1[i+1] == gene_list_2[j+1]:
+                            count += 1
+                            break
+
+            return count
+
+        self.dist = dist
 
 
     # Getter and setters for all required varibles
