@@ -77,6 +77,7 @@ class Parent_Selection:
             Will make tournaments of size tournament_size and choose the winner (best fitness) 
             from the tournament and use it as a parent for the next generation. The total number 
             of parents selected is determined by parent_ratio, an attribute to the GA object.
+            May require many loops if the selection probability is very low.
             """
 
             # Choose the tournament size.
@@ -86,12 +87,12 @@ class Parent_Selection:
                 tournament_size = min(5, len(ga.population))
 
             # Repeat tournaments until the mating pool is large enough.
-            while True:
+            while len(ga.population.mating_pool) < parent_amount:
 
                 # Generate a random tournament group and sort by fitness.
                 tournament_group = sorted(random.sample(
                     range(len(ga.population)),
-                    k = tournament_size
+                    tournament_size
                 ))
 
                 # For each chromosome, add it to the mating pool based on its rank in the tournament.
@@ -100,12 +101,14 @@ class Parent_Selection:
                     # Probability required is selection_probability * (1-selection_probability) ^ index
                     # Each chromosome is (1-selection_probability) times
                     # more likely to become a parent than the next ranked.
-                    if random.random() < ga.selection_probability * pow(1-ga.selection_probability, index):
-                        ga.population.set_parent(tournament_group[index])
+                    if random.random() < ga.selection_probability * (1-ga.selection_probability) ** index:
+                        break
 
-                        # Stop tournament selection if enough parents are selected
-                        if len(ga.population.mating_pool) >= parent_amount:
-                            return
+                # Use random in tournament if noone wins
+                else:
+                    index = random.randrange(tournament_size)
+
+                ga.population.set_parent(tournament_group[index])
 
 
         @_check_selection_probability
@@ -115,7 +118,9 @@ class Parent_Selection:
             """
             Selects parents using the same probability approach as tournament selection,
             but doesn't create tournaments. Uses random.choices with weighted values to
-            select parents and may produce duplicate parents.
+            select parents and may produce duplicate parents. Selects worse chromosomes
+            less than tournament selection, and may result in many duplicate best
+            chromosomes if the selection probability is too high.
             """
 
             # Set the weights of each parent based on their rank.
