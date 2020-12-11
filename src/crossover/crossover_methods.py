@@ -1,5 +1,9 @@
 import random
 
+# Round to an integer near x with higher probability
+# the closer it is to that integer.
+randround = lambda x: int(x + random.random())
+
 def _append_to_next_population(population_method):
     """Appends the new chromosomes to the next population.
     Also modifies the input to include the mating pool.
@@ -161,7 +165,7 @@ class Crossover_Methods:
                     value = weight*value_1 + (1-weight)*value_2
 
                     if type(value_1) == type(value_2) == int:
-                        value = round(value + random.uniform(-0.5, 0.5))
+                        value = randround(value)
 
                     yield value
 
@@ -182,7 +186,7 @@ class Crossover_Methods:
                     value = (2-weight)*value_1 + (weight-1)*value_2
 
                     if type(value_1) == type(value_2) == int:
-                        value = round(value + random.uniform(-0.5, 0.5))
+                        value = randround(value)
 
                     yield value
 
@@ -211,7 +215,7 @@ class Crossover_Methods:
                         value = value_1 + (value_2-value_1) * (1-(1-x)**t)**(1/t)
 
                     if type(value_1) == type(value_2) == int:
-                        value = round(value + random.uniform(-0.5, 0.5))
+                        value = randround(value)
 
                     yield value
 
