@@ -44,8 +44,9 @@ class GA(Attributes):
     """
 
 
-    def evolve_generation(self, number_of_generations = 1, consider_termination = True):
-        """Evolves the ga the specified number of generations."""
+    def evolve(self, number_of_generations = float('inf'), consider_termination = True):
+        """Evolves the ga the specified number of generations
+        or until the ga is no longer active if consider_termination is True."""
 
         cond1 = lambda: number_of_generations > 0  # Evolve the specified number of generations.
         cond2 = lambda: not consider_termination   # If consider_termination flag is set:
@@ -91,13 +92,6 @@ class GA(Attributes):
 
             number_of_generations -= 1
             self.current_generation += 1
-
-
-    def evolve(self, number_of_generations = 100, consider_termination = True):
-        """Runs the ga until the termination point has been satisfied."""
-
-        while self.active():
-            self.evolve_generation(number_of_generations, consider_termination)
 
 
     def active(self):
