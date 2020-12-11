@@ -187,7 +187,13 @@ class Attributes:
     def numeric_chromosomes(self):
         """Sets default numerical based methods"""
 
+        # Adapt every 10th generation
+        self.adapt_rate = 0.10
+
+        # Use averaging for crossover
         self.crossover_individual_impl = Crossover_Methods.Individual.Arithmetic.average
+
+        # Euclidean norm
         self.dist = lambda chromosome_1, chromosome_2:\
             sqrt(sum(
                 (gene_1.value - gene_2.value) ** 2
