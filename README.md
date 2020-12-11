@@ -1,3 +1,5 @@
+<meta name="google-site-verification" content="kSu5d-r5SCvcnT5232YbkI6bHCR_3xV1bmUqFla4kSw" />
+
 ![](https://raw.githubusercontent.com/danielwilczak101/EasyGA/media/images/easyGA_logo.png)
 
 # EasyGA - Genetic Algorithms made Easy
