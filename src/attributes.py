@@ -63,8 +63,8 @@ class Attributes:
             min_selection_probability    = 0.25,
             max_chromosome_mutation_rate = None,
             min_chromosome_mutation_rate = None,
-            max_gene_mutation_rate       = 0.99,
-            min_gene_mutation_rate       = 0.01,
+            max_gene_mutation_rate       = 1,
+            min_gene_mutation_rate       = 0,
             dist                         = None,
             initialization_impl          = Initialization_Methods.random_initialization,
             fitness_function_impl        = Fitness_Examples.is_it_5,
@@ -283,7 +283,7 @@ class Attributes:
             self._max_chromosome_mutation_rate = min(self.chromosome_mutation_rate*2, (1+self.chromosome_mutation_rate)/2)
 
         # Otherwise check value
-        elif 0 < value_input < 1:
+        elif 0 <= value_input <= 1:
             self._max_chromosome_mutation_rate = value_input
 
         # Throw error
@@ -307,7 +307,7 @@ class Attributes:
             self._min_chromosome_mutation_rate = self.chromosome_mutation_rate/2
 
         # Otherwise check value
-        elif 0 < value_input < 1:
+        elif 0 <= value_input <= 1:
             self._min_chromosome_mutation_rate = value_input
 
         # Throw error
