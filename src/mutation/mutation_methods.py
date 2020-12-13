@@ -119,7 +119,7 @@ class Mutation_Methods:
         @_reset_fitness
         @_loop_random_mutations
         def individual_genes(ga, chromosome, index):
-            """Mutates a random gene in the chromosome."""
+            """Mutates random genes by making completely new genes."""
 
             # Using the chromosome_impl
             if ga.chromosome_impl is not None:
@@ -135,14 +135,41 @@ class Mutation_Methods:
 
 
         class Arithmetic:
-            """Methods for mutating a chromosome
-            by numerically modifying the genes."""
+            """Methods for mutating a chromosome by numerically modifying the genes."""
+
+            @_check_gene_mutation_rate
+            @_reset_fitness
+            @_loop_random_mutations
+            def average(ga, chromosome, index):
+                """Mutates random genes by making completely new genes
+                and then averaging them with the old genes. May cause
+                premature convergence. Weight is the reciprocal of the
+                number of generations run."""
+
+                weight = 1/max(1, ga.current_generation)
+
+                # Using the chromosome_impl
+                if ga.chromosome_impl is not None:
+                    new_value = ga.chromosome_impl()[index]
+
+                # Using the gene_impl
+                elif ga.gene_impl is not None:
+                    new_value = ga.gene_impl()
+
+                # Exit because no gene creation method specified
+                else:
+                    raise Exception("Did not specify any initialization constraints.")
+
+                chromosome[index] = ga.make_gene((1-weight)*chromosome[index].value + weight*new_value)
+
 
             @_check_gene_mutation_rate
             @_reset_fitness
             @_loop_random_mutations
             def reflect_genes(ga, chromosome, index):
-                """Reflects genes against the best chromosome."""
+                """Reflects genes against the best chromosome.
+                Requires large genetic variety to work well but
+                when it does it may be very fast."""
 
                 difference = ga.population[0][index].value - chromosome[index].value
                 value = ga.population[0][index].value + 2*difference
