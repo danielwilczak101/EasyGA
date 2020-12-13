@@ -2,12 +2,12 @@ import random
 
 def _check_selection_probability(selection_method):
     """Raises an exception if the selection_probability
-    is not between 0 and 1. Otherwise runs the selection
-    method.
+    is not between 0 and 1 inclusively. Otherwise runs
+    the selection method.
     """
 
     def new_method(ga):
-        if 0 < ga.selection_probability < 1:
+        if 0 <= ga.selection_probability <= 1:
             selection_method(ga)
         else:
             raise Exception("Selection probability must be between 0 and 1 to select parents.")
