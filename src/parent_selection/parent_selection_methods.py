@@ -151,7 +151,7 @@ class Parent_Selection:
             # The worst chromosome has a weight of 1,
             # the next worst chromosome has a weight of 2,
             # etc.
-            # with an inflation of (1-selection probability) * sum of weights
+            # with an inflation of (1-selection probability) * average weight
 
             average_weight = (len(ga.population)+1) // 2
             inflation = (1-ga.selection_probability) * average_weight
