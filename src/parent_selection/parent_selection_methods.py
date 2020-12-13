@@ -153,8 +153,8 @@ class Parent_Selection:
             # etc.
             # with an inflation of (1-selection probability) * sum of weights
 
-            sum_of_weights = round(len(ga.population) * (len(ga.population)+1) / 2)
-            inflation = (1-ga.selection_probability) * sum_of_weights
+            average_weight = (len(ga.population)+1) // 2
+            inflation = (1-ga.selection_probability) * average_weight
 
             weights = [
                 i + inflation
