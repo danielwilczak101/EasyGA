@@ -114,13 +114,14 @@ class Parent_Selection:
         @_check_selection_probability
         @_ensure_sorted
         @_compute_parent_amount
-        def stochastic(ga, parent_amount):
+        def stochastic_geometric(ga, parent_amount):
             """
-            Selects parents using the same probability approach as tournament selection,
-            but doesn't create tournaments. Uses random.choices with weighted values to
-            select parents and may produce duplicate parents. Selects worse chromosomes
-            less than tournament selection, and may result in many duplicate best
-            chromosomes if the selection probability is too high.
+            Selects parents with probabilities given by a geometric progression. This
+            method is similar to tournament selection, but doesn't create several
+            tournaments. Instead, it assigns probabilities to each rank and selects
+            the entire mating pool using random.choices. Since it essentially uses the
+            entire population as a tournament repeatedly, it is less likely to select
+            worse parents than tournament selection.
             """
 
             # Set the weights of each parent based on their rank.
@@ -130,6 +131,35 @@ class Parent_Selection:
                 (1-ga.selection_probability) ** i
                 for i
                 in range(len(ga.population))
+            ]
+
+            # Set the mating pool.
+            ga.population.mating_pool = random.choices(ga.population, weights, k = parent_amount)
+
+
+        @_check_selection_probability
+        @_ensure_sorted
+        @_compute_parent_amount
+        def stochastic_arithmetic(ga, parent_amount):
+            """
+            Selects parents with probabilities given by an arithmetic progression. This
+            method is similar to stochastic-geometric selection, but is more likely to
+            select worse parents with its simpler selection scheme.
+            """
+
+            # Set the weights of each parent based on their rank.
+            # The worst chromosome has a weight of 1,
+            # the next worst chromosome has a weight of 2,
+            # etc.
+            # with an inflation of (1-selection probability) * sum of weights
+
+            sum_of_weights = round(len(ga.population) * (len(ga.population)+1) / 2)
+            inflation = (1-ga.selection_probability) * sum_of_weights
+
+            weights = [
+                i + inflation
+                for i
+                in range(len(ga.population), 0, -1)
             ]
 
             # Set the mating pool.
