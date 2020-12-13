@@ -87,7 +87,7 @@ class GA(Attributes):
             # Adapt the ga if the generation times the adapt rate
             # passes through an integer value.
             adapt_counter = self.adapt_rate*self.current_generation
-            if int(adapt_counter) > int(adapt_counter - self.adapt_rate):
+            if int(adapt_counter) < int(adapt_counter + self.adapt_rate):
                 self.adapt()
 
             number_of_generations -= 1
@@ -262,8 +262,11 @@ class GA(Attributes):
         etc.
         """
 
+        if self.target_fitness_type not in ('max', 'min'):
+            raise ValueError("Unknown target fitness type")
+
         if in_place:
-            chromosome_list.sort(                       # list to be sorted
+            chromosome_list.sort(                              # list to be sorted
                 key = lambda chromosome: chromosome.fitness,   # by fitness
                 reverse = (self.target_fitness_type == 'max')  # ordered by fitness type
             )
