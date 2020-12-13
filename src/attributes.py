@@ -37,19 +37,6 @@ class Attributes:
     been set then they will fall back onto the default attribute. All
     attributes have been catigorized to explain sections in the ga process."""
 
-    target_fitness_type_dict = {
-        'min'          : 'min',
-        'minimize'     : 'min',
-        'minimise'     : 'min',
-        'minimization' : 'min',
-        'minimisation' : 'min',
-        'max'          : 'max',
-        'maximize'     : 'max',
-        'maximise'     : 'max',
-        'maximization' : 'max',
-        'maximisation' : 'max'
-    }
-
     def __init__(self,
             chromosome_length            = 10,
             population_size              = 10,
@@ -76,8 +63,8 @@ class Attributes:
             min_selection_probability    = 0.25,
             max_chromosome_mutation_rate = None,
             min_chromosome_mutation_rate = None,
-            max_gene_mutation_rate       = None,
-            min_gene_mutation_rate       = None,
+            max_gene_mutation_rate       = 0.99,
+            min_gene_mutation_rate       = 0.01,
             dist                         = None,
             initialization_impl          = Initialization_Methods.random_initialization,
             fitness_function_impl        = Fitness_Examples.is_it_5,
@@ -104,71 +91,69 @@ class Attributes:
         ):
 
         # Initilization variables
-        self.chromosome_length   = deepcopy(chromosome_length)
-        self.population_size     = deepcopy(population_size)
-        self.chromosome_impl     = deepcopy(chromosome_impl)
-        self.gene_impl           = deepcopy(gene_impl)
-        self.population          = deepcopy(population)
-        self.target_fitness_type = deepcopy(target_fitness_type)
-        self.update_fitness      = deepcopy(update_fitness)
+        self.chromosome_length   = chromosome_length
+        self.population_size     = population_size
+        self.chromosome_impl     = chromosome_impl
+        self.gene_impl           = gene_impl
+        self.population          = population
+        self.target_fitness_type = target_fitness_type
+        self.update_fitness      = update_fitness
 
         # Selection variables
-        self.parent_ratio          = deepcopy(parent_ratio)
-        self.selection_probability = deepcopy(selection_probability)
-        self.tournament_size_ratio = deepcopy(tournament_size_ratio)
+        self.parent_ratio          = parent_ratio
+        self.selection_probability = selection_probability
+        self.tournament_size_ratio = tournament_size_ratio
 
         # Termination variables
-        self.current_generation = deepcopy(current_generation)
-        self.current_fitness    = deepcopy(current_fitness)
-        self.generation_goal    = deepcopy(generation_goal)
-        self.fitness_goal       = deepcopy(fitness_goal)
-        self.tolerance_goal     = deepcopy(tolerance_goal)
-        self.percent_converged  = deepcopy(percent_converged)
-        self.adapt_rate         = deepcopy(adapt_rate)
-        self.adapt_probability_rate = deepcopy(adapt_probability_rate)
-        self.adapt_population_flag  = deepcopy(adapt_population_flag)
+        self.current_generation = current_generation
+        self.current_fitness    = current_fitness
+        self.generation_goal    = generation_goal
+        self.fitness_goal       = fitness_goal
+        self.tolerance_goal     = tolerance_goal
+        self.percent_converged  = percent_converged
+
+        # Mutation variables
+        self.chromosome_mutation_rate = chromosome_mutation_rate
+        self.gene_mutation_rate       = gene_mutation_rate
+
+        # Adapt variables
+        self.adapt_rate             = adapt_rate
+        self.adapt_probability_rate = adapt_probability_rate
+        self.adapt_population_flag  = adapt_population_flag
 
         # Bounds on probabilities when adapting
         self.max_selection_probability    = max_selection_probability
         self.min_selection_probability    = min_selection_probability
-        self.max_chromosome_mutation_rate = chromosome_mutation_rate if (max_chromosome_mutation_rate is None) else max_chromosome_mutation_rate
-        self.min_chromosome_mutation_rate = chromosome_mutation_rate if (min_chromosome_mutation_rate is None) else min_chromosome_mutation_rate
-        self.max_gene_mutation_rate       = gene_mutation_rate if (max_gene_mutation_rate is None) else max_gene_mutation_rate
-        self.min_gene_mutation_rate       = gene_mutation_rate if (min_gene_mutation_rate is None) else min_gene_mutation_rate
+        self.max_chromosome_mutation_rate = max_chromosome_mutation_rate
+        self.min_chromosome_mutation_rate = min_chromosome_mutation_rate
+        self.max_gene_mutation_rate       = max_gene_mutation_rate
+        self.min_gene_mutation_rate       = min_gene_mutation_rate
 
         # Distance between two chromosomes
-        if dist is None:
-            self.dist = lambda chromosome_1, chromosome_2:\
-                sqrt(abs(chromosome_1.fitness - chromosome_2.fitness))
-        else:
-            self.dist = dist
-
-        # Mutation variables
-        self.chromosome_mutation_rate = deepcopy(chromosome_mutation_rate)
-        self.gene_mutation_rate       = deepcopy(gene_mutation_rate)
+        self.dist = dist
 
         # Default EasyGA implimentation structure
-        self.initialization_impl   = deepcopy(initialization_impl)
-        self.fitness_function_impl = deepcopy(fitness_function_impl)
-        self.make_population       = deepcopy(make_population)
-        self.make_chromosome       = deepcopy(make_chromosome)
-        self.make_gene             = deepcopy(make_gene)
+        self.initialization_impl   = initialization_impl
+        self.fitness_function_impl = fitness_function_impl
+        self.make_population       = make_population
+        self.make_chromosome       = make_chromosome
+        self.make_gene             = make_gene
 
         # Methods for accomplishing Parent-Selection -> Crossover -> Survivor_Selection -> Mutation
-        self.parent_selection_impl     = deepcopy(parent_selection_impl)
-        self.crossover_individual_impl = deepcopy(crossover_individual_impl)
-        self.crossover_population_impl = deepcopy(crossover_population_impl)
-        self.survivor_selection_impl   = deepcopy(survivor_selection_impl)
-        self.mutation_individual_impl  = deepcopy(mutation_individual_impl)
-        self.mutation_population_impl  = deepcopy(mutation_population_impl)
+        self.parent_selection_impl     = parent_selection_impl
+        self.crossover_individual_impl = crossover_individual_impl
+        self.crossover_population_impl = crossover_population_impl
+        self.survivor_selection_impl   = survivor_selection_impl
+        self.mutation_individual_impl  = mutation_individual_impl
+        self.mutation_population_impl  = mutation_population_impl
 
         # The type of termination to impliment
-        self.termination_impl = deepcopy(termination_impl)
+        self.termination_impl = termination_impl
 
         # Database varibles
         self.database = Database()
-        self.database_name = deepcopy(database_name)
-        self.sql_create_data_structure = deepcopy(sql_create_data_structure)
+        self.database_name = database_name
+        self.sql_create_data_structure = sql_create_data_structure
 
         # Graphing variables
         self.graph = Graph(self.database)
@@ -192,6 +177,9 @@ class Attributes:
 
         # Use averaging for crossover
         self.crossover_individual_impl = Crossover_Methods.Individual.Arithmetic.average
+
+        # Use averaging for mutation
+        self.mutation_individual_impl = Mutation_Methods.Individual.Arithmetic.average
 
         # Euclidean norm
         self.dist = lambda chromosome_1, chromosome_2:\
@@ -228,24 +216,6 @@ class Attributes:
 
 
     # Getter and setters for all required varibles
-
-    @property
-    def database_name(self):
-        """Getter function for the database name"""
-
-        return self._database_name
-
-
-    @database_name.setter
-    def database_name(self, value_input):
-        """Setter function with error checking for the database name"""
-
-        # Update the database class of the name change
-        self.database._database_name = value_input
-
-        # Set the name in the ga attribute
-        self._database_name = value_input
-
 
     @property
     def chromosome_length(self):
@@ -292,12 +262,93 @@ class Attributes:
 
     @target_fitness_type.setter
     def target_fitness_type(self, value_input):
-        """Setter function for target fitness type for
-        converting input to min/max."""
+        """Setter function for target fitness type."""
 
-        if value_input in self.target_fitness_type_dict.keys():
-            self._target_fitness_type = self.target_fitness_type_dict[value_input]
+        self._target_fitness_type = value_input
 
-        # Custom input
+
+    @property
+    def max_chromosome_mutation_rate(self):
+        """Getter function for max chromosome mutation rate"""
+
+        return self._max_chromosome_mutation_rate
+
+
+    @max_chromosome_mutation_rate.setter
+    def max_chromosome_mutation_rate(self, value_input):
+        """Setter function with error checking and default value for max chromosome mutation rate"""
+
+        # Default value
+        if value_input is None:
+            self._max_chromosome_mutation_rate = min(self.chromosome_mutation_rate*2, (1+self.chromosome_mutation_rate)/2)
+
+        # Otherwise check value
+        elif 0 < value_input < 1:
+            self._max_chromosome_mutation_rate = value_input
+
+        # Throw error
         else:
-            self._target_fitness_type = value_input
+            raise ValueError("Max chromosome mutation rate must be between 0 and 1")
+
+
+    @property
+    def min_chromosome_mutation_rate(self):
+        """Getter function for min chromosome mutation rate"""
+
+        return self._min_chromosome_mutation_rate
+
+
+    @min_chromosome_mutation_rate.setter
+    def min_chromosome_mutation_rate(self, value_input):
+        """Setter function with error checking and default value for min chromosome mutation rate"""
+
+        # Default value
+        if value_input is None:
+            self._min_chromosome_mutation_rate = self.chromosome_mutation_rate/2
+
+        # Otherwise check value
+        elif 0 < value_input < 1:
+            self._min_chromosome_mutation_rate = value_input
+
+        # Throw error
+        else:
+            raise ValueError("Min chromosome mutation rate must be between 0 and 1")
+
+
+    @property
+    def dist(self):
+        """Getter function for the distance between chromosomes."""
+
+        return self._dist
+
+
+    @dist.setter
+    def dist(self, value_input):
+        """Setter function for the distance between chromosomes."""
+
+        # Default value by comparing fitnesses of chromosomes
+        if value_input is None:
+            self._dist = lambda chromosome_1, chromosome_2:\
+                sqrt(abs(chromosome_1.fitness - chromosome_2.fitness))
+
+        # Given input
+        else:
+            self._dist = value_input
+
+
+    @property
+    def database_name(self):
+        """Getter function for the database name"""
+
+        return self._database_name
+
+
+    @database_name.setter
+    def database_name(self, value_input):
+        """Setter function with error checking for the database name"""
+
+        # Update the database class of the name change
+        self.database._database_name = value_input
+
+        # Set the name in the ga attribute
+        self._database_name = value_input
