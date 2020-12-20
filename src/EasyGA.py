@@ -5,9 +5,9 @@ import math
 import random
 
 # Import all the data structure prebuilt modules
-from structure import Population as create_population
-from structure import Chromosome as create_chromosome
-from structure import Gene as create_gene
+from structure import Population as make_population
+from structure import Chromosome as make_chromosome
+from structure import Gene       as make_gene
 
 # Structure Methods
 from fitness_function  import Fitness_Examples
@@ -105,6 +105,10 @@ class GA(Attributes):
 
         self.adapt_probabilities()
         self.adapt_population()
+
+        # Update and sort fitnesses
+        self.set_all_fitness()
+        self.population.sort_by_best_fitness(self)
 
 
     def adapt_probabilities(self):
@@ -227,8 +231,6 @@ class GA(Attributes):
             if cond:
                 tol_j = tol(j)
                 best_chromosome = self.population[n]
-
-        self.population.sort_by_best_fitness(self)
 
 
     def initialize_population(self):
