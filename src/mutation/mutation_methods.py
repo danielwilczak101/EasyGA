@@ -192,3 +192,24 @@ class Mutation_Methods:
 
                 # Swap genes
                 chromosome[index_one], chromosome[index_two] = chromosome[index_two], chromosome[index_one]
+
+
+            @_check_gene_mutation_rate
+            @_reset_fitness
+            def swap_segments(ga, chromosome):
+                """Splits the chromosome into 3 segments and shuffle them."""
+
+                # Chromosome too short to mutate
+                if len(chromosome) < 3:
+                    return
+
+                # Indexes to split the chromosome
+                index_two = random.randrange(2, len(chromosome))
+                index_one = random.randrange(1, index_two)
+
+                # Extract segments and shuffle them
+                segments = [chromosome[:index_one], chromosome[index_one:index_two], chromosome[index_two:]]
+                random.shuffle(segments)
+
+                # Put segments back together
+                chromosome.gene_list = segments[0] + segments[1] + segments[2]
