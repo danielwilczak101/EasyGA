@@ -6,9 +6,9 @@ import sqlite3
 from copy import deepcopy
 
 # Import all the data structure prebuilt modules
-from structure import Population as create_population
-from structure import Chromosome as create_chromosome
-from structure import Gene as create_gene
+from structure import Population as make_population
+from structure import Chromosome as make_chromosome
+from structure import Gene       as make_gene
 
 # Structure Methods
 from fitness_function  import Fitness_Examples
@@ -25,7 +25,7 @@ from crossover import Crossover_Methods
 
 # Database class
 from database import sql_database
-from sqlite3 import Error
+from sqlite3  import Error
 
 # Graphing package
 from database import matplotlib_graph
@@ -44,7 +44,7 @@ class Attributes:
             gene_impl                    = lambda: random.randint(1, 10),
             population                   = None,
             target_fitness_type          = 'max',
-            update_fitness               = True,
+            update_fitness               = False,
             parent_ratio                 = 0.10,
             selection_probability        = 0.50,
             tournament_size_ratio        = 0.10,
@@ -63,14 +63,14 @@ class Attributes:
             min_selection_probability    = 0.25,
             max_chromosome_mutation_rate = None,
             min_chromosome_mutation_rate = None,
-            max_gene_mutation_rate       = 1,
-            min_gene_mutation_rate       = 0,
+            max_gene_mutation_rate       = 0.15,
+            min_gene_mutation_rate       = 0.01,
             dist                         = None,
             initialization_impl          = Initialization_Methods.random_initialization,
             fitness_function_impl        = Fitness_Examples.is_it_5,
-            make_population              = create_population,
-            make_chromosome              = create_chromosome,
-            make_gene                    = create_gene,
+            make_population              = make_population,
+            make_chromosome              = make_chromosome,
+            make_gene                    = make_gene,
             parent_selection_impl        = Parent_Selection.Rank.tournament,
             crossover_individual_impl    = Crossover_Methods.Individual.single_point,
             crossover_population_impl    = Crossover_Methods.Population.sequential_selection,
