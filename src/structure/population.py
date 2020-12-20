@@ -1,13 +1,12 @@
-from copy import deepcopy
+from structure import Chromosome as make_chromosome
 
 class Population:
 
     def __init__(self, chromosome_list):
-        """Initialize the population with fitness of value None, and a
-        set of chromosomes dependant on user-passed parameter."""
+        """Initialize the population with a collection
+        of chromosomes dependant on user-passed parameter."""
 
-        self.chromosome_list = [deepcopy(chromosome) for chromosome in chromosome_list]
-        self.fitness = None
+        self.chromosome_list = [make_chromosome(chromosome) for chromosome in chromosome_list]
         self.mating_pool = []
         self.next_population = []
 
@@ -135,25 +134,61 @@ class Population:
         return (searched_chromosome in self.chromosome_list)
 
 
-    def index_of(self, searched_chromosome):
+    def index_of(self, chromosome, guess = None):
         """
         Allows the user to use
                 index = population.index_of(chromosome)
+                index = population.index_of(chromosome, guess)
         to find the index of a chromosome in the population.
         Be sure to check if the population contains the chromosome
-        first, or to catch an exception if the chromosome is not
-        in the population.
+        first, or to catch an IndexError exception if the chromosome
+        is not in the population. A guess may be used to find the
+        index quicker.
         """
-        return self.chromosome_list.index(searched_chromosome)
+
+        # Use built-in method
+        if guess is None:
+            return self.chromosome_list.index(gene)
+
+        # Use symmetric mod
+        guess %= len(self)
+        if guess >= len(self)//2:
+            guess -= len(self)
+
+        # Search outwards for the gene
+        for i in range(len(self)//2):
+
+            # Search to the left
+            if chromosome == self[guess-i]:
+                return (guess-i) % len(self)
+
+            # Search to the right
+            elif chromosome == self[guess+i]:
+                return (guess+i) % len(self)
+
+        # Gene not found
+        else:
+            raise IndexError("No such chromosome in the population found")
 
 
     def __repr__(self):
         """
         Allows the user to use
-                repr(population)
+                population_string = repr(population)
+                population = eval(population_string)
+        to get a backend representation of the population
+        which can be evaluated directly as code to create
+        the population.
+        """
+        return "EasyGA.make_population({repr(self.chromosome_list)})"
+
+
+    def __str__(self):
+        """
+        Allows the user to use
                 str(population)
                 print(population)
-        to get a backend representation of the population.
+        to get a frontend representation of the population.
         """
         return ''.join(
             f'Chromosome - {index} {chromosome} / Fitness = {chromosome.fitness}\n'

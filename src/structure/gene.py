@@ -3,8 +3,15 @@ from copy import deepcopy
 class Gene:
 
     def __init__(self, value):
-        """Initialize a gene with fitness of value None and the input value."""
-        self.value = deepcopy(value)
+        """Initialize a gene with the input value."""
+
+        # Copy another gene
+        try:
+            self.value = deepcopy(value.value)
+
+        # Otherwise copy the given value
+        except:
+            self.value = deepcopy(value)
 
 
     def __eq__(self, other_gene):
@@ -20,10 +27,11 @@ class Gene:
     def __repr__(self):
         """
         Allows the user to use
-                repr(gene)
+                gene_string = repr(gene)
+                gene = eval(gene_string)
         to get a backend representation of the gene.
         """
-        return str(self.value)
+        return f"EasyGA.make_gene({repr(self.value)})"
 
 
     def __str__(self):

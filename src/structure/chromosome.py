@@ -1,4 +1,4 @@
-from copy import deepcopy
+from structure import Gene as make_gene
 
 class Chromosome:
 
@@ -6,7 +6,7 @@ class Chromosome:
         """Initialize the chromosome with fitness value of None, and a
         set of genes dependent on user-passed parameter."""
 
-        self.gene_list = [deepcopy(gene) for gene in gene_list]
+        self.gene_list = [make_gene(gene) for gene in gene_list]
         self.fitness = None
 
 
@@ -70,6 +70,15 @@ class Chromosome:
         self.gene_list[index] = gene
 
 
+    def __delitem__(self, index):
+        """
+        Allows the user to use
+                del chromosome[index]
+        to delete a gene at the specified index.
+        """
+        del self.gene_list[index]
+
+
     def __len__(self):
         """
         Allows the user to use
@@ -88,16 +97,41 @@ class Chromosome:
         return (searched_gene in self.gene_list)
 
 
-    def index_of(self, searched_gene):
+    def index_of(self, gene, guess = None):
         """
         Allows the user to use
                 index = chromosome.index_of(gene)
+                index = chromosome.index_of(gene, guess)
         to find the index of a gene in the chromosome.
         Be sure to check if the chromosome contains the gene
-        first, or to catch an exception if the gene is not
-        in the chromosome.
+        first, or to catch an IndexError exception if the gene
+        is not in the chromosome. A guess may be used to find
+        the index quicker.
         """
-        return self.gene_list.index(searched_gene)
+
+        # Use built-in method
+        if guess is None:
+            return self.gene_list.index(gene)
+
+        # Use symmetric mod
+        guess %= len(self)
+        if guess >= len(self)//2:
+            guess -= len(self)
+
+        # Search outwards for the gene
+        for i in range(1+len(self)//2):
+
+            # Search to the left
+            if gene == self[guess-i]:
+                return (guess-i) % len(self)
+
+            # Search to the right
+            elif gene == self[guess+i]:
+                return (guess+i) % len(self)
+
+        # Gene not found
+        else:
+            raise IndexError("No such gene in the chromosome found")
 
 
     def __eq__(self, chromosome):
@@ -107,17 +141,19 @@ class Chromosome:
                 chromosome_1 != chromosome_2
         to compare two chromosomes based on their genes.
         """
-
-        return all(gene_1 == gene_2 for gene_1, gene_2 in zip(self, chromosome))
+        return self.gene_list == chromosome.gene_list
 
 
     def __repr__(self):
         """
         Allows the user to use
-                repr(chromosome)
-        to get a backend representation of the chromosome.
+                chromosome_string = repr(chromosome)
+                chromosome = eval(chromosome_string)
+        to get a backend representation of the chromosome
+        which can be evaluated directly as code to create
+        the chromosome.
         """
-        return ', '.join(repr(gene) for gene in self)
+        return f"EasyGA.make_chromosome({repr(self.gene_list)})"
 
 
     def __str__(self):
