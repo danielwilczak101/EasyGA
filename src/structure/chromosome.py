@@ -14,7 +14,7 @@ class Chromosome:
         """Add a gene to the chromosome at the specified index, defaulted to end of the chromosome"""
         if index is None:
             index = len(self)
-        self.gene_list.insert(index, gene)
+        self.gene_list.insert(index, make_gene(gene))
 
 
     def remove_gene(self, index):
@@ -67,7 +67,10 @@ class Chromosome:
                 chromosome[index] = gene
         to set the indexed gene.
         """
-        self.gene_list[index] = gene
+        if isinstance(index, int):
+            self.gene_list[index] = make_gene(gene)
+        else:
+            self.gene_list[index] = (make_gene(item) for item in gene)
 
 
     def __delitem__(self, index):
@@ -88,13 +91,13 @@ class Chromosome:
         return len(self.gene_list)
 
 
-    def __contains__(self, searched_gene):
+    def __contains__(self, gene):
         """
         Allows the user to use
                 if gene in chromosome
         to check if a gene is in the chromosome.
         """
-        return (searched_gene in self.gene_list)
+        return (make_gene(gene) in self.gene_list)
 
 
     def index_of(self, gene, guess = None):
@@ -108,6 +111,9 @@ class Chromosome:
         is not in the chromosome. A guess may be used to find
         the index quicker.
         """
+
+        # Cast to gene object
+        gene = make_gene(gene)
 
         # Use built-in method
         if guess is None:

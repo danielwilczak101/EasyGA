@@ -15,13 +15,14 @@ class Gene:
 
 
     def __eq__(self, other_gene):
-        """Comparing two genes by their value.
-        Returns False if either gene is None."""
+        """Comparing two genes by their value."""
 
-        if (self is None) or (other_gene is None):
-            return False
-        else:
-            return self.value == other_gene.value
+        try:
+            other_value = other_gene.value
+        except:
+            other_value = other_gene
+
+        return self.value == other_value
 
 
     def __repr__(self):
