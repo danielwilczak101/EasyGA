@@ -180,7 +180,7 @@ class Population:
         which can be evaluated directly as code to create
         the population.
         """
-        return "EasyGA.make_population({repr(self.chromosome_list)})"
+        return f"EasyGA.make_population({repr(self.chromosome_list)})"
 
 
     def __str__(self):
