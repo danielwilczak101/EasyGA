@@ -228,6 +228,14 @@ class Crossover_Methods:
                 """Cross two parents by slicing out a random part of one parent
                 and then filling in the rest of the genes from the second parent."""
 
+                # Too small to cross
+                if len(parent_1) < 2:
+                    return parent_1.gene_list
+
+                # Unequal parent lengths
+                if len(parent_1) != len(parent_2):
+                    raise ValueError("Parents do not have the same lengths.")
+
                 # Swap with weighted probability so that most of the genes
                 # are taken directly from parent 1.
                 if random.choices([0, 1], cum_weights = [weight, 1]) == 1:
@@ -266,6 +274,14 @@ class Crossover_Methods:
                 """Cross two parents by slicing out a random part of one parent
                 and then filling in the rest of the genes from the second parent,
                 preserving the ordering of genes wherever possible."""
+
+                # Too small to cross
+                if len(parent_1) < 2:
+                    return parent_1.gene_list
+
+                # Unequal parent lengths
+                if len(parent_1) != len(parent_2):
+                    raise ValueError("Parents do not have the same lengths.")
 
                 # Swap with weighted probability so that most of the genes
                 # are taken directly from parent 1.
