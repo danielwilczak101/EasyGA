@@ -1,5 +1,14 @@
 from structure import Gene as make_gene
 
+def to_gene(gene):
+    """Converts the input to a gene if it isn't already one."""
+
+    if isinstance(gene, make_gene):
+        return gene
+    else:
+        return make_gene(gene)
+
+
 class Chromosome:
 
     def __init__(self, gene_list):
@@ -14,7 +23,7 @@ class Chromosome:
         """Add a gene to the chromosome at the specified index, defaulted to end of the chromosome"""
         if index is None:
             index = len(self)
-        self.gene_list.insert(index, make_gene(gene))
+        self.gene_list.insert(index, to_gene(gene))
 
 
     def remove_gene(self, index):
@@ -68,9 +77,9 @@ class Chromosome:
         to set the indexed gene.
         """
         if isinstance(index, int):
-            self.gene_list[index] = make_gene(gene)
+            self.gene_list[index] = to_gene(gene)
         else:
-            self.gene_list[index] = (make_gene(item) for item in gene)
+            self.gene_list[index] = (to_gene(item) for item in gene)
 
 
     def __delitem__(self, index):
@@ -97,7 +106,7 @@ class Chromosome:
                 if gene in chromosome
         to check if a gene is in the chromosome.
         """
-        return (make_gene(gene) in self.gene_list)
+        return (to_gene(gene) in self.gene_list)
 
 
     def index_of(self, gene, guess = None):
@@ -113,7 +122,7 @@ class Chromosome:
         """
 
         # Cast to gene object
-        gene = make_gene(gene)
+        gene = to_gene(gene)
 
         # Use built-in method
         if guess is None:

@@ -1,5 +1,14 @@
 from structure import Chromosome as make_chromosome
 
+def to_chromosome(chromosome):
+    """Converts the input to a chromosome if it isn't already one."""
+
+    if isinstance(chromosome, make_chromosome):
+        return chromosome
+    else:
+        return make_chromosome(chromosome)
+
+
 class Population:
 
     def __init__(self, chromosome_list):
@@ -50,9 +59,11 @@ class Population:
         values already will stay sorted.
         """
 
-        if not isinstance(chromosome_list, list):
-            chromosome_list = list(chromosome_list)
-        self.next_population = chromosome_list + self.next_population
+        self.next_population = [
+            to_chromosome(chromosome)
+            for chromosome
+            in chromosome_list
+        ] + self.next_population
 
 
     def sort_by_best_fitness(self, ga):
@@ -66,17 +77,17 @@ class Population:
 
         if index is None:
             index = len(self)
-        self.chromosome_list.insert(index, chromosome)
+        self.chromosome_list.insert(index, to_chromosome(chromosome))
 
 
     def add_parent(self, chromosome):
         """Adds a chromosome to the mating pool"""
-        self.mating_pool.append(chromosome)
+        self.mating_pool.append(to_chromosome(chromosome))
 
 
     def add_child(self, chromosome):
         """Adds a chromosome to the next population"""
-        self.next_population.append(chromosome)
+        self.next_population.append(to_chromosome(chromosome))
 
 
     def set_parent(self, index):
@@ -113,7 +124,7 @@ class Population:
                 population[index] = chromosome
         to set the indexed chromosome.
         """
-        self.chromosome_list[index] = chromosome
+        self.chromosome_list[index] = to_chromosome(chromosome)
 
 
     def __len__(self):
@@ -125,13 +136,13 @@ class Population:
         return len(self.chromosome_list)
 
 
-    def __contains__(self, searched_chromosome):
+    def __contains__(self, chromosome):
         """
         Allows the user to use
                 if chromosome in population
         to check if a chromosome is in the population.
         """
-        return (searched_chromosome in self.chromosome_list)
+        return (to_chromosome(chromosome) in self.chromosome_list)
 
 
     def index_of(self, chromosome, guess = None):
@@ -145,6 +156,8 @@ class Population:
         is not in the population. A guess may be used to find the
         index quicker.
         """
+
+        chromosome = to_chromosome(chromosome)
 
         # Use built-in method
         if guess is None:
