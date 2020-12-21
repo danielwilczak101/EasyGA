@@ -15,6 +15,7 @@ def _check_chromosome_mutation_rate(population_method):
         else:
             raise ValueError("Chromosome mutation rate must be between 0 and 1.")
 
+    new_method.__name__ = population_method.__name__
     return new_method
 
 
@@ -26,12 +27,13 @@ def _check_gene_mutation_rate(individual_method):
         if not isinstance(ga.gene_mutation_rate, float):
             raise TypeError("Gene mutation rate must be a float.")
 
-        elif 0 < ga.gene_mutation_rate < 1:
+        elif 0 < ga.gene_mutation_rate <= 1:
             individual_method(ga, index)
 
         else:
             raise ValueError("Gene mutation rate must be between 0 and 1.")
 
+    new_method.__name__ = individual_method.__name__
     return new_method
 
 
@@ -42,24 +44,7 @@ def _reset_fitness(individual_method):
         chromosome.fitness = None
         individual_method(ga, chromosome)
 
-    return new_method
-
-
-def _loop_random_selections(population_method):
-    """Runs the population method until enough chromosomes are mutated.
-    Provides the indexes of selected chromosomes to mutate using
-    random.sample to get all indexes fast.
-    """
-
-    def new_method(ga):
-
-        sample_space = range(len(ga.population))
-        sample_size  = ceil(len(ga.population)*ga.chromosome_mutation_rate)
-
-        # Loop the population method until enough chromosomes are mutated.
-        for index in random.sample(sample_space, sample_size):
-            population_method(ga, index)
-
+    new_method.__name__ = individual_method.__name__
     return new_method
 
 
@@ -78,6 +63,7 @@ def _loop_random_mutations(individual_method):
         for index in random.sample(sample_space, sample_size):
             individual_method(ga, chromosome, index)
 
+    new_method.__name__ = individual_method.__name__
     return new_method
 
 
@@ -86,7 +72,6 @@ class Mutation_Methods:
     _check_chromosome_mutation_rate = _check_chromosome_mutation_rate
     _check_gene_mutation_rate       = _check_gene_mutation_rate
     _reset_fitness = _reset_fitness
-    _loop_random_selections = _loop_random_selections
     _loop_random_mutations  = _loop_random_mutations
 
 
@@ -94,11 +79,15 @@ class Mutation_Methods:
         """Methods for selecting chromosomes to mutate"""
 
         @_check_chromosome_mutation_rate
-        @_loop_random_selections
-        def random_selection(ga, index):
+        def random_selection(ga):
             """Selects random chromosomes."""
 
-            ga.mutation_individual_impl(ga, ga.population[index])
+            sample_space = range(len(ga.population))
+            sample_size  = ceil(len(ga.population)*ga.chromosome_mutation_rate)
+
+            # Loop the individual method until enough genes are mutated.
+            for index in random.sample(sample_space, sample_size):
+                ga.mutation_individual_impl(ga, ga.population[index])
 
 
         @_check_chromosome_mutation_rate
@@ -110,6 +99,17 @@ class Mutation_Methods:
 
             for index in random.sample(sample_space, sample_size):
                 ga.mutation_individual_impl(ga, ga.population[index])
+
+
+        @_check_chromosome_mutation_rate
+        def best_replace_worst(ga):
+            """Selects the best chromosomes, copies them, and replaces the worst chromosomes."""
+
+            mutation_amount = ceil(ga.chromosome_mutation_rate*len(ga.population))
+
+            for i in range(mutation_amount):
+                ga.population[-i-1] = ga.make_chromosome(ga.population[i])
+                ga.mutation_individual_impl(ga, ga.population[-i-1])
 
 
     class Individual:

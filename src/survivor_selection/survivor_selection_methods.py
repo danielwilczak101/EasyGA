@@ -3,8 +3,11 @@ import random
 def _append_to_next_population(survivor_method):
     """Appends the selected chromosomes to the next population."""
 
-    return lambda ga:\
+    def new_method(ga):
         ga.population.append_children(survivor_method(ga))
+
+    new_method.__name__ = survivor_method.__name__
+    return new_method
 
 
 class Survivor_Selection:

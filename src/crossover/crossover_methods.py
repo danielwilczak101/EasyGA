@@ -32,39 +32,11 @@ def _check_weight(individual_method):
     return new_method
 
 
-def _genes_to_chromosome(individual_method):
-    """Converts a collection of genes into a chromosome.
-    Note: Will recreate the gene list if given gene list.
-          Built-in methods do not construct gene lists
-          and use yield for efficiency.
-    """
-
-    return lambda ga, parent_1, parent_2, weight:\
-        ga.make_chromosome(
-            individual_method(ga, parent_1, parent_2, weight)
-        )
-
-
-def _values_to_genes(individual_method):
-    """Converts a collection of values into genes.
-    Returns a generator of genes to avoid storing a new list.
-    """
-
-    return lambda ga, parent_1, parent_2, weight:\
-        (
-            ga.make_gene(value)
-            for value
-            in individual_method(ga, parent_1, parent_2, weight)
-        )
-
-
 class Crossover_Methods:
 
     # Allowing access to decorators when importing class
     _append_to_next_population = _append_to_next_population
     _check_weight              = _check_weight
-    _genes_to_chromosome       = _genes_to_chromosome
-    _values_to_genes           = _values_to_genes
 
 
     class Population:
@@ -107,7 +79,6 @@ class Crossover_Methods:
 
 
         @_check_weight
-        @_genes_to_chromosome
         def single_point(ga, parent_1, parent_2, weight = 0.5):
             """Cross two parents by swapping genes at one random point."""
 
@@ -134,14 +105,12 @@ class Crossover_Methods:
 
 
         @_check_weight
-        @_genes_to_chromosome
         def multi_point(ga, parent_1, parent_2, weight = 0.5):
             """Cross two parents by swapping genes at multiple points."""
             pass
 
 
         @_check_weight
-        @_genes_to_chromosome
         def uniform(ga, parent_1, parent_2, weight = 0.5):
             """Cross two parents by swapping all genes randomly."""
 
@@ -152,8 +121,6 @@ class Crossover_Methods:
         class Arithmetic:
             """Crossover methods for numerical genes."""
 
-            @_genes_to_chromosome
-            @_values_to_genes
             def average(ga, parent_1, parent_2, weight = 0.5):
                 """Cross two parents by taking the average of the genes."""
 
@@ -170,8 +137,6 @@ class Crossover_Methods:
                     yield value
 
 
-            @_genes_to_chromosome
-            @_values_to_genes
             def extrapolate(ga, parent_1, parent_2, weight = 0.5):
 
                 """Cross two parents by extrapolating towards the first parent.
@@ -192,8 +157,6 @@ class Crossover_Methods:
 
 
             @_check_weight
-            @_genes_to_chromosome
-            @_values_to_genes
             def random(ga, parent_1, parent_2, weight = 0.5):
                 """Cross two parents by taking a random integer or float value between each of the genes."""
 
@@ -219,11 +182,11 @@ class Crossover_Methods:
 
                     yield value
 
+
         class Permutation:
             """Crossover methods for permutation based chromosomes."""
 
             @_check_weight
-            @_genes_to_chromosome
             def ox1(ga, parent_1, parent_2, weight = 0.5):
                 """Cross two parents by slicing out a random part of one parent
                 and then filling in the rest of the genes from the second parent."""
@@ -269,11 +232,12 @@ class Crossover_Methods:
 
 
             @_check_weight
-            @_genes_to_chromosome
             def partially_mapped(ga, parent_1, parent_2, weight = 0.5):
                 """Cross two parents by slicing out a random part of one parent
                 and then filling in the rest of the genes from the second parent,
-                preserving the ordering of genes wherever possible."""
+                preserving the ordering of genes wherever possible.
+
+                NOTE: Needs to be fixed."""
 
                 # Too small to cross
                 if len(parent_1) < 2:
