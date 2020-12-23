@@ -188,12 +188,13 @@ class Population:
         """
         Allows the user to use
                 population_string = repr(population)
-                population = eval(population_string)
+                population_data   = eval(population_string)
+                population        = ga.make_population(population_data)
         to get a backend representation of the population
         which can be evaluated directly as code to create
         the population.
         """
-        return f"EasyGA.make_population({repr(self.chromosome_list)})"
+        return repr(self.chromosome_list)
 
 
     def __str__(self):

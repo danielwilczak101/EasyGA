@@ -29,10 +29,11 @@ class Gene:
         """
         Allows the user to use
                 gene_string = repr(gene)
-                gene = eval(gene_string)
+                gene_data   = eval(gene_string)
+                gene        = ga.make_gene(gene_data)
         to get a backend representation of the gene.
         """
-        return f"EasyGA.make_gene({repr(self.value)})"
+        return repr(self.value)
 
 
     def __str__(self):

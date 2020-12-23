@@ -163,12 +163,13 @@ class Chromosome:
         """
         Allows the user to use
                 chromosome_string = repr(chromosome)
-                chromosome = eval(chromosome_string)
+                chromosome_data   = eval(chromosome_string)
+                chromosome        = ga.make_chromosome(chromosome_data)
         to get a backend representation of the chromosome
         which can be evaluated directly as code to create
         the chromosome.
         """
-        return f"EasyGA.make_chromosome({repr(self.gene_list)})"
+        return repr(self.gene_list)
 
 
     def __str__(self):
