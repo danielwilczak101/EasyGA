@@ -11,7 +11,6 @@ from structure import Gene       as make_gene
 
 # Structure Methods
 from fitness_function  import Fitness_Examples
-from initialization    import Initialization_Methods
 from termination_point import Termination_Methods
 
 # Parent/Survivor Selection Methods
@@ -239,7 +238,26 @@ class GA(Attributes):
         that is currently set.
         """
 
-        self.population = self.initialization_impl(self)
+        if self.chromosome_impl is not None:
+            self.population = self.make_population(
+                self.chromosome_impl()
+                for _
+                in range(self.population_size)
+            )
+
+        elif self.gene_impl is not None:
+            self.population = self.make_population(
+                (
+                    self.gene_impl()
+                    for _
+                    in range(self.chromosome_length)
+                )
+                for _
+                in range(self.population_size)
+            )
+
+        else:
+            raise ValueError("No chromosome or gene impl specified.")
 
 
     def set_all_fitness(self):

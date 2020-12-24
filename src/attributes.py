@@ -12,7 +12,6 @@ from structure import Gene       as make_gene
 
 # Structure Methods
 from fitness_function  import Fitness_Examples
-from initialization    import Initialization_Methods
 from termination_point import Termination_Methods
 
 # Parent/Survivor Selection Methods
@@ -66,7 +65,6 @@ class Attributes:
             max_gene_mutation_rate       = 0.15,
             min_gene_mutation_rate       = 0.01,
             dist                         = None,
-            initialization_impl          = Initialization_Methods.random_initialization,
             fitness_function_impl        = Fitness_Examples.is_it_5,
             make_population              = make_population,
             make_chromosome              = make_chromosome,
@@ -133,7 +131,6 @@ class Attributes:
         self.dist = dist
 
         # Default EasyGA implimentation structure
-        self.initialization_impl   = initialization_impl
         self.fitness_function_impl = fitness_function_impl
         self.make_population       = make_population
         self.make_chromosome       = make_chromosome
