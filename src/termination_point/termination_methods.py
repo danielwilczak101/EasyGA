@@ -17,6 +17,7 @@ def _add_by_fitness_goal(termination_impl):
         # Check other termination methods
         return termination_impl(ga)
 
+    new_method.__name__ = termination_impl.__name__
     return new_method
 
 
@@ -32,6 +33,7 @@ def _add_by_generation_goal(termination_impl):
         # Check other termination methods
         return termination_impl(ga)
 
+    new_method.__name__ = termination_impl.__name__
     return new_method
 
 
@@ -53,6 +55,7 @@ def _add_by_tolerance_goal(termination_impl):
         # Check other termination methods
         return termination_impl(ga)
 
+    new_method.__name__ = termination_impl.__name__
     return new_method
 
 
