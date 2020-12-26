@@ -9,10 +9,13 @@ def _append_to_next_population(population_method):
     Also modifies the input to include the mating pool.
     """
 
-    return lambda ga:\
+    def new_method(ga):
         ga.population.append_children(
             population_method(ga, ga.population.mating_pool)
         )
+
+    new_method.__name__ = population_method.__name__
+    return new_method
 
 
 def _check_weight(individual_method):
@@ -21,7 +24,7 @@ def _check_weight(individual_method):
     the error and try again with valid weight.
     """
 
-    def new_method(ga, parent_1, parent_2, weight):
+    def new_method(ga, parent_1, parent_2, weight = 0.5):
 
         if 0 < weight < 1:
             return individual_method(ga, parent_1, parent_2, weight)
@@ -29,6 +32,7 @@ def _check_weight(individual_method):
             raise ValueError("""Weight must be between 0 and 1 when using
              the given crossover method.""")
 
+    new_method.__name__ = individual_method.__name__
     return new_method
 
 
@@ -55,7 +59,6 @@ class Crossover_Methods:
                     ga,                              #
                     mating_pool[index],              #         the parent and
                     mating_pool[index-1],            #         the previous parent
-                    0.5                              #         with equal weight
                 )
 
 
@@ -70,7 +73,6 @@ class Crossover_Methods:
                     ga,                              #
                     parent,                          #         the parent and
                     random.choice(mating_pool),      #         a random parent
-                    0.5                              #         with equal weight
                 )
 
 
