@@ -1,5 +1,8 @@
+from EasyGA import function_info
 import random
 
+
+@function_info
 def _append_to_next_population(survivor_method):
     """Appends the selected chromosomes to the next population."""
 

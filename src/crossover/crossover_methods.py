@@ -1,9 +1,12 @@
+from EasyGA import function_info
 import random
 
 # Round to an integer near x with higher probability
 # the closer it is to that integer.
 randround = lambda x: int(x + random.random())
 
+
+@function_info
 def _append_to_next_population(population_method):
     """Appends the new chromosomes to the next population.
     Also modifies the input to include the mating pool.
@@ -14,25 +17,25 @@ def _append_to_next_population(population_method):
             population_method(ga, ga.population.mating_pool)
         )
 
-    new_method.__name__ = population_method.__name__
     return new_method
 
 
+@function_info
 def _check_weight(individual_method):
     """Checks if the weight is between 0 and 1 before running.
     Exception may occur when using ga.adapt, which will catch
     the error and try again with valid weight.
     """
 
-    def new_method(ga, parent_1, parent_2, weight = 0.5):
+    def new_method(ga, parent_1, parent_2, *, weight = individual_method.__kwdefaults__.get('weight', None)):
 
-        if 0 < weight < 1:
-            return individual_method(ga, parent_1, parent_2, weight)
+        if weight is None:
+            return individual_method(ga, parent_1, parent_2)
+        elif 0 < weight < 1:
+            return individual_method(ga, parent_1, parent_2, weight = weight)
         else:
-            raise ValueError("""Weight must be between 0 and 1 when using
-             the given crossover method.""")
+            raise ValueError(f"Weight must be between 0 and 1 when using {individual_method.__name__}.")
 
-    new_method.__name__ = individual_method.__name__
     return new_method
 
 
@@ -53,10 +56,9 @@ class Crossover_Methods:
             Every parent is paired with the previous parent.
             The first parent is paired with the last parent.
             """
-
+            
             for index in range(len(mating_pool)):    # for each parent in the mating pool
                 yield ga.crossover_individual_impl(  #     apply crossover to
-                    ga,                              #
                     mating_pool[index],              #         the parent and
                     mating_pool[index-1],            #         the previous parent
                 )
@@ -70,7 +72,6 @@ class Crossover_Methods:
 
             for parent in mating_pool:               # for each parent in the mating pool
                 yield ga.crossover_individual_impl(  #     apply crossover to
-                    ga,                              #
                     parent,                          #         the parent and
                     random.choice(mating_pool),      #         a random parent
                 )
@@ -81,7 +82,7 @@ class Crossover_Methods:
 
 
         @_check_weight
-        def single_point(ga, parent_1, parent_2, weight = 0.5):
+        def single_point(ga, parent_1, parent_2, *, weight = 0.5):
             """Cross two parents by swapping genes at one random point."""
 
             minimum_parent_length = min(len(parent_1), len(parent_2))
@@ -107,13 +108,13 @@ class Crossover_Methods:
 
 
         @_check_weight
-        def multi_point(ga, parent_1, parent_2, weight = 0.5):
+        def multi_point(ga, parent_1, parent_2, *, weight = 0.5):
             """Cross two parents by swapping genes at multiple points."""
             pass
 
 
         @_check_weight
-        def uniform(ga, parent_1, parent_2, weight = 0.5):
+        def uniform(ga, parent_1, parent_2, *, weight = 0.5):
             """Cross two parents by swapping all genes randomly."""
 
             for gene_pair in zip(parent_1, parent_2):
@@ -123,7 +124,7 @@ class Crossover_Methods:
         class Arithmetic:
             """Crossover methods for numerical genes."""
 
-            def average(ga, parent_1, parent_2, weight = 0.5):
+            def average(ga, parent_1, parent_2, *, weight = 0.5):
                 """Cross two parents by taking the average of the genes."""
 
                 values_1 = parent_1.gene_value_iter
@@ -139,7 +140,7 @@ class Crossover_Methods:
                     yield value
 
 
-            def extrapolate(ga, parent_1, parent_2, weight = 0.5):
+            def extrapolate(ga, parent_1, parent_2, *, weight = 0.5):
 
                 """Cross two parents by extrapolating towards the first parent.
                 May result in gene values outside the expected domain.
@@ -159,7 +160,7 @@ class Crossover_Methods:
 
 
             @_check_weight
-            def random(ga, parent_1, parent_2, weight = 0.5):
+            def random(ga, parent_1, parent_2, *, weight = 0.5):
                 """Cross two parents by taking a random integer or float value between each of the genes."""
 
                 values_1 = parent_1.gene_value_iter
@@ -189,7 +190,7 @@ class Crossover_Methods:
             """Crossover methods for permutation based chromosomes."""
 
             @_check_weight
-            def ox1(ga, parent_1, parent_2, weight = 0.5):
+            def ox1(ga, parent_1, parent_2, *, weight = 0.5):
                 """Cross two parents by slicing out a random part of one parent
                 and then filling in the rest of the genes from the second parent."""
 
@@ -234,7 +235,7 @@ class Crossover_Methods:
 
 
             @_check_weight
-            def partially_mapped(ga, parent_1, parent_2, weight = 0.5):
+            def partially_mapped(ga, parent_1, parent_2, *, weight = 0.5):
                 """Cross two parents by slicing out a random part of one parent
                 and then filling in the rest of the genes from the second parent,
                 preserving the ordering of genes wherever possible.

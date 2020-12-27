@@ -1,6 +1,9 @@
+from EasyGA import function_info
 import random
 from math import ceil
 
+
+@function_info
 def _check_chromosome_mutation_rate(population_method):
     """Checks if the chromosome mutation rate is a float between 0 and 1 before running."""
 
@@ -15,10 +18,10 @@ def _check_chromosome_mutation_rate(population_method):
         else:
             raise ValueError("Chromosome mutation rate must be between 0 and 1.")
 
-    new_method.__name__ = population_method.__name__
     return new_method
 
 
+@function_info
 def _check_gene_mutation_rate(individual_method):
     """Checks if the gene mutation rate is a float between 0 and 1 before running."""
 
@@ -33,10 +36,10 @@ def _check_gene_mutation_rate(individual_method):
         else:
             raise ValueError("Gene mutation rate must be between 0 and 1.")
 
-    new_method.__name__ = individual_method.__name__
     return new_method
 
 
+@function_info
 def _reset_fitness(individual_method):
     """Resets the fitness value of the chromosome."""
 
@@ -44,10 +47,10 @@ def _reset_fitness(individual_method):
         chromosome.fitness = None
         individual_method(ga, chromosome)
 
-    new_method.__name__ = individual_method.__name__
     return new_method
 
 
+@function_info
 def _loop_random_mutations(individual_method):
     """Runs the individual method until enough
     genes are mutated on the indexed chromosome.
@@ -63,7 +66,6 @@ def _loop_random_mutations(individual_method):
         for index in random.sample(sample_space, sample_size):
             individual_method(ga, chromosome, index)
 
-    new_method.__name__ = individual_method.__name__
     return new_method
 
 
@@ -87,7 +89,7 @@ class Mutation_Methods:
 
             # Loop the individual method until enough genes are mutated.
             for index in random.sample(sample_space, sample_size):
-                ga.mutation_individual_impl(ga, ga.population[index])
+                ga.mutation_individual_impl(ga.population[index])
 
 
         @_check_chromosome_mutation_rate
@@ -98,7 +100,7 @@ class Mutation_Methods:
             sample_size  = ceil(ga.chromosome_mutation_rate*len(ga.population))
 
             for index in random.sample(sample_space, sample_size):
-                ga.mutation_individual_impl(ga, ga.population[index])
+                ga.mutation_individual_impl(ga.population[index])
 
 
         @_check_chromosome_mutation_rate
@@ -109,7 +111,7 @@ class Mutation_Methods:
 
             for i in range(mutation_amount):
                 ga.population[-i-1] = ga.make_chromosome(ga.population[i])
-                ga.mutation_individual_impl(ga, ga.population[-i-1])
+                ga.mutation_individual_impl(ga.population[-i-1])
 
 
     class Individual:

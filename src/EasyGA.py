@@ -1,3 +1,21 @@
+def function_info(decorator):
+    """Recovers the name and doc-string for decorators."""
+
+    def new_decorator(method):
+
+        # Apply old decorator
+        new_method = decorator(method)
+
+        # Recover name and doc-string
+        new_method.__name__ = method.__name__
+        new_method.__doc__  = method.__doc__
+
+        # Return new method with proper name and doc-string
+        return new_method
+
+    return new_decorator
+
+
 # Import math for square root (ga.dist()) and ceil (crossover methods)
 import math
 
@@ -47,15 +65,15 @@ class GA(Attributes):
         """Evolves the ga the specified number of generations
         or until the ga is no longer active if consider_termination is True."""
 
+        # Create the initial population if necessary.
+        if self.population is None:
+            self.initialize_population()
+
         cond1 = lambda: number_of_generations > 0  # Evolve the specified number of generations.
         cond2 = lambda: not consider_termination   # If consider_termination flag is set:
         cond3 = lambda: cond2() or self.active()   #     check termination conditions.
 
         while cond1() and cond3():
-
-            # Create the initial population if necessary.
-            if self.population is None:
-                self.initialize_population()
 
             # If its the first generation, setup the database.
             if self.current_generation == 0:
@@ -70,15 +88,15 @@ class GA(Attributes):
             # Otherwise evolve the population.
             else:
 
-                self.parent_selection_impl(self)
-                self.crossover_population_impl(self)
-                self.survivor_selection_impl(self)
+                self.parent_selection_impl()
+                self.crossover_population_impl()
+                self.survivor_selection_impl()
                 self.population.update()
-                self.mutation_population_impl(self)
+                self.mutation_population_impl()
 
             # Update and sort fitnesses
             self.set_all_fitness()
-            self.population.sort_by_best_fitness(self)
+            self.sort_by_best_fitness()
 
             # Save the population to the database
             self.save_population()
@@ -96,7 +114,7 @@ class GA(Attributes):
     def active(self):
         """Returns if the ga should terminate based on the termination implimented."""
 
-        return self.termination_impl(self)
+        return self.termination_impl()
 
 
     def adapt(self):
@@ -107,7 +125,7 @@ class GA(Attributes):
 
         # Update and sort fitnesses
         self.set_all_fitness()
-        self.population.sort_by_best_fitness(self)
+        self.sort_by_best_fitness()
 
 
     def adapt_probabilities(self):
@@ -204,7 +222,7 @@ class GA(Attributes):
                     self,
                     self.population[n],
                     best_chromosome,
-                    min(0.25, 2 * tol_j / (tol(n) - tol_j))
+                    weight = min(0.25, 2 * tol_j / (tol(n) - tol_j))
                 )
 
             # If negative weights can't be used,
@@ -214,7 +232,7 @@ class GA(Attributes):
                     self,
                     self.population[n],
                     self.population[j],
-                    0.75
+                    weight = 0.75
                 )
 
             # Update fitnesses
@@ -275,7 +293,7 @@ class GA(Attributes):
                 chromosome.fitness = self.fitness_function_impl(chromosome)
 
 
-    def sort_by_best_fitness(self, chromosome_list, in_place = False):
+    def sort_by_best_fitness(self, chromosome_list = None, in_place = False):
         """Sorts the chromosome list by fitness based on fitness type.
         1st element has best fitness.
         2nd element has second best fitness.
@@ -284,6 +302,10 @@ class GA(Attributes):
 
         if self.target_fitness_type not in ('max', 'min'):
             raise ValueError("Unknown target fitness type")
+
+        # Sort the population if no chromosome list is given
+        if chromosome_list is None:
+            chromosome_list = self.population
 
         if in_place:
             chromosome_list.sort(                              # list to be sorted

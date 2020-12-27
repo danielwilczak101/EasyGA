@@ -1,5 +1,8 @@
+from EasyGA import function_info
 import random
 
+
+@function_info
 def _check_selection_probability(selection_method):
     """Raises an exception if the selection_probability
     is not between 0 and 1 inclusively. Otherwise runs
@@ -16,6 +19,7 @@ def _check_selection_probability(selection_method):
     return new_method
 
 
+@function_info
 def _check_positive_fitness(selection_method):
     """Raises an exception if the population contains a
     chromosome with negative fitness. Otherwise runs
@@ -32,6 +36,7 @@ def _check_positive_fitness(selection_method):
     return new_method
 
 
+@function_info
 def _ensure_sorted(selection_method):
     """Sorts the population by fitness
     and then runs the selection method.
@@ -45,6 +50,7 @@ def _ensure_sorted(selection_method):
     return new_method
 
 
+@function_info
 def _compute_parent_amount(selection_method):
     """Computes the amount of parents
     needed to be selected, and passes it
