@@ -31,16 +31,28 @@ from database import matplotlib_graph
 import matplotlib.pyplot as plt
 
 
+def function_info(setter):
+    """Decorator for setter functions involving functions so that the name and doc-string are kept."""
+
+    def new_setter(obj, method):
+        if (new_method := setter(obj, method)) is not None:
+            new_method.__name__ = method.__name__
+            new_method.__doc__  = method.__doc__
+
+    return new_setter
+
+
 class Attributes:
     """Default GA attributes can be found here. If any attributes have not
     been set then they will fall back onto the default attribute. All
     attributes have been catigorized to explain sections in the ga process."""
 
-    def __init__(self,
+    def __init__(
+            self,
             chromosome_length            = 10,
             population_size              = 10,
             chromosome_impl              = None,
-            gene_impl                    = lambda: random.randint(1, 10),
+            gene_impl                    = None,
             population                   = None,
             target_fitness_type          = 'max',
             update_fitness               = False,
@@ -65,17 +77,17 @@ class Attributes:
             max_gene_mutation_rate       = 0.15,
             min_gene_mutation_rate       = 0.01,
             dist                         = None,
-            fitness_function_impl        = Fitness_Examples.is_it_5,
+            fitness_function_impl        = None,
             make_population              = make_population,
             make_chromosome              = make_chromosome,
             make_gene                    = make_gene,
-            parent_selection_impl        = Parent_Selection.Rank.tournament,
-            crossover_individual_impl    = Crossover_Methods.Individual.single_point,
-            crossover_population_impl    = Crossover_Methods.Population.sequential_selection,
-            survivor_selection_impl      = Survivor_Selection.fill_in_best,
-            mutation_individual_impl     = Mutation_Methods.Individual.individual_genes,
-            mutation_population_impl     = Mutation_Methods.Population.random_avoid_best,
-            termination_impl             = Termination_Methods.fitness_generation_tolerance,
+            parent_selection_impl        = None,
+            crossover_individual_impl    = None,
+            crossover_population_impl    = None,
+            survivor_selection_impl      = None,
+            mutation_individual_impl     = None,
+            mutation_population_impl     = None,
+            termination_impl             = None,
             Database                     = sql_database.SQL_Database,
             database_name                = 'database.db',
             sql_create_data_structure    = """CREATE TABLE IF NOT EXISTS data (
@@ -187,37 +199,264 @@ class Attributes:
             ))
 
 
-    def permutation_chromosomes(self):
+    def permutation_chromosomes(self, cycle = True):
         """Sets default permutation based methods"""
 
+        cycle = int(cycle)
+
         self.crossover_individual_impl = Crossover_Methods.Individual.Permutation.ox1
-        self.mutation_individual_impl = Mutation_Methods.Individual.Permutation.swap_genes
+        self.mutation_individual_impl  = Mutation_Methods.Individual.Permutation.swap_genes
 
-        # Count the number of gene pairs they have in common
+        # Count the number of gene pairs they don't have in common
         def dist(chromosome_1, chromosome_2):
-            gene_list_1 = list(chromosome_1)
-            gene_list_2 = list(chromosome_2)
 
-            count = 0
+            # Used to set values during comprehension
+            set_value = lambda arg: True
 
-            for i in range(len(gene_list_1)-1):
-                for j in range(len(gene_list_2)-1):
-                    if gene_list_1[i] == gene_list_2[j]:
-                        if gene_list_1[i+1] == gene_list_2[j+1]:
-                            count += 1
-                            break
+            # Index of gene from chromosome 1 in chromosome 2
+            j = 0
 
-            return count
+            return sum(
+                # Add 1 if they are different
+                int(chromosome_1[i-1] != chromosome_2[j-1])
+
+                # Loop over chromosome 1
+                for i
+                in range(1-cycle, len(chromosome_1))
+
+                # Find index of gene from chromosome 1 in chromosome 2
+                if set_value(j := chromosome_2.index_of(chromosome_1[i]))
+
+                # Additional case to check
+                if j + cycle > 0
+            )
 
         self.dist = dist
 
 
     # Getter and setters for all required varibles
 
+
+    @property
+    def dist(self):
+        """Getter for distance lambda which passes a reference of self in."""
+        return self._dist
+
+
+    @dist.setter
+    @function_info
+    def dist(self, method):
+        """Setter for distance lambda."""
+        if method is not None:
+            self._dist = lambda *args, **kwargs: method(self, *args, **kwargs)
+            return self._dist
+
+
+    def _dist(self, chromosome_1, chromosome_2):
+        """Default distance lambda. Returns the square root of the difference in fitnesses."""
+        return sqrt(abs(chromosome_1.fitness - chromosome_2.fitness))
+
+
+    @property
+    def chromosome_impl(self):
+        """Getter for chromosome implementation lambda which passes a reference of self in."""
+        return self._chromosome_impl
+
+
+    @chromosome_impl.setter
+    @function_info
+    def chromosome_impl(self, method):
+        """Setter for chromosome implementation lambda."""
+        if method is not None:
+            self._chromosome_impl = lambda *args, **kwargs: method(*args, **kwargs)
+            return self._chromosome_impl
+
+
+    @property
+    def gene_impl(self):
+        """Getter for gene implementation lambda which passes a reference of self in."""
+        return self._gene_impl
+
+
+    @gene_impl.setter
+    @function_info
+    def gene_impl(self, method):
+        """Setter for gene implementation lambda."""
+        if method is not None:
+            self._gene_impl = lambda *args, **kwargs: method(*args, **kwargs)
+            return self._gene_impl
+
+
+    def _gene_impl(self, *args, **kwargs):
+        """Default gene implementation. Returns a random integer from 1 to 10."""
+        return random.randint(1, 10)
+
+
+    @property
+    def fitness_function_impl(self):
+        """Getter for fitness function lambda which passes a reference of self in."""
+        return self._fitness_function_impl
+
+
+    @fitness_function_impl.setter
+    @function_info
+    def fitness_function_impl(self, method):
+        """Setter for fitness function lambda."""
+        if method is not None:
+            self._fitness_function_impl = lambda *args, **kwargs: method(self, *args, **kwargs)
+            return self._fitness_function_impl
+
+
+    def _fitness_function_impl(self, *args, **kwargs):
+        """Default fitness function. Returns the number of genes that are 5."""
+        return Fitness_Examples.is_it_5(*args, **kwargs)
+
+
+    @property
+    def parent_selection_impl(self):
+        """Getter for parent selection lambda which passes a reference of self in."""
+
+        return self._parent_selection_impl
+
+
+    @parent_selection_impl.setter
+    @function_info
+    def parent_selection_impl(self, method):
+        """Setter for parent selection lambda."""
+        if method is not None:
+            self._parent_selection_impl = lambda *args, **kwargs: method(self, *args, **kwargs)
+            return self._parent_selection_impl
+
+
+    def _parent_selection_impl(self, *args, **kwargs):
+        """Default parent selection method using tournament selection."""
+        return Parent_Selection.Rank.tournament(self, *args, **kwargs)
+
+
+    @property
+    def crossover_individual_impl(self):
+        """Getter for individual crossover lambda which passes a reference of self in."""
+
+        return self._crossover_individual_impl
+
+
+    @crossover_individual_impl.setter
+    @function_info
+    def crossover_individual_impl(self, method):
+        """Setter for individual crossover lambda."""
+        if method is not None:
+            self._crossover_individual_impl = lambda *args, **kwargs: method(self, *args, **kwargs)
+            return self._crossover_individual_impl
+
+
+    def _crossover_individual_impl(self, *args, **kwargs):
+        """Default individual crossover method using single point crossover."""
+        return Crossover_Methods.Individual.single_point(self, *args, **kwargs)
+
+
+    @property
+    def crossover_population_impl(self):
+        """Getter for population crossover lambda which passes a reference of self in."""
+        return self._crossover_population_impl
+
+
+    @crossover_population_impl.setter
+    @function_info
+    def crossover_population_impl(self, method):
+        """Setter for population crossover lambda."""
+        if method is not None:
+            self._crossover_population_impl = lambda *args, **kwargs: method(self, *args, **kwargs)
+            return self._crossover_population_impl
+
+
+    def _crossover_population_impl(self, *args, **kwargs):
+        """Default population crossover method using sequential selection."""
+        return Crossover_Methods.Population.sequential_selection(self, *args, **kwargs)
+
+
+    @property
+    def survivor_selection_impl(self):
+        """Getter for survivor selection lambda which passes a reference of self in."""
+        return self._survivor_selection_impl
+
+
+    @survivor_selection_impl.setter
+    @function_info
+    def survivor_selection_impl(self, method):
+        """Setter for survivor selection lambda."""
+        if method is not None:
+            self._survivor_selection_impl = lambda *args, **kwargs: method(self, *args, **kwargs)
+            return self._survivor_selection_impl
+
+
+    def _survivor_selection_impl(self, *args, **kwargs):
+        """Default survivor selection method using the fill in best method."""
+        return Survivor_Selection.fill_in_best(self, *args, **kwargs)
+
+
+    @property
+    def mutation_individual_impl(self):
+        """Getter for individual mutation lambda which passes a reference of self in."""
+        return self._mutation_individual_impl
+
+
+    @mutation_individual_impl.setter
+    @function_info
+    def mutation_individual_impl(self, method):
+        """Setter for individual mutation lambda."""
+        if method is not None:
+            self._mutation_individual_impl = lambda *args, **kwargs: method(self, *args, **kwargs)
+            return self._mutation_individual_impl
+
+
+    def _mutation_individual_impl(self, *args, **kwargs):
+        """Default individual mutation method by randomizing individual genes."""
+        return Mutation_Methods.Individual.individual_genes(self, *args, **kwargs)
+
+
+    @property
+    def mutation_population_impl(self):
+        """Getter for population mutation lambda which passes a reference of self in."""
+        return self._mutation_population_impl
+
+
+    @mutation_population_impl.setter
+    @function_info
+    def mutation_population_impl(self, method):
+        """Setter for population mutation lambda."""
+        if method is not None:
+            self._mutation_population_impl = lambda *args, **kwargs: method(self, *args, **kwargs)
+            return self._mutation_population_impl
+
+
+    def _mutation_population_impl(self, *args, **kwargs):
+        """Default population mutation method selects chromosomes randomly while avoiding the best."""
+        return Mutation_Methods.Population.random_avoid_best(self, *args, **kwargs)
+
+
+    @property
+    def termination_impl(self):
+        """Getter for termination lambda which passes a reference of self in."""
+        return self._termination_impl
+
+
+    @termination_impl.setter
+    @function_info
+    def termination_impl(self, method):
+        """Setter for termination lambda."""
+        if method is not None:
+            self._termination_impl = lambda *args, **kwargs: method(self, *args, **kwargs)
+            return self._termination_impl
+
+
+    def _termination_impl(self, *args, **kwargs):
+        """Default termination method by testing the fitness, generation, and tolerance goals."""
+        return Termination_Methods.fitness_generation_tolerance(self, *args, **kwargs)
+
+
     @property
     def chromosome_length(self):
         """Getter function for chromosome length"""
-
         return self._chromosome_length
 
 
@@ -310,27 +549,6 @@ class Attributes:
         # Throw error
         else:
             raise ValueError("Min chromosome mutation rate must be between 0 and 1")
-
-
-    @property
-    def dist(self):
-        """Getter function for the distance between chromosomes."""
-
-        return self._dist
-
-
-    @dist.setter
-    def dist(self, value_input):
-        """Setter function for the distance between chromosomes."""
-
-        # Default value by comparing fitnesses of chromosomes
-        if value_input is None:
-            self._dist = lambda chromosome_1, chromosome_2:\
-                sqrt(abs(chromosome_1.fitness - chromosome_2.fitness))
-
-        # Given input
-        else:
-            self._dist = value_input
 
 
     @property
