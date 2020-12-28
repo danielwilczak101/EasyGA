@@ -111,6 +111,14 @@ class GA(Attributes):
             self.current_generation += 1
 
 
+    def reset_run(self):
+        """Resets a run by re-initializing the population and modifying counters."""
+
+        self.initialize_population()
+        self.current_generation = 0
+        self.run += 1
+
+
     def active(self):
         """Returns if the ga should terminate based on the termination implimented."""
 
