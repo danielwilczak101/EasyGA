@@ -3,8 +3,8 @@ def _add_by_fitness_goal(termination_impl):
 
     def new_method(ga):
 
-        # If fitness goal is set, check it.
-        if ga.fitness_goal is not None and ga.population is not None:
+        # Try to check the fitness goal
+        try:
 
             # If minimum fitness goal reached, stop ga.
             if ga.target_fitness_type == 'min' and ga.population[0].fitness <= ga.fitness_goal:
@@ -13,6 +13,14 @@ def _add_by_fitness_goal(termination_impl):
             # If maximum fitness goal reached, stop ga.
             elif ga.target_fitness_type == 'max' and ga.population[0].fitness >= ga.fitness_goal:
                 return False
+
+        # Fitness or fitness goals are None
+        except TypeError:
+            pass
+
+        # Population not initialized
+        except AttributeError:
+            pass
 
         # Check other termination methods
         return termination_impl(ga)
@@ -42,8 +50,8 @@ def _add_by_tolerance_goal(termination_impl):
 
     def new_method(ga):
 
-        # If tolerance is set, check it.
-        if ga.tolerance_goal is not None and ga.population is not None:
+        # If tolerance is set, check it, if possible.
+        try:
             best_fitness = ga.population[0].fitness
             threshhold_fitness = ga.population[round(ga.percent_converged*len(ga.population))].fitness
             tol = ga.tolerance_goal * (1 + abs(best_fitness))
@@ -51,6 +59,14 @@ def _add_by_tolerance_goal(termination_impl):
             # Terminate if the specified amount of the population has converged to the specified tolerance
             if abs(best_fitness - threshhold_fitness) < tol:
                 return False
+
+        # Fitness or tolerance goals are None
+        except TypeError:
+            pass
+
+        # Population not initialized
+        except AttributeError:
+            pass
 
         # Check other termination methods
         return termination_impl(ga)
