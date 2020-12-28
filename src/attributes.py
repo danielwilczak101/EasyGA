@@ -1,4 +1,7 @@
-# Import square root function for ga.adapt()
+# Import signature tool to check if functions start with self or ga
+from inspect import signature
+
+# Import square root function for ga.adapt() and ga.dist()
 from math import sqrt
 
 import random
@@ -43,6 +46,7 @@ class Attributes:
     def __init__(
             self,
             *,
+            run                          = 0,
             chromosome_length            = 10,
             population_size              = 10,
             chromosome_impl              = None,
@@ -93,6 +97,9 @@ class Attributes:
                                               ); """,
             Graph                        = matplotlib_graph.Matplotlib_Graph
         ):
+
+        # Keep track of the current run
+        self.run = run
 
         # Initilization variables
         self.chromosome_length   = chromosome_length
@@ -169,7 +176,7 @@ class Attributes:
 
         which follows the following guidelines:
         - if self.name is a property, the specific property setter is used
-        - else if value is callable, self is passed in as the first parameter
+        - else if value is callable and the first parameter is either 'self' or 'ga', self is passed in as the first parameter
         - else if value is not None or self.name is not set, assign it like normal
         """
 
@@ -180,7 +187,7 @@ class Attributes:
             prop.fset(self, value)
 
         # Check for function
-        elif callable(value):
+        elif callable(value) and next(iter(signature(value).parameters), None) in ('self', 'ga'):
             foo = lambda *args, **kwargs: value(self, *args, **kwargs)
             # Reassign name and doc-string for documentation
             foo.__name__ = value.__name__
@@ -329,63 +336,17 @@ class Attributes:
 
 
     @property
-    def make_population(self):
-        """Getter function for making populations."""
-        return self._make_population
+    def run(self):
+        """Getter function for the run counter."""
+        return self._run
 
 
-    @make_population.setter
-    def make_population(self, method):
-        """Setter function for making populations."""
-        self.__dict__['_make_population'] = method
-
-
-    @property
-    def make_chromosome(self):
-        """Getter function for making chromosomes."""
-        return self._make_chromosome
-
-
-    @make_chromosome.setter
-    def make_chromosome(self, method):
-        """Setter function for making chromosomes."""
-        self.__dict__['_make_chromosome'] = method
-
-
-    @property
-    def make_gene(self):
-        """Getter function for making genes."""
-        return self._make_gene
-
-
-    @make_gene.setter
-    def make_gene(self, method):
-        """Setter function for making genes."""
-        self.__dict__['_make_gene'] = method
-
-
-    @property
-    def gene_impl(self):
-        """Getter function for making randomized genes."""
-        return self._gene_impl
-
-
-    @gene_impl.setter
-    def gene_impl(self, method):
-        """Setter function for making randomized genes."""
-        self.__dict__['_gene_impl'] = method
-
-
-    @property
-    def chromosome_impl(self):
-        """Getter function for making randomized chromosomes."""
-        return self._chromosome_impl
-
-
-    @chromosome_impl.setter
-    def chromosome_impl(self, method):
-        """Setter function for making randomized chromosomes."""
-        self.__dict__['_chromosome_impl'] = method
+    @run.setter
+    def run(self, value):
+        """Setter function for the run counter."""
+        if not(isinstance(value, int) and value >= 0):
+            raise ValueError("ga.run counter must be an integer greater than or equal to 0.")
+        self._run = value
 
 
     @property
