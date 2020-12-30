@@ -15,7 +15,6 @@ def _check_selection_probability(selection_method):
         else:
             raise Exception("Selection probability must be between 0 and 1 to select parents.")
 
-    new_method.__name__ = selection_method.__name__
     return new_method
 
 
@@ -32,7 +31,6 @@ def _check_positive_fitness(selection_method):
         else:
             raise Exception("Converted fitness values can't have negative values or be all 0. Consider using rank selection or stochastic selection instead.")
 
-    new_method.__name__ = selection_method.__name__
     return new_method
 
 
@@ -43,10 +41,9 @@ def _ensure_sorted(selection_method):
     """
 
     def new_method(ga):
-        ga.population.sort_by_best_fitness(ga)
+        ga.sort_by_best_fitness()
         selection_method(ga)
 
-    new_method.__name__ = selection_method.__name__
     return new_method
 
 
@@ -61,7 +58,6 @@ def _compute_parent_amount(selection_method):
         parent_amount = max(2, round(len(ga.population)*ga.parent_ratio))
         selection_method(ga, parent_amount)
 
-    new_method.__name__ = selection_method.__name__
     return new_method
 
 
