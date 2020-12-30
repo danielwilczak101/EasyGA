@@ -204,6 +204,17 @@ class Attributes:
     #===========================#
 
 
+    def weighted_random(self, weight):
+        """Returns a random value between 0 and 1. Returns values between the weight and the
+        nearest of 0 and 1 less frequently than between weight and the farthest of 0 and 1.
+        """
+        rand_num = random.random()
+        if rand_num < weight:
+            return (1-weight) * rand_num / weight
+        else:
+            return 1 - weight * (1-rand_num) / (1-weight)
+
+
     def dist(self, chromosome_1, chromosome_2):
         """Default distance lambda. Returns the square root of the difference in fitnesses."""
         return sqrt(abs(chromosome_1.fitness - chromosome_2.fitness))
