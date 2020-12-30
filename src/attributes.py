@@ -1,8 +1,8 @@
 # Import signature tool to check if functions start with self or ga
 from inspect import signature
 
-# Import square root function for ga.adapt() and ga.dist()
-from math import sqrt
+# Import math for square root (ga.dist()) and ceil (crossover methods)
+import math
 
 import random
 import sqlite3
@@ -13,17 +13,17 @@ from structure import Population as make_population
 from structure import Chromosome as make_chromosome
 from structure import Gene       as make_gene
 
-# Structure Methods
-from fitness_function  import Fitness_Examples
+# Misc. Methods
+from fitness_function import Fitness_Examples
 from termination_point import Termination_Methods
 
 # Parent/Survivor Selection Methods
-from parent_selection   import Parent_Selection
+from parent_selection import Parent_Selection
 from survivor_selection import Survivor_Selection
 
 # Genetic Operator Methods
-from mutation  import Mutation_Methods
 from crossover import Crossover_Methods
+from mutation import Mutation_Methods
 
 # Database class
 from database import sql_database
@@ -217,7 +217,7 @@ class Attributes:
 
     def dist(self, chromosome_1, chromosome_2):
         """Default distance lambda. Returns the square root of the difference in fitnesses."""
-        return sqrt(abs(chromosome_1.fitness - chromosome_2.fitness))
+        return math.sqrt(abs(chromosome_1.fitness - chromosome_2.fitness))
 
 
     def gene_impl(self, *args, **kwargs):
@@ -299,7 +299,7 @@ class Attributes:
 
         # Euclidean norm
         self.dist = lambda self, chromosome_1, chromosome_2:\
-            sqrt(sum(
+            math.sqrt(sum(
                 (gene_1.value - gene_2.value) ** 2
                 for gene_1, gene_2
                 in zip(chromosome_1, chromosome_2)

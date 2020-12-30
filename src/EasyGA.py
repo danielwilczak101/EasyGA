@@ -26,17 +26,17 @@ from structure import Population as make_population
 from structure import Chromosome as make_chromosome
 from structure import Gene       as make_gene
 
-# Structure Methods
-from fitness_function  import Fitness_Examples
+# Misc. Methods
+from fitness_function import Fitness_Examples
 from termination_point import Termination_Methods
 
 # Parent/Survivor Selection Methods
-from parent_selection   import Parent_Selection
+from parent_selection import Parent_Selection
 from survivor_selection import Survivor_Selection
 
 # Genetic Operator Methods
-from mutation  import Mutation_Methods
 from crossover import Crossover_Methods
+from mutation import Mutation_Methods
 
 # Default Attributes for the GA
 from attributes import Attributes
