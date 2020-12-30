@@ -16,13 +16,7 @@ class Gene:
 
     def __eq__(self, other_gene):
         """Comparing two genes by their value."""
-
-        try:
-            other_value = other_gene.value
-        except:
-            other_value = other_gene
-
-        return self.value == other_value
+        return self.value == Gene(other_value).value
 
 
     def __repr__(self):
