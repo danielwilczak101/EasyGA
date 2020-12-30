@@ -1,5 +1,5 @@
 def function_info(decorator):
-    """Recovers the name and doc-string for decorators."""
+    """Recovers the name and doc-string for decorators throughout EasyGA for documentation purposes."""
 
     def new_decorator(method):
 
@@ -14,7 +14,6 @@ def function_info(decorator):
         return new_method
 
     return new_decorator
-
 
 # Import math for square root (ga.dist()) and ceil (crossover methods)
 import math
@@ -92,6 +91,7 @@ class GA(Attributes):
                 self.crossover_population_impl()
                 self.survivor_selection_impl()
                 self.population.update()
+                self.sort_by_best_fitness()
                 self.mutation_population_impl()
 
             # Update and sort fitnesses
@@ -154,41 +154,22 @@ class GA(Attributes):
         best_chromosome = self.population[0]
         tol = lambda i: self.dist(best_chromosome, self.population[i])
 
+        # Weighted averaging
+        average = lambda x, y: self.adapt_probability_rate * x + (1-self.adapt_probability_rate) * y
+
         # Too few converged: cross more and mutate less
         if tol(amount_converged//2) > tol(amount_converged//4)*2:
 
-            self.selection_probability = sum((
-                self.adapt_probability_rate * self.max_selection_probability,
-                (1-self.adapt_probability_rate) * self.selection_probability
-            ))
-
-            self.chromosome_mutation_rate = sum((
-                self.adapt_probability_rate * self.min_chromosome_mutation_rate,
-                (1-self.adapt_probability_rate) * self.chromosome_mutation_rate
-            ))
-
-            self.gene_mutation_rate = sum((
-                self.adapt_probability_rate * self.min_gene_mutation_rate,
-                (1-self.adapt_probability_rate) * self.gene_mutation_rate
-            ))
+            self.selection_probability    = average(self.max_selection_probability   , self.selection_probability)
+            self.chromosome_mutation_rate = average(self.min_chromosome_mutation_rate, self.chromosome_mutation_rate)
+            self.gene_mutation_rate       = average(self.min_gene_mutation_rate      , self.gene_mutation_rate)
 
         # Too many converged: cross less and mutate more
         else:
 
-            self.selection_probability = sum((
-                self.adapt_probability_rate * self.min_selection_probability,
-                (1-self.adapt_probability_rate) * self.selection_probability
-            ))
-
-            self.chromosome_mutation_rate = sum((
-                self.adapt_probability_rate * self.max_chromosome_mutation_rate,
-                (1-self.adapt_probability_rate) * self.chromosome_mutation_rate
-            ))
-
-            self.gene_mutation_rate = sum((
-                self.adapt_probability_rate * self.max_gene_mutation_rate,
-                (1-self.adapt_probability_rate) * self.gene_mutation_rate
-            ))
+            self.selection_probability    = average(self.min_selection_probability   , self.selection_probability)
+            self.chromosome_mutation_rate = average(self.max_chromosome_mutation_rate, self.chromosome_mutation_rate)
+            self.gene_mutation_rate       = average(self.max_gene_mutation_rate      , self.gene_mutation_rate)
 
 
     def adapt_population(self):
@@ -315,19 +296,18 @@ class GA(Attributes):
         if chromosome_list is None:
             chromosome_list = self.population
 
+        # Reversed sort if max fitness should be first
+        reverse = (self.target_fitness_type == 'max')
+
+        # Sort by fitness, assuming None should be moved to the end of the list
+        key = lambda chromosome: chromosome.fitness if chromosome.fitness is not None else float('inf') * (+1, -1)[int(reverse)]
+
         if in_place:
-            chromosome_list.sort(                              # list to be sorted
-                key = lambda chromosome: chromosome.fitness,   # by fitness
-                reverse = (self.target_fitness_type == 'max')  # ordered by fitness type
-            )
+            chromosome_list.sort(key = key, reverse = reverse)
             return chromosome_list
 
         else:
-            return sorted(
-                chromosome_list,                               # list to be sorted
-                key = lambda chromosome: chromosome.fitness,   # by fitness
-                reverse = (self.target_fitness_type == 'max')  # ordered by fitness type
-            )
+            return sorted(chromosome_list, key = key, reverse = reverse)
 
 
     def get_chromosome_fitness(self, index):
