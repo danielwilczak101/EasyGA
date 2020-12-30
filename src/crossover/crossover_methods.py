@@ -7,20 +7,6 @@ randround = lambda x: int(x + random.random())
 
 
 @function_info
-def _append_to_next_population(population_method):
-    """Appends the new chromosomes to the next population.
-    Also modifies the input to include the mating pool.
-    """
-
-    def new_method(ga):
-        ga.population.append_children(
-            population_method(ga, ga.population.mating_pool)
-        )
-
-    return new_method
-
-
-@function_info
 def _check_weight(individual_method):
     """Checks if the weight is between 0 and 1 before running.
     Exception may occur when using ga.adapt, which will catch
@@ -30,9 +16,9 @@ def _check_weight(individual_method):
     def new_method(ga, parent_1, parent_2, *, weight = individual_method.__kwdefaults__.get('weight', None)):
 
         if weight is None:
-            return individual_method(ga, parent_1, parent_2)
+            individual_method(ga, parent_1, parent_2)
         elif 0 < weight < 1:
-            return individual_method(ga, parent_1, parent_2, weight = weight)
+            individual_method(ga, parent_1, parent_2, weight = weight)
         else:
             raise ValueError(f"Weight must be between 0 and 1 when using {individual_method.__name__}.")
 
@@ -41,27 +27,17 @@ def _check_weight(individual_method):
 
 @function_info
 def _gene_by_gene(individual_method):
-    """Perform crossover by making a single new chromosome
-    by combining each gene by gene.
-    """
+    """Perform crossover by making a single new chromosome by combining each gene by gene."""
 
-    def new_method(ga, parent_1, parent_2, *, weight = individual_method.__kwdefaults__.get('weight', None)):
+    def new_method(ga, parent_1, parent_2, *, weight = individual_method.__kwdefaults__.get('weight', 'None')):
 
-        # Without any weight
-        if weight is None:
-            yield (
-                individual_method(ga, value_1, value_2)
-                for value_1, value_2
-                in zip(parent_1.gene_value_iter, parent_2.gene_value_iter)
-            )
-
-        # With a weight
-        else:
-            yield (
-                individual_method(ga, value_1, value_2, weight = weight)
-                for value_1, value_2
-                in zip(parent_1.gene_value_iter, parent_2.gene_value_iter)
-            )
+        ga.population.add_child(
+            individual_method(ga, value_1, value_2)
+            if weight == 'None' else
+            individual_method(ga, value_1, value_2, weight = weight)
+            for value_1, value_2
+            in zip(parent_1.gene_value_iter, parent_2.gene_value_iter)
+        )
 
     return new_method
 
@@ -69,7 +45,6 @@ def _gene_by_gene(individual_method):
 class Crossover_Methods:
 
     # Allowing access to decorators when importing class
-    _append_to_next_population = _append_to_next_population
     _check_weight = _check_weight
     _gene_by_gene = _gene_by_gene
 
@@ -78,30 +53,28 @@ class Crossover_Methods:
         """Methods for selecting chromosomes to crossover."""
 
 
-        @_append_to_next_population
         def sequential_selection(ga, mating_pool):
             """Select sequential pairs from the mating pool.
             Every parent is paired with the previous parent.
             The first parent is paired with the last parent.
             """
             
-            for index in range(len(mating_pool)):         # for each parent in the mating pool
-                yield from ga.crossover_individual_impl(  #     apply crossover to
-                    mating_pool[index],                   #         the parent and
-                    mating_pool[index-1],                 #         the previous parent
+            for index in range(len(mating_pool)):  # for each parent in the mating pool
+                ga.crossover_individual_impl(      #     apply crossover to
+                    mating_pool[index],            #         the parent and
+                    mating_pool[index-1],          #         the previous parent
                 )
 
 
-        @_append_to_next_population
         def random_selection(ga, mating_pool):
             """Select random pairs from the mating pool.
             Every parent is paired with a random parent.
             """
 
-            for parent in mating_pool:                    # for each parent in the mating pool
-                yield from ga.crossover_individual_impl(  #     apply crossover to
-                    parent,                               #         the parent and
-                    random.choice(mating_pool),           #         a random parent
+            for parent in mating_pool:           # for each parent in the mating pool
+                ga.crossover_individual_impl(    #     apply crossover to
+                    parent,                      #         the parent and
+                    random.choice(mating_pool),  #         a random parent
                 )
 
 
@@ -118,8 +91,8 @@ class Crossover_Methods:
             # Weighted random integer from 0 to minimum parent length - 1
             swap_index = int(ga.weighted_random(weight) * minimum_parent_length)
 
-            yield parent_1[:swap_index] + parent_2[swap_index:]
-            yield parent_2[:swap_index] + parent_1[swap_index:]
+            ga.population.add_child(parent_1[:swap_index] + parent_2[swap_index:])
+            ga.population.add_child(parent_2[:swap_index] + parent_1[swap_index:])
 
 
         @_check_weight
@@ -174,7 +147,7 @@ class Crossover_Methods:
                 if type(value_1) == type(value_2) == int:
                     value = randround(value)
 
-                yield value
+                return value
 
 
         class Permutation:
@@ -222,7 +195,7 @@ class Crossover_Methods:
                         gene_list_1[input_index] = gene_list_2.pop(-1)
                         input_index += 1
 
-                yield gene_list_1
+                ga.population.add_child(gene_list_1)
 
 
             @_check_weight
@@ -282,4 +255,4 @@ class Crossover_Methods:
                         gene_list_1[input_index] = gene_list_2.pop(-1)
                         input_index += 1
 
-                yield gene_list_1
+                ga.population.add_child(gene_list_1)
