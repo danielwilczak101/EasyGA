@@ -14,16 +14,16 @@ from structure import Chromosome as make_chromosome
 from structure import Gene       as make_gene
 
 # Misc. Methods
-from fitness_function import Fitness_Examples
-from termination_point import Termination_Methods
+from fitness_examples import Fitness_Examples
+from termination import Termination
 
 # Parent/Survivor Selection Methods
-from parent_selection import Parent_Selection
-from survivor_selection import Survivor_Selection
+from parent import Parent
+from survivor import Survivor
 
 # Genetic Operator Methods
-from crossover import Crossover_Methods
-from mutation import Mutation_Methods
+from crossover import Crossover
+from mutation import Mutation
 
 # Database class
 from database import sql_database
@@ -225,44 +225,44 @@ class Attributes:
         return random.randint(1, 10)
 
 
-    def _fitness_function_impl(self, *args, **kwargs):
+    def fitness_function_impl(self, *args, **kwargs):
         """Default fitness function. Returns the number of genes that are 5."""
         return Fitness_Examples.is_it_5(*args, **kwargs)
 
 
     def parent_selection_impl(self, *args, **kwargs):
         """Default parent selection method using tournament selection."""
-        return Parent_Selection.Rank.tournament(self, *args, **kwargs)
+        return Parent.Rank.tournament(self, *args, **kwargs)
 
 
     def crossover_individual_impl(self, *args, **kwargs):
         """Default individual crossover method using single point crossover."""
-        return Crossover_Methods.Individual.single_point(self, *args, **kwargs)
+        return Crossover.Individual.single_point(self, *args, **kwargs)
 
 
     def crossover_population_impl(self, *args, **kwargs):
         """Default population crossover method using sequential selection."""
-        return Crossover_Methods.Population.sequential_selection(self, *args, **kwargs)
+        return Crossover.Population.sequential(self, *args, **kwargs)
 
 
     def survivor_selection_impl(self, *args, **kwargs):
         """Default survivor selection method using the fill in best method."""
-        return Survivor_Selection.fill_in_best(self, *args, **kwargs)
+        return Survivor.fill_in_best(self, *args, **kwargs)
 
 
     def mutation_individual_impl(self, *args, **kwargs):
         """Default individual mutation method by randomizing individual genes."""
-        return Mutation_Methods.Individual.individual_genes(self, *args, **kwargs)
+        return Mutation.Individual.individual_genes(self, *args, **kwargs)
 
 
     def mutation_population_impl(self, *args, **kwargs):
         """Default population mutation method selects chromosomes randomly while avoiding the best."""
-        return Mutation_Methods.Population.random_avoid_best(self, *args, **kwargs)
+        return Mutation.Population.random_avoid_best(self, *args, **kwargs)
 
 
     def termination_impl(self, *args, **kwargs):
         """Default termination method by testing the fitness, generation, and tolerance goals."""
-        return Termination_Methods.fitness_generation_tolerance(self, *args, **kwargs)
+        return Termination.fitness_generation_tolerance(self, *args, **kwargs)
 
 
     #============================#
