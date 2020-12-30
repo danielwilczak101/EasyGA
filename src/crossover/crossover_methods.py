@@ -87,18 +87,8 @@ class Crossover_Methods:
 
             minimum_parent_length = min(len(parent_1), len(parent_2))
 
-            # Equally weighted indexes
-            if weight == 0.5:
-                swap_index = random.randrange(minimum_parent_length)
-
-            # Use weighted random index.
-            else:
-                weight_conversion = 2*weight if (weight < 0.5) else 0.5 / (1-weight)
-                rand_num = random.random()
-                swap_index = int(
-                    minimum_parent_length *
-                        (1-(1-rand_num)**weight_conversion)**(1/weight_conversion)
-                    )
+            # Weighted random integer from 0 to minimum parent length - 1
+            swap_index = int(ga.weighted_random(weight) * minimum_parent_length)
 
             # Randomly choose which parent's genes are selected first.
             if random.choice([True, False]):
@@ -168,17 +158,8 @@ class Crossover_Methods:
 
                 for value_1, value_2 in zip(values_1, values_2):
 
-                    # Use equally weighted values.
-                    if weight == 0.5:
-                        value = random.uniform(value_1, value_2)
-
-                    # Use weighted random value, which gives values closer
-                    # to value_1 if weight < 0.5 or values closer to value_2
-                    # if weight > 0.5.
-                    else:
-                        t = 2*weight if (weight < 0.5) else 0.5 / (1-weight)
-                        x = random.random()
-                        value = value_1 + (value_2-value_1) * (1-(1-x)**t)**(1/t)
+                    # Weighted random value between value 1 and value 2
+                    value = value_1 + ga.weighted_random(weight) * (value_2-value_1)
 
                     if type(value_1) == type(value_2) == int:
                         value = randround(value)
