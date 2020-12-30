@@ -55,16 +55,13 @@ class Population:
 
 
     def append_children(self, chromosome_list):
-        """Appends a list of chromosomes to the next population.
-        Appends to the front so that chromosomes with fitness
-        values already will stay sorted.
-        """
+        """Appends a list of chromosomes to the next population."""
 
-        self.next_population = [
+        self.next_population += (
             to_chromosome(chromosome)
             for chromosome
             in chromosome_list
-        ] + self.next_population
+        )
 
 
     def add_chromosome(self, chromosome, index = None):
