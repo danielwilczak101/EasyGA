@@ -1,4 +1,5 @@
 from structure import Gene as make_gene
+from itertools import chain
 
 def to_gene(gene):
     """Converts the input to a gene if it isn't already one."""
@@ -9,7 +10,7 @@ def to_gene(gene):
         return make_gene(gene)
 
 
-class Chromosome:
+class Chromosome():
 
     def __init__(self, gene_list):
         """Initialize the chromosome with fitness value of None, and a
@@ -17,18 +18,6 @@ class Chromosome:
 
         self.gene_list = [make_gene(gene) for gene in gene_list]
         self.fitness = None
-
-
-    def add_gene(self, gene, index = None):
-        """Add a gene to the chromosome at the specified index, defaulted to end of the chromosome"""
-        if index is None:
-            index = len(self)
-        self.gene_list.insert(index, to_gene(gene))
-
-
-    def remove_gene(self, index):
-        """Removes the gene at the given index"""
-        return self.gene_list.pop(index)
 
 
     @property
@@ -41,6 +30,11 @@ class Chromosome:
     def gene_value_iter(self):
         """Returns an iterable of gene values"""
         return (gene.value for gene in self)
+
+
+    #==================================================#
+    # Magic-Dunder Methods replicating list structure. #
+    #==================================================#
 
 
     def __iter__(self):
@@ -109,16 +103,50 @@ class Chromosome:
         return (to_gene(gene) in self.gene_list)
 
 
-    def index_of(self, gene, guess = None):
+    def __eq__(self, chromosome):
+        """Returns self == chromosome, True if all genes match."""
+        return self.gene_list == chromosome.gene_list
+
+
+    def __add__(self, chromosome):
+        """Return self + chromosome, a chromosome made by concatenating the genes."""
+        return Chromosome(chain(self, chromosome))
+
+
+    def __iadd__(self, chromosome):
+        """Implement self += chromosome by concatenating the new genes."""
+        self.gene_list += (to_gene(gene) for gene in chromosome)
+
+
+    def append(self, gene):
+        """Append gene to the end of the chromosome."""
+        self.gene_list.append(to_gene(gene))
+
+
+    def clear(self):
+        """Remove all genes from chromosome."""
+        self.gene_list = []
+
+
+    def copy(self):
+        """Return a copy of the chromosome."""
+        return Chromosome(self)
+
+
+    def count(self, gene):
+        """Return number of occurrences of the gene in the chromosome."""
+        return self.gene_list.count(to_gene(gene))
+
+
+    def index(self, gene, guess = None):
         """
         Allows the user to use
-                index = chromosome.index_of(gene)
-                index = chromosome.index_of(gene, guess)
+                index = chromosome.index(gene)
+                index = chromosome.index(gene, guess)
         to find the index of a gene in the chromosome.
-        Be sure to check if the chromosome contains the gene
-        first, or to catch an IndexError exception if the gene
-        is not in the chromosome. A guess may be used to find
-        the index quicker.
+
+        If no guess is given, it finds the index of the first match.
+        If a guess is given, it finds index of the nearest match.
         """
 
         # Cast to gene object
@@ -145,18 +173,28 @@ class Chromosome:
                 return (guess+i) % len(self)
 
         # Gene not found
-        else:
-            raise IndexError("No such gene in the chromosome found")
+        raise ValueError("No such gene in the chromosome found")
 
 
-    def __eq__(self, chromosome):
+    def insert(self, index, gene):
+        """Insert gene so that self[index] == gene."""
+        self.gene_list.insert(index, to_gene(gene))
+
+
+    def pop(self, index = -1):
+        """Remove and return gene at index (default last).
+
+        Raises IndexError if chromosome is empty or index is out of range.
         """
-        Allows the user to use
-                chromosome_1 == chromosome_2
-                chromosome_1 != chromosome_2
-        to compare two chromosomes based on their genes.
+        return self.gene_list.pop(index)
+
+
+    def remove(self, gene):
+        """Remove first occurrence of gene.
+
+        Raises ValueError if the gene in not present.
         """
-        return self.gene_list == chromosome.gene_list
+        self.gene_list.remove(to_gene(gene))
 
 
     def __repr__(self):

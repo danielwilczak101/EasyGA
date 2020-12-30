@@ -1,4 +1,5 @@
 from structure import Chromosome as make_chromosome
+from itertools import chain
 
 def to_chromosome(chromosome):
     """Converts the input to a chromosome if it isn't already one."""
@@ -66,11 +67,6 @@ class Population:
         ] + self.next_population
 
 
-    def sort_by_best_fitness(self, ga):
-        """Sorts the population by fitness"""
-        ga.sort_by_best_fitness(self.chromosome_list, in_place = True)
-
-
     def add_chromosome(self, chromosome, index = None):
         """Adds a chromosome to the population at the input index,
         defaulted to the end of the chromosome set"""
@@ -93,6 +89,11 @@ class Population:
     def set_parent(self, index):
         """Sets the indexed chromosome from the population as a parent"""
         self.add_parent(self[index])
+
+
+    #==================================================#
+    # Magic-Dunder Methods replicating list structure. #
+    #==================================================#
 
 
     def __iter__(self):
@@ -127,6 +128,15 @@ class Population:
         self.chromosome_list[index] = to_chromosome(chromosome)
 
 
+    def __delitem__(self, index):
+        """
+        Allows the user to use
+                del population[index]
+        to delete a chromosome at the specified index.
+        """
+        del self.chromosome_list[index]
+
+
     def __len__(self):
         """
         Allows the user to use
@@ -145,30 +155,64 @@ class Population:
         return (to_chromosome(chromosome) in self.chromosome_list)
 
 
-    def index_of(self, chromosome, guess = None):
+    def __eq__(self, population):
+        """Returns self == population, True if all chromosomes match."""
+        return self.chromosome_list == population.chromosome_list
+
+
+    def __add__(self, population):
+        """Returns self + population, a population made by concatenating the chromosomes."""
+        return Population(chain(self, population))
+
+
+    def __iadd__(self, population):
+        """Implement self += population by concatenating the new chromosomes."""
+        self.chromosome_list += (to_chromosome(chromosome) for chromosome in population)
+
+
+    def append(self, chromosome):
+        """Append chromosome to the end of the population."""
+        self.chromosome_list.append(to_chromosome(chromosome))
+
+
+    def clear(self):
+        """Remove all chromosomes from the population."""
+        self.chromosome_list = []
+
+
+    def copy(self):
+        """Return a copy of the population."""
+        return Population(self)
+
+
+    def count(self, chromosome):
+        """Return number of occurrences of the chromosome in the population."""
+        return self.chromosome_list.count(to_chromosome(chromosome))
+
+
+    def index(self, chromosome, guess = None):
         """
         Allows the user to use
-                index = population.index_of(chromosome)
-                index = population.index_of(chromosome, guess)
+                index = population.index(chromosome)
+                index = population.index(chromosome, guess)
         to find the index of a chromosome in the population.
-        Be sure to check if the population contains the chromosome
-        first, or to catch an IndexError exception if the chromosome
-        is not in the population. A guess may be used to find the
-        index quicker.
+
+        If no guess is given, it finds the index of the first match.
+        If a guess is given, it finds index of the nearest match.
         """
 
         chromosome = to_chromosome(chromosome)
 
         # Use built-in method
         if guess is None:
-            return self.chromosome_list.index(gene)
+            return self.chromosome_list.index(chromosome)
 
         # Use symmetric mod
         guess %= len(self)
         if guess >= len(self)//2:
             guess -= len(self)
 
-        # Search outwards for the gene
+        # Search outwards for the chromosome
         for i in range(len(self)//2):
 
             # Search to the left
@@ -179,9 +223,37 @@ class Population:
             elif chromosome == self[guess+i]:
                 return (guess+i) % len(self)
 
-        # Gene not found
-        else:
-            raise IndexError("No such chromosome in the population found")
+        # Chromosome not found
+        raise IndexError("No such chromosome in the population found")
+
+
+    def insert(self, index, chromosome):
+        """Insert chromosome so that self[index] == chromsome."""
+        self.chromosome_list.insert(index, to_chromosome(chromosome))
+
+
+    def pop(self, index = -1):
+        """Remove and return chromosome at index (default last).
+
+        Raises IndexError if population is empty or index is out of range.
+        """
+        return self.chromosome_list.pop(index)
+
+
+    def remove(self, chromosome):
+        """Remove first occurrence of chromosome.
+
+        Raises ValueError if the chromosome is not present.
+        """
+        self.chromosome_list.remove(to_chromosome(chromosome))
+
+
+    def sort(self, *, key = lambda chromosome: chromosome.fitness, reverse):
+        """Sorts the population."""
+        self.chromosome_list.sort(
+            key = key,
+            reverse = reverse
+        )
 
 
     def __repr__(self):
