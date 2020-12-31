@@ -31,12 +31,12 @@ from fitness_examples import Fitness_Examples
 from termination import Termination
 
 # Parent/Survivor Selection Methods
-from parent import Parent
+from parent   import Parent
 from survivor import Survivor
 
 # Genetic Operator Methods
 from crossover import Crossover
-from mutation import Mutation
+from mutation  import Mutation
 
 # Default Attributes for the GA
 from attributes import Attributes
@@ -107,7 +107,7 @@ class GA(Attributes):
             if int(adapt_counter) < int(adapt_counter + self.adapt_rate):
                 self.adapt()
 
-            number_of_generations -= 1
+            number_of_generations   -= 1
             self.current_generation += 1
 
 
@@ -143,33 +143,39 @@ class GA(Attributes):
         population gradually approaches the solution.
         """
 
+        # Determines how much to adapt by
+        weight = self.adapt_probability_rate 
+
         # Don't adapt
-        if self.adapt_probability_rate is None or self.adapt_probability_rate <= 0:
+        if weight is None or weight <= 0:
             return
 
         # Amount of the population desired to converge (default 50%)
-        amount_converged = round(self.percent_converged*len(self.population))
+        amount_converged = round(self.percent_converged * len(self.population))
 
         # Difference between best and i-th chromosomes
         best_chromosome = self.population[0]
         tol = lambda i: self.dist(best_chromosome, self.population[i])
 
-        # Weighted averaging
-        average = lambda x, y: self.adapt_probability_rate * x + (1-self.adapt_probability_rate) * y
-
         # Too few converged: cross more and mutate less
         if tol(amount_converged//2) > tol(amount_converged//4)*2:
-
-            self.selection_probability    = average(self.max_selection_probability   , self.selection_probability)
-            self.chromosome_mutation_rate = average(self.min_chromosome_mutation_rate, self.chromosome_mutation_rate)
-            self.gene_mutation_rate       = average(self.min_gene_mutation_rate      , self.gene_mutation_rate)
+            bounds = (self.max_selection_probability,
+                      self.min_chromosome_mutation_rate,
+                      self.min_gene_mutation_rate)
 
         # Too many converged: cross less and mutate more
         else:
+            bounds = (self.min_selection_probability,
+                      self.max_chromosome_mutation_rate,
+                      self.max_gene_mutation_rate)
 
-            self.selection_probability    = average(self.min_selection_probability   , self.selection_probability)
-            self.chromosome_mutation_rate = average(self.max_chromosome_mutation_rate, self.chromosome_mutation_rate)
-            self.gene_mutation_rate       = average(self.max_gene_mutation_rate      , self.gene_mutation_rate)
+        # Weighted average of x and y
+        average = lambda x, y: weight * x + (1-weight) * y
+
+        # Adjust rates towards the bounds
+        self.selection_probability    = average(bounds[0], self.selection_probability)
+        self.chromosome_mutation_rate = average(bounds[1], self.chromosome_mutation_rate)
+        self.gene_mutation_rate       = average(bounds[2], self.gene_mutation_rate)
 
 
     def adapt_population(self):
@@ -208,7 +214,6 @@ class GA(Attributes):
             # May reject negative weight or division by 0
             try:
                 self.population[n] = self.crossover_individual_impl(
-                    self,
                     self.population[n],
                     best_chromosome,
                     weight = min(0.25, 2 * tol_j / (tol(n) - tol_j))
@@ -218,7 +223,6 @@ class GA(Attributes):
             # Cross with j-th chromosome instead
             except:
                 self.population[n] = self.crossover_individual_impl(
-                    self,
                     self.population[n],
                     self.population[j],
                     weight = 0.75
@@ -228,13 +232,11 @@ class GA(Attributes):
             self.population[n].fitness = self.fitness_function_impl(self.population[n])
 
             # Update best chromosome
-            if self.target_fitness_type == 'max':
-                cond = (self.population[n].fitness > best_chromosome.fitness)
-
-            if self.target_fitness_type == 'min':
-                cond = (self.population[n].fitness < best_chromosome.fitness)
-
-            if cond:
+            if any((all((self.target_fitness_type == 'max',
+                         self.population[n].fitness > best_chromosome.fitness)),
+                    all((self.target_fitness_type == 'min',
+                         self.population[n].fitness < best_chromosome.fitness))
+                    )):
                 tol_j = tol(j)
                 best_chromosome = self.population[n]
 
@@ -256,7 +258,7 @@ class GA(Attributes):
             self.population = self.make_population(
                 (
                     self.gene_impl()
-                    for _
+                    for __
                     in range(self.chromosome_length)
                 )
                 for _
@@ -316,9 +318,7 @@ class GA(Attributes):
         on the target fitness type.
         """
 
-        return self.convert_fitness(
-            self.population[index].fitness
-        )
+        return self.convert_fitness(self.population[index].fitness)
 
 
     def convert_fitness(self, fitness_value):

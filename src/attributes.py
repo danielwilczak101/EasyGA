@@ -18,12 +18,12 @@ from fitness_examples import Fitness_Examples
 from termination import Termination
 
 # Parent/Survivor Selection Methods
-from parent import Parent
+from parent   import Parent
 from survivor import Survivor
 
 # Genetic Operator Methods
 from crossover import Crossover
-from mutation import Mutation
+from mutation  import Mutation
 
 # Database class
 from database import sql_database
@@ -46,111 +46,126 @@ class Attributes:
     def __init__(
             self,
             *,
-            run                          = 0,
-            chromosome_length            = 10,
-            population_size              = 10,
-            chromosome_impl              = None,
-            gene_impl                    = None,
-            population                   = None,
-            target_fitness_type          = 'max',
-            update_fitness               = False,
-            parent_ratio                 = 0.10,
-            selection_probability        = 0.50,
-            tournament_size_ratio        = 0.10,
-            current_generation           = 0,
-            current_fitness              = 0,
-            generation_goal              = 100,
-            fitness_goal                 = None,
-            tolerance_goal               = None,
-            percent_converged            = 0.50,
-            chromosome_mutation_rate     = 0.15,
-            gene_mutation_rate           = 0.05,
-            adapt_rate                   = 0.05,
-            adapt_probability_rate       = 0.05,
-            adapt_population_flag        = True,
-            max_selection_probability    = 0.75,
-            min_selection_probability    = 0.25,
+            # Attributes must be passed in using kwargs
+
+            run  = 0,
+
+            chromosome_length = 10,
+            population_size = 10,
+            chromosome_impl = None,
+            gene_impl  = None,
+            population = None,
+            target_fitness_type = 'max',
+            update_fitness = False,
+
+            parent_ratio = 0.10,
+            selection_probability = 0.50,
+            tournament_size_ratio = 0.10,
+
+            current_generation = 0,
+            current_fitness = 0,
+
+            generation_goal   = 100,
+            fitness_goal      = None,
+            tolerance_goal    = None,
+            percent_converged = 0.50,
+
+            chromosome_mutation_rate = 0.15,
+            gene_mutation_rate = 0.05,
+
+            adapt_rate = 0.05,
+            adapt_probability_rate = 0.05,
+            adapt_population_flag  = True,
+
+            max_selection_probability = 0.75,
+            min_selection_probability = 0.25,
             max_chromosome_mutation_rate = None,
             min_chromosome_mutation_rate = None,
-            max_gene_mutation_rate       = 0.15,
-            min_gene_mutation_rate       = 0.01,
-            dist                         = None,
-            fitness_function_impl        = None,
-            make_population              = make_population,
-            make_chromosome              = make_chromosome,
-            make_gene                    = make_gene,
-            parent_selection_impl        = None,
-            crossover_individual_impl    = None,
-            crossover_population_impl    = None,
-            survivor_selection_impl      = None,
-            mutation_individual_impl     = None,
-            mutation_population_impl     = None,
-            termination_impl             = None,
-            Database                     = sql_database.SQL_Database,
-            database_name                = 'database.db',
-            sql_create_data_structure    = """CREATE TABLE IF NOT EXISTS data (
-                                                  id INTEGER PRIMARY KEY,
-                                                  config_id INTEGER DEFAULT NULL,
-                                                  generation INTEGER NOT NULL,
-                                                  fitness REAL,
-                                                  chromosome TEXT
-                                              ); """,
-            Graph                        = matplotlib_graph.Matplotlib_Graph
+            max_gene_mutation_rate = 0.15,
+            min_gene_mutation_rate = 0.01,
+
+            dist = None,
+            fitness_function_impl = None,
+
+            make_population = make_population,
+            make_chromosome = make_chromosome,
+            make_gene = make_gene,
+
+            parent_selection_impl     = None,
+            crossover_individual_impl = None,
+            crossover_population_impl = None,
+            survivor_selection_impl   = None,
+            mutation_individual_impl  = None,
+            mutation_population_impl  = None,
+
+            termination_impl = None,
+
+            Database = sql_database.SQL_Database,
+            database_name = 'database.db',
+            sql_create_data_structure = """CREATE TABLE IF NOT EXISTS data (
+                                               id INTEGER PRIMARY KEY,
+                                               config_id INTEGER DEFAULT NULL,
+                                               generation INTEGER NOT NULL,
+                                               fitness REAL,
+                                               chromosome TEXT
+                                           ); """,
+
+            Graph = matplotlib_graph.Matplotlib_Graph
         ):
 
         # Keep track of the current run
         self.run = run
 
         # Initilization variables
-        self.chromosome_length   = chromosome_length
-        self.population_size     = population_size
-        self.chromosome_impl     = chromosome_impl
-        self.gene_impl           = gene_impl
-        self.population          = population
+        self.chromosome_length = chromosome_length
+        self.population_size = population_size
+        self.chromosome_impl = chromosome_impl
+        self.gene_impl  = gene_impl
+        self.population = population
         self.target_fitness_type = target_fitness_type
-        self.update_fitness      = update_fitness
+        self.update_fitness = update_fitness
 
         # Selection variables
-        self.parent_ratio          = parent_ratio
+        self.parent_ratio = parent_ratio
         self.selection_probability = selection_probability
         self.tournament_size_ratio = tournament_size_ratio
 
         # Termination variables
         self.current_generation = current_generation
-        self.current_fitness    = current_fitness
-        self.generation_goal    = generation_goal
-        self.fitness_goal       = fitness_goal
-        self.tolerance_goal     = tolerance_goal
-        self.percent_converged  = percent_converged
+        self.current_fitness = current_fitness
+        self.generation_goal = generation_goal
+        self.fitness_goal = fitness_goal
+        self.tolerance_goal = tolerance_goal
+        self.percent_converged = percent_converged
 
         # Mutation variables
         self.chromosome_mutation_rate = chromosome_mutation_rate
-        self.gene_mutation_rate       = gene_mutation_rate
+        self.gene_mutation_rate = gene_mutation_rate
 
         # Adapt variables
-        self.adapt_rate             = adapt_rate
+        self.adapt_rate = adapt_rate
         self.adapt_probability_rate = adapt_probability_rate
         self.adapt_population_flag  = adapt_population_flag
 
         # Bounds on probabilities when adapting
-        self.max_selection_probability    = max_selection_probability
-        self.min_selection_probability    = min_selection_probability
+        self.max_selection_probability = max_selection_probability
+        self.min_selection_probability = min_selection_probability
         self.max_chromosome_mutation_rate = max_chromosome_mutation_rate
         self.min_chromosome_mutation_rate = min_chromosome_mutation_rate
-        self.max_gene_mutation_rate       = max_gene_mutation_rate
-        self.min_gene_mutation_rate       = min_gene_mutation_rate
+        self.max_gene_mutation_rate = max_gene_mutation_rate
+        self.min_gene_mutation_rate = min_gene_mutation_rate
 
         # Distance between two chromosomes
         self.dist = dist
 
         # Default EasyGA implimentation structure
         self.fitness_function_impl = fitness_function_impl
-        self.make_population       = make_population
-        self.make_chromosome       = make_chromosome
-        self.make_gene             = make_gene
+        self.make_population = make_population
+        self.make_chromosome = make_chromosome
+        self.make_gene = make_gene
 
         # Methods for accomplishing Parent-Selection -> Crossover -> Survivor_Selection -> Mutation
-        self.parent_selection_impl     = parent_selection_impl
+        self.parent_selection_impl = parent_selection_impl
         self.crossover_individual_impl = crossover_individual_impl
         self.crossover_population_impl = crossover_population_impl
         self.survivor_selection_impl   = survivor_selection_impl
@@ -361,20 +376,35 @@ class Attributes:
 
 
     @property
+    def current_generation(self):
+        """Getter function for the current generation."""
+        return self._current_generation
+
+
+    @current_generation.setter
+    def current_generation(self, generation):
+        """Setter function for the current generation."""
+
+        if not isinstance(generation, int) or generation < 0:
+            raise ValueError("ga.current_generation must be an integer greater than or equal to 0")
+
+        self._current_generation = generation
+
+
+    @property
     def chromosome_length(self):
         """Getter function for chromosome length"""
         return self._chromosome_length
 
 
     @chromosome_length.setter
-    def chromosome_length(self, value_input):
+    def chromosome_length(self, length):
         """Setter function with error checking for chromosome length"""
 
-        # If the chromosome length is less then or equal 0 throw error
-        if(not isinstance(value_input, int) or value_input <= 0):
-            raise ValueError("Chromosome length must be integer greater then 0")
+        if(not isinstance(length, int) or length <= 0):
+            raise ValueError("Chromosome length must be integer greater than 0")
 
-        self._chromosome_length = value_input
+        self._chromosome_length = length
 
 
     @property
@@ -385,14 +415,13 @@ class Attributes:
 
 
     @population_size.setter
-    def population_size(self, value_input):
+    def population_size(self, size):
         """Setter function with error checking for population size"""
 
-        # If the population size is less then or equal 0 throw error
-        if(not isinstance(value_input, int) or value_input <= 0):
-            raise ValueError("Population length must be integer greater then 0")
+        if(not isinstance(size, int) or size <= 0):
+            raise ValueError("Population size must be integer greater than 0")
 
-        self._population_size = value_input
+        self._population_size = size
 
 
     @property
@@ -403,10 +432,10 @@ class Attributes:
 
 
     @target_fitness_type.setter
-    def target_fitness_type(self, value_input):
+    def target_fitness_type(self, target_fitness_type):
         """Setter function for target fitness type."""
 
-        self._target_fitness_type = value_input
+        self._target_fitness_type = target_fitness_type
 
 
     @property
@@ -417,16 +446,16 @@ class Attributes:
 
 
     @max_chromosome_mutation_rate.setter
-    def max_chromosome_mutation_rate(self, value_input):
+    def max_chromosome_mutation_rate(self, rate):
         """Setter function with error checking and default value for max chromosome mutation rate"""
 
         # Default value
-        if value_input is None:
+        if rate is None:
             self._max_chromosome_mutation_rate = min(self.chromosome_mutation_rate*2, (1+self.chromosome_mutation_rate)/2)
 
         # Otherwise check value
-        elif 0 <= value_input <= 1:
-            self._max_chromosome_mutation_rate = value_input
+        elif 0 <= rate <= 1:
+            self._max_chromosome_mutation_rate = rate
 
         # Throw error
         else:
@@ -441,16 +470,16 @@ class Attributes:
 
 
     @min_chromosome_mutation_rate.setter
-    def min_chromosome_mutation_rate(self, value_input):
+    def min_chromosome_mutation_rate(self, rate):
         """Setter function with error checking and default value for min chromosome mutation rate"""
 
         # Default value
-        if value_input is None:
+        if rate is None:
             self._min_chromosome_mutation_rate = self.chromosome_mutation_rate/2
 
         # Otherwise check value
-        elif 0 <= value_input <= 1:
-            self._min_chromosome_mutation_rate = value_input
+        elif 0 <= rate <= 1:
+            self._min_chromosome_mutation_rate = rate
 
         # Throw error
         else:
