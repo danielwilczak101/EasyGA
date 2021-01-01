@@ -122,7 +122,16 @@ class Population:
                 population[index] = chromosome
         to set the indexed chromosome.
         """
-        self.chromosome_list[index] = to_chromosome(chromosome)
+
+        # Just one chromosome
+        if isinstance(index, int):
+            chromosome = to_chromosome(chromosome)
+
+        # Multiple chromosomes
+        else:
+            chromosome = [to_chromosome(elem) for elem in chromosome]
+
+        self.chromosome_list[index] = chromosome
 
 
     def __delitem__(self, index):

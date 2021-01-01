@@ -1,25 +1,11 @@
-def function_info(decorator):
-    """Recovers the name and doc-string for decorators throughout EasyGA for documentation purposes."""
-
-    def new_decorator(method):
-
-        # Apply old decorator
-        new_method = decorator(method)
-
-        # Recover name and doc-string
-        new_method.__name__ = method.__name__
-        new_method.__doc__  = method.__doc__
-
-        # Return new method with proper name and doc-string
-        return new_method
-
-    return new_decorator
-
 # Import math for square root (ga.dist()) and ceil (crossover methods)
 import math
 
 # Import random for many methods
 import random
+
+# Import all decorators
+import decorators
 
 # Import all the data structure prebuilt modules
 from structure import Population as make_population
@@ -207,38 +193,35 @@ class GA(Attributes):
             if (tol_j := tol(j)) > 2*tol_i:
                 break
 
+        
+
         # Strongly cross the best chromosome with the worst chromosomes
-        for n in range(i, len(self.population)):
+        for n in range(len(self.population)-1, i-1, -1):
 
             # Strongly cross with the best chromosome
             # May reject negative weight or division by 0
             try:
-                self.population[n] = self.crossover_individual_impl(
+                self.crossover_individual_impl(
                     self.population[n],
                     best_chromosome,
                     weight = min(0.25, 2 * tol_j / (tol(n) - tol_j))
                 )
 
-            # If negative weights can't be used,
+            # If negative weights can't be used or division by 0,
             # Cross with j-th chromosome instead
-            except:
-                self.population[n] = self.crossover_individual_impl(
+            except (ValueError, ZeroDivisionError):
+                self.crossover_individual_impl(
                     self.population[n],
                     self.population[j],
                     weight = 0.75
                 )
 
-            # Update fitnesses
-            self.population[n].fitness = self.fitness_function_impl(self.population[n])
+            if len(self.population.next_population) >= len(self.population) - i:
+                break
 
-            # Update best chromosome
-            if any((all((self.target_fitness_type == 'max',
-                         self.population[n].fitness > best_chromosome.fitness)),
-                    all((self.target_fitness_type == 'min',
-                         self.population[n].fitness < best_chromosome.fitness))
-                    )):
-                tol_j = tol(j)
-                best_chromosome = self.population[n]
+        # Replace worst chromosomes with new chromosomes
+        self.population[-len(self.population.next_population):] = self.population.next_population
+        self.population.next_population = []
 
 
     def initialize_population(self):
