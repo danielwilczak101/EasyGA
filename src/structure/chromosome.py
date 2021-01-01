@@ -70,10 +70,14 @@ class Chromosome():
                 chromosome[index] = gene
         to set the indexed gene.
         """
+
+        # Single gene
         if isinstance(index, int):
             self.gene_list[index] = to_gene(gene)
+
+        # Multiple genes
         else:
-            self.gene_list[index] = (to_gene(item) for item in gene)
+            self.gene_list[index] = [to_gene(item) for item in gene]
 
 
     def __delitem__(self, index):

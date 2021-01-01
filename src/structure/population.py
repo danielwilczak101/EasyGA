@@ -125,13 +125,11 @@ class Population:
 
         # Just one chromosome
         if isinstance(index, int):
-            chromosome = to_chromosome(chromosome)
+            self.chromosome_list[index] = to_chromosome(chromosome)
 
         # Multiple chromosomes
         else:
-            chromosome = [to_chromosome(elem) for elem in chromosome]
-
-        self.chromosome_list[index] = chromosome
+            self.chromosome_list[index] = [to_chromosome(item) for item in chromosome]
 
 
     def __delitem__(self, index):
