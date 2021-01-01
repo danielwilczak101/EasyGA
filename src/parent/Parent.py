@@ -4,10 +4,8 @@ import random
 
 @function_info
 def _check_selection_probability(selection_method):
-    """Raises an exception if the selection_probability
-    is not between 0 and 1 inclusively. Otherwise runs
-    the selection method.
-    """
+    """Raises a ValueError if the selection_probability is not between 0 and 1 inclusively.
+    Otherwise runs the selection method."""
 
     def new_method(ga):
         if 0 <= ga.selection_probability <= 1:
@@ -20,10 +18,8 @@ def _check_selection_probability(selection_method):
 
 @function_info
 def _check_positive_fitness(selection_method):
-    """Raises an exception if the population contains a
-    chromosome with negative fitness. Otherwise runs
-    the selection method.
-    """
+    """Raises a ValueError if the population contains a chromosome with negative fitness.
+    Otherwise runs the selection method."""
 
     def new_method(ga):
         if ga.get_chromosome_fitness(0) > 0 and ga.get_chromosome_fitness(-1) >= 0:
@@ -37,9 +33,7 @@ def _check_positive_fitness(selection_method):
 
 @function_info
 def _ensure_sorted(selection_method):
-    """Sorts the population by fitness
-    and then runs the selection method.
-    """
+    """Sorts the population by fitness and then runs the selection method."""
 
     def new_method(ga):
         ga.sort_by_best_fitness()
@@ -50,10 +44,8 @@ def _ensure_sorted(selection_method):
 
 @function_info
 def _compute_parent_amount(selection_method):
-    """Computes the amount of parents
-    needed to be selected, and passes it
-    as another argument for the method.
-    """
+    """Computes the amount of parents needed to be selected,
+    and passes it as another argument for the method."""
 
     def new_method(ga):
         parent_amount = max(2, round(len(ga.population)*ga.parent_ratio))
