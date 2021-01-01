@@ -61,7 +61,7 @@ class Population:
             )
 
 
-    def random(ga):
+    def random_mate(ga):
         """Select random pairs from the mating pool.
         Every parent is paired with a random parent.
         """
@@ -100,9 +100,9 @@ class Individual:
 
     @_check_weight
     @_gene_by_gene
-    def uniform(ga, value_1, value_2, *, weight = 0.5):
+    def uniform(ga, *gene_values, *, weight = 0.5):
         """Cross two parents by swapping all genes randomly."""
-        return random.choices(gene_pair, cum_weights = [weight, 1])[0]
+        return random.choices(gene_values, cum_weights = [weight, 1])[0]
 
 
     class Arithmetic:
@@ -136,7 +136,7 @@ class Individual:
 
         @_check_weight
         @_gene_by_gene
-        def random(ga, value_1, value_2, *, weight = 0.5):
+        def random_value(ga, value_1, value_2, *, weight = 0.5):
             """Cross two parents by taking a random integer or float value between each of the genes."""
 
             value = value_1 + ga.weighted_random(weight) * (value_2-value_1)
@@ -158,7 +158,7 @@ class Individual:
 
             # Too small to cross
             if len(parent_1) < 2:
-                return parent_1.gene_list
+                raise ValueError("Parent lengths must be at least 2.")
 
             # Unequal parent lengths
             if len(parent_1) != len(parent_2):
