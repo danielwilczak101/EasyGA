@@ -13,7 +13,7 @@ def _check_selection_probability(selection_method):
         if 0 <= ga.selection_probability <= 1:
             selection_method(ga)
         else:
-            raise Exception("Selection probability must be between 0 and 1 to select parents.")
+            raise ValueError("Selection probability must be between 0 and 1 to select parents.")
 
     return new_method
 
@@ -29,7 +29,8 @@ def _check_positive_fitness(selection_method):
         if ga.get_chromosome_fitness(0) > 0 and ga.get_chromosome_fitness(-1) >= 0:
             selection_method(ga)
         else:
-            raise Exception("Converted fitness values can't have negative values or be all 0. Consider using rank selection or stochastic selection instead.")
+            raise ValueError("Converted fitness values can't have negative values or be all 0."
+                             + " Consider using rank selection or stochastic selection instead.")
 
     return new_method
 
