@@ -1,72 +1,8 @@
-from EasyGA import function_info
 import random
 from math import ceil
 
-
-@function_info
-def _check_chromosome_mutation_rate(population_method):
-    """Checks if the chromosome mutation rate is a float between 0 and 1 before running."""
-
-    def new_method(ga):
-
-        if not isinstance(ga.chromosome_mutation_rate, float):
-            raise TypeError("Chromosome mutation rate must be a float.")
-
-        elif 0 < ga.chromosome_mutation_rate < 1:
-            population_method(ga)
-
-        else:
-            raise ValueError("Chromosome mutation rate must be between 0 and 1.")
-
-    return new_method
-
-
-@function_info
-def _check_gene_mutation_rate(individual_method):
-    """Checks if the gene mutation rate is a float between 0 and 1 before running."""
-
-    def new_method(ga, index):
-
-        if not isinstance(ga.gene_mutation_rate, float):
-            raise TypeError("Gene mutation rate must be a float.")
-
-        elif 0 < ga.gene_mutation_rate <= 1:
-            individual_method(ga, index)
-
-        else:
-            raise ValueError("Gene mutation rate must be between 0 and 1.")
-
-    return new_method
-
-
-@function_info
-def _reset_fitness(individual_method):
-    """Resets the fitness value of the chromosome."""
-
-    def new_method(ga, chromosome):
-        chromosome.fitness = None
-        individual_method(ga, chromosome)
-
-    return new_method
-
-
-@function_info
-def _loop_random_mutations(individual_method):
-    """Runs the individual method until enough
-    genes are mutated on the indexed chromosome.
-    """
-
-    # Change input to include the gene index being mutated.
-    def new_method(ga, chromosome):
-
-        sample_space = range(len(chromosome))
-        sample_size  = ceil(len(chromosome)*ga.gene_mutation_rate)
-
-        # Loop the individual method until enough genes are mutated.
-        for index in random.sample(sample_space, sample_size):
-            individual_method(ga, chromosome, index)
-
-    return new_method
+# Import all mutation decorators
+from decorators import _check_chromosome_mutation_rate, _check_gene_mutation_rate, _reset_fitness, _loop_random_mutations
 
 
 class Population:

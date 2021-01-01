@@ -1,34 +1,23 @@
-from EasyGA import function_info
 import random
 
-
-@function_info
-def _append_to_next_population(survivor_method):
-    """Appends the selected chromosomes to the next population."""
-
-    def new_method(ga):
-        ga.population.append_children(survivor_method(ga))
-
-    return new_method
+# Import all survivor decorators
+from decorators import *
 
 
-@_append_to_next_population
 def fill_in_best(ga):
     """Fills in the next population with the best chromosomes from the last population"""
 
     needed_amount = len(ga.population) - len(ga.population.next_population)
-    return ga.population[:needed_amount]
+    ga.population.append_children(ga.population[:needed_amount])
 
 
-@_append_to_next_population
 def fill_in_random(ga):
     """Fills in the next population with random chromosomes from the last population"""
 
     needed_amount = len(ga.population) - len(ga.population.next_population)
-    return random.sample(ga.population, needed_amount)
+    ga.population.append_children(random.sample(ga.population, needed_amount))
 
 
-@_append_to_next_population
 def fill_in_parents_then_random(ga):
     """Fills in the next population with all parents followed by random chromosomes from the last population"""
 
@@ -41,11 +30,19 @@ def fill_in_parents_then_random(ga):
 
     # Only parents are used.
     if random_amount == 0:
-        return ga.population.mating_pool[:parent_amount]
+        ga.population.append_children(
+            chromosome
+            for i, chromosome
+            in enumerate(mating_pool)
+            if i < parent_amount
+        )
 
     # Parents need to be removed from the random sample to avoid dupes.
     else:
-        return mating_pool + random.sample(
-                                 set(ga.population) - mating_pool,
-                                 random_amount
-                             )
+        ga.population.append_children(mating_pool)
+        ga.population.append_children(
+               random.sample(
+                  set(ga.population) - mating_pool,
+                  random_amount
+              )
+        )

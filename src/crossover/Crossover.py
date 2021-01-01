@@ -1,45 +1,11 @@
-from EasyGA import function_info
 import random
+
+# Import all crossover decorators
+from decorators import _check_weight, _gene_by_gene
 
 # Round to an integer near x with higher probability
 # the closer it is to that integer.
 randround = lambda x: int(x + random.random())
-
-
-@function_info
-def _check_weight(individual_method):
-    """Checks if the weight is between 0 and 1 before running.
-    Exception may occur when using ga.adapt, which will catch
-    the error and try again with valid weight.
-    """
-
-    def new_method(ga, parent_1, parent_2, *, weight = individual_method.__kwdefaults__.get('weight', None)):
-
-        if weight is None:
-            individual_method(ga, parent_1, parent_2)
-        elif 0 < weight < 1:
-            individual_method(ga, parent_1, parent_2, weight = weight)
-        else:
-            raise ValueError(f"Weight must be between 0 and 1 when using {individual_method.__name__}.")
-
-    return new_method
-
-
-@function_info
-def _gene_by_gene(individual_method):
-    """Perform crossover by making a single new chromosome by combining each gene by gene."""
-
-    def new_method(ga, parent_1, parent_2, *, weight = individual_method.__kwdefaults__.get('weight', 'None')):
-
-        ga.population.add_child(
-            individual_method(ga, value_1, value_2)
-            if weight == 'None' else
-            individual_method(ga, value_1, value_2, weight = weight)
-            for value_1, value_2
-            in zip(parent_1.gene_value_iter, parent_2.gene_value_iter)
-        )
-
-    return new_method
 
 
 class Population:
@@ -61,7 +27,7 @@ class Population:
             )
 
 
-    def random_mate(ga):
+    def random(ga):
         """Select random pairs from the mating pool.
         Every parent is paired with a random parent.
         """
@@ -100,9 +66,9 @@ class Individual:
 
     @_check_weight
     @_gene_by_gene
-    def uniform(ga, *gene_values, *, weight = 0.5):
+    def uniform(ga, value_1, value_2, *, weight = 0.5):
         """Cross two parents by swapping all genes randomly."""
-        return random.choices(gene_values, cum_weights = [weight, 1])[0]
+        return random.choices(gene_pair, cum_weights = [weight, 1])[0]
 
 
     class Arithmetic:
@@ -136,7 +102,7 @@ class Individual:
 
         @_check_weight
         @_gene_by_gene
-        def random_value(ga, value_1, value_2, *, weight = 0.5):
+        def random(ga, value_1, value_2, *, weight = 0.5):
             """Cross two parents by taking a random integer or float value between each of the genes."""
 
             value = value_1 + ga.weighted_random(weight) * (value_2-value_1)
@@ -158,7 +124,7 @@ class Individual:
 
             # Too small to cross
             if len(parent_1) < 2:
-                raise ValueError("Parent lengths must be at least 2.")
+                return parent_1.gene_list
 
             # Unequal parent lengths
             if len(parent_1) != len(parent_2):

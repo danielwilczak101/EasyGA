@@ -1,57 +1,7 @@
-from EasyGA import function_info
 import random
 
-
-@function_info
-def _check_selection_probability(selection_method):
-    """Raises a ValueError if the selection_probability is not between 0 and 1 inclusively.
-    Otherwise runs the selection method."""
-
-    def new_method(ga):
-        if 0 <= ga.selection_probability <= 1:
-            selection_method(ga)
-        else:
-            raise ValueError("Selection probability must be between 0 and 1 to select parents.")
-
-    return new_method
-
-
-@function_info
-def _check_positive_fitness(selection_method):
-    """Raises a ValueError if the population contains a chromosome with negative fitness.
-    Otherwise runs the selection method."""
-
-    def new_method(ga):
-        if ga.get_chromosome_fitness(0) > 0 and ga.get_chromosome_fitness(-1) >= 0:
-            selection_method(ga)
-        else:
-            raise ValueError("Converted fitness values can't have negative values or be all 0."
-                             + " Consider using rank selection or stochastic selection instead.")
-
-    return new_method
-
-
-@function_info
-def _ensure_sorted(selection_method):
-    """Sorts the population by fitness and then runs the selection method."""
-
-    def new_method(ga):
-        ga.sort_by_best_fitness()
-        selection_method(ga)
-
-    return new_method
-
-
-@function_info
-def _compute_parent_amount(selection_method):
-    """Computes the amount of parents needed to be selected,
-    and passes it as another argument for the method."""
-
-    def new_method(ga):
-        parent_amount = max(2, round(len(ga.population)*ga.parent_ratio))
-        selection_method(ga, parent_amount)
-
-    return new_method
+# Import all parent decorators
+from decorators import _check_selection_probability, _check_positive_fitness, _ensure_sorted, _compute_parent_amount
 
 
 class Rank:
