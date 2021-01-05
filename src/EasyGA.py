@@ -76,7 +76,7 @@ class GA(Attributes):
                 self.parent_selection_impl()
                 self.crossover_population_impl()
                 self.survivor_selection_impl()
-                self.population.update()
+                self.update_population()
                 self.sort_by_best_fitness()
                 self.mutation_population_impl()
 
@@ -95,6 +95,12 @@ class GA(Attributes):
 
             number_of_generations   -= 1
             self.current_generation += 1
+
+
+    def update_population(self):
+        """Updates the population to the new population and resets the mating pool and new population."""
+
+        self.population.update()
 
 
     def reset_run(self):
