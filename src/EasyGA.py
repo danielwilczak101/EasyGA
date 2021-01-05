@@ -72,7 +72,6 @@ class GA(Attributes):
 
             # Otherwise evolve the population.
             else:
-
                 self.parent_selection_impl()
                 self.crossover_population_impl()
                 self.survivor_selection_impl()
@@ -273,7 +272,7 @@ class GA(Attributes):
                 chromosome.fitness = self.fitness_function_impl(chromosome)
 
 
-    def sort_by_best_fitness(self, chromosome_list = None, in_place = False):
+    def sort_by_best_fitness(self, chromosome_list = None, in_place = True):
         """Sorts the chromosome list by fitness based on fitness type.
         1st element has best fitness.
         2nd element has second best fitness.
@@ -291,7 +290,7 @@ class GA(Attributes):
         reverse = (self.target_fitness_type == 'max')
 
         # Sort by fitness, assuming None should be moved to the end of the list
-        key = lambda chromosome: chromosome.fitness if chromosome.fitness is not None else float('inf') * (+1, -1)[int(reverse)]
+        key = lambda chromosome: (chromosome.fitness if (chromosome.fitness is not None) else (float('inf') * (+1, -1)[int(reverse)]))
 
         if in_place:
             chromosome_list.sort(key = key, reverse = reverse)
