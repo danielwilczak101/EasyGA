@@ -39,6 +39,50 @@ class Attributes:
     been set then they will fall back onto the default attribute. All
     attributes have been catigorized to explain sections in the ga process."""
 
+    #=====================#
+    # Default GA methods: #
+    #=====================#
+
+    # Default EasyGA implimentation structure
+    fitness_function_impl = Fitness_Examples.is_it_5
+    make_population = make_population
+    make_chromosome = make_chromosome
+    make_gene = make_gene
+
+    # Methods for accomplishing Parent-Selection -> Crossover -> Survivor_Selection -> Mutation -> Termination
+    parent_selection_impl = Parent.Rank.tournament
+    crossover_individual_impl = Crossover.Individual.single_point
+    crossover_population_impl = Crossover.Population.sequential
+    survivor_selection_impl = Survivor.fill_in_best
+    mutation_individual_impl = Mutation.Individual.individual_genes
+    mutation_population_impl = Mutation.Population.random_avoid_best
+    termination_impl = Termination.fitness_generation_tolerance
+
+
+    def dist(self, chromosome_1, chromosome_2):
+        """Default distance lambda. Returns the square root of the difference in fitnesses."""
+        return math.sqrt(abs(chromosome_1.fitness - chromosome_2.fitness))
+
+
+    def weighted_random(self, weight):
+        """Returns a random value between 0 and 1. Returns values between the weight and the
+        nearest of 0 and 1 less frequently than between weight and the farthest of 0 and 1."""
+
+        rand_num = random.random()
+        if rand_num < weight:
+            return (1-weight) * rand_num / weight
+        else:
+            return 1 - weight * (1-rand_num) / (1-weight)
+
+
+    def gene_impl(self, *args, **kwargs):
+        """Default gene implementation. Returns a random integer from 1 to 10."""
+        return random.randint(1, 10)
+
+
+    chromosome_impl = None
+
+
     #=====================================#
     # Special built-in class __methods__: #
     #=====================================#
@@ -52,8 +96,6 @@ class Attributes:
 
             chromosome_length = 10,
             population_size = 10,
-            chromosome_impl = None,
-            gene_impl  = None,
             population = None,
             target_fitness_type = 'max',
             update_fitness = False,
@@ -84,22 +126,6 @@ class Attributes:
             max_gene_mutation_rate = 0.15,
             min_gene_mutation_rate = 0.01,
 
-            dist = None,
-            fitness_function_impl = None,
-
-            make_population = make_population,
-            make_chromosome = make_chromosome,
-            make_gene = make_gene,
-
-            parent_selection_impl     = None,
-            crossover_individual_impl = None,
-            crossover_population_impl = None,
-            survivor_selection_impl   = None,
-            mutation_individual_impl  = None,
-            mutation_population_impl  = None,
-
-            termination_impl = None,
-
             Database = sql_database.SQL_Database,
             database_name = 'database.db',
             sql_create_data_structure = """CREATE TABLE IF NOT EXISTS data (
@@ -110,7 +136,9 @@ class Attributes:
                                                chromosome TEXT
                                            ); """,
 
-            Graph = matplotlib_graph.Matplotlib_Graph
+            Graph = matplotlib_graph.Matplotlib_Graph,
+
+            **kwargs
         ):
 
         # Keep track of the current run
@@ -119,8 +147,6 @@ class Attributes:
         # Initilization variables
         self.chromosome_length = chromosome_length
         self.population_size = population_size
-        self.chromosome_impl = chromosome_impl
-        self.gene_impl  = gene_impl
         self.population = population
         self.target_fitness_type = target_fitness_type
         self.update_fitness = update_fitness
@@ -155,26 +181,6 @@ class Attributes:
         self.max_gene_mutation_rate = max_gene_mutation_rate
         self.min_gene_mutation_rate = min_gene_mutation_rate
 
-        # Distance between two chromosomes
-        self.dist = dist
-
-        # Default EasyGA implimentation structure
-        self.fitness_function_impl = fitness_function_impl
-        self.make_population = make_population
-        self.make_chromosome = make_chromosome
-        self.make_gene = make_gene
-
-        # Methods for accomplishing Parent-Selection -> Crossover -> Survivor_Selection -> Mutation
-        self.parent_selection_impl = parent_selection_impl
-        self.crossover_individual_impl = crossover_individual_impl
-        self.crossover_population_impl = crossover_population_impl
-        self.survivor_selection_impl   = survivor_selection_impl
-        self.mutation_individual_impl  = mutation_individual_impl
-        self.mutation_population_impl  = mutation_population_impl
-
-        # The type of termination to impliment
-        self.termination_impl = termination_impl
-
         # Database varibles
         self.database = Database()
         self.database_name = database_name
@@ -182,6 +188,10 @@ class Attributes:
 
         # Graphing variables
         self.graph = Graph(self.database)
+
+        # Any other custom kwargs?
+        for name, value in kwargs.items():
+            self.__setattr__(name, value)
 
 
     def __setattr__(self, name, value):
@@ -212,72 +222,6 @@ class Attributes:
         # Assign like normal unless None or undefined self.name
         elif value is not None or not hasattr(self, name):
             self.__dict__[name] = value
-
-
-    #===========================#
-    # Default built-in methods: #
-    #===========================#
-
-
-    def weighted_random(self, weight):
-        """Returns a random value between 0 and 1. Returns values between the weight and the
-        nearest of 0 and 1 less frequently than between weight and the farthest of 0 and 1.
-        """
-        rand_num = random.random()
-        if rand_num < weight:
-            return (1-weight) * rand_num / weight
-        else:
-            return 1 - weight * (1-rand_num) / (1-weight)
-
-
-    def dist(self, chromosome_1, chromosome_2):
-        """Default distance lambda. Returns the square root of the difference in fitnesses."""
-        return math.sqrt(abs(chromosome_1.fitness - chromosome_2.fitness))
-
-
-    def gene_impl(self, *args, **kwargs):
-        """Default gene implementation. Returns a random integer from 1 to 10."""
-        return random.randint(1, 10)
-
-
-    def fitness_function_impl(self, *args, **kwargs):
-        """Default fitness function. Returns the number of genes that are 5."""
-        return Fitness_Examples.is_it_5(*args, **kwargs)
-
-
-    def parent_selection_impl(self, *args, **kwargs):
-        """Default parent selection method using tournament selection."""
-        return Parent.Rank.tournament(self, *args, **kwargs)
-
-
-    def crossover_individual_impl(self, *args, **kwargs):
-        """Default individual crossover method using single point crossover."""
-        return Crossover.Individual.single_point(self, *args, **kwargs)
-
-
-    def crossover_population_impl(self, *args, **kwargs):
-        """Default population crossover method using sequential selection."""
-        return Crossover.Population.sequential(self, *args, **kwargs)
-
-
-    def survivor_selection_impl(self, *args, **kwargs):
-        """Default survivor selection method using the fill in best method."""
-        return Survivor.fill_in_best(self, *args, **kwargs)
-
-
-    def mutation_individual_impl(self, *args, **kwargs):
-        """Default individual mutation method by randomizing individual genes."""
-        return Mutation.Individual.individual_genes(self, *args, **kwargs)
-
-
-    def mutation_population_impl(self, *args, **kwargs):
-        """Default population mutation method selects chromosomes randomly while avoiding the best."""
-        return Mutation.Population.random_avoid_best(self, *args, **kwargs)
-
-
-    def termination_impl(self, *args, **kwargs):
-        """Default termination method by testing the fitness, generation, and tolerance goals."""
-        return Termination.fitness_generation_tolerance(self, *args, **kwargs)
 
 
     #============================#
