@@ -190,12 +190,14 @@ class GA(Attributes):
 
         # First non-zero tolerance after amount_converged/4
         for i in range(amount_converged//4, len(self.population)):
-            if (tol_i := tol(i)) > 0:
+            tol_i = tol(i)
+            if tol_i > 0:
                 break
 
         # First significantly different tolerance
         for j in range(i, len(self.population)):
-            if (tol_j := tol(j)) > 2*tol_i:
+            tol_j = tol(j)
+            if tol_j > 2*tol_i:
                 break
 
         
