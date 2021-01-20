@@ -77,7 +77,7 @@ class SQL_Database:
             # Not a function
             else:
                 # Convert to the right type
-                if type(value) not in self.sql_type_list:
+                if type(value) not in sql_type_list:
 
                     value = str(value)
 
