@@ -7,12 +7,16 @@ class SQL_Database:
     """Main database class that controls all the functionality for input /
     out of the database using SQLite3."""
 
-    sql_type_list = [int, float, str]
 
     def __init__(self):
         self.conn = None
         self.config_id = None
         self._database_name = 'database.db'
+        self.config_structure = f"""
+        CREATE TABLE IF NOT EXISTS config (
+        config_id INTEGER,
+        attribute_name TEXT,
+        attribute_value TEXT)"""
 
 
     #=====================================#
@@ -23,14 +27,6 @@ class SQL_Database:
         """Create the database if it doenst exist and then the data and config
         tables."""
 
-        # if the database file already exists.
-        try:
-            self.config = self.get_current_config()
-
-        # If the database does not exist continue
-        except:
-            pass
-
         # Create the database connection
         self.create_connection()
 
@@ -38,11 +34,60 @@ class SQL_Database:
             # Create data table
             self.create_table(ga.sql_create_data_structure)
             # Creare config table
-            self.create_table(self.create_config_table_string(ga))
+            self.create_table(self.config_structure)
+            # Set the config id
+            self.config_id = self.get_current_config()
 
         else:
             raise Exception("Error! Cannot create the database connection.")
 
+
+
+    def insert_config(self,ga):
+        """Insert the configuration attributes into the config."""
+
+        # Get the current config and add one for the new config key
+        self.config_id = self.get_current_config()
+
+        # Setting the config_id index if there is no file
+        if self.config_id == None:
+            self.config_id = 0
+        else:
+            self.config_id = self.config_id + 1
+
+        # Getting all the attributes from the attributes class
+        db_config_dict = (
+            (attr_name, getattr(ga, attr_name))
+            for attr_name
+            in dir(ga)
+            if attr_name[0] != '_'
+            if attr_name != 'population'
+        )
+
+        # Types supported in the database
+        sql_type_list = [int, float, str]
+
+        # Loop through all attributes
+        for name, value in db_config_dict:
+
+            # Inserting a function, do special stuff
+            if callable(value):
+                value = ""
+
+            # Not a function
+            else:
+                # Convert to the right type
+                if type(value) not in self.sql_type_list:
+
+                    value = str(value)
+
+                # Insert into database
+                self.conn.execute(f"""
+                INSERT INTO config(config_id,attribute_name, attribute_value)
+                VALUES ('{self.config_id}', '{name}','{value}');""")
+
+
+        self.config_id = self.get_current_config()
 
 
     #=====================================#
@@ -50,13 +95,16 @@ class SQL_Database:
     #=====================================#
 
     def default_config_id(method):
-        """Decorator used to set the default config_id"""
+        """Decorator used to set the default config_id inside other functions."""
 
         def new_method(self, config_id = None):
+
             input_id = self.config_id if config_id is None else config_id
+
             return method(self, input_id)
 
         return new_method
+
 
     def format_query_data(method):
         """Decorator used to format query data"""
@@ -83,99 +131,74 @@ class SQL_Database:
 
     def get_current_config(self):
         """Get the current config_id from the config table."""
-        return self.query_one_item("SELECT MAX(id) FROM config")
+        return self.query_one_item("SELECT MAX(config_id) FROM config")
 
     def past_runs(self):
         """Show a summerization of the past runs that the user has done."""
 
-        query_data = self.query_all(f"SELECT id,chromosome_length,population_size,generation_goal FROM config;")
+        query_data = self.query_all(f"""
+        SELECT config_id,attribute_name,attribute_value
+        FROM config;""")
 
         print(
             tabulate(
                 query_data,
                 headers = [
-                    'id',
-                    'chromosome_length',
-                    'population_size',
-                    'generation_goal'
+                    'config_id',
+                    'attribute_name',
+                    'attribute_value'
                 ]
             )
         )
-
-
-    def get_most_recent_config_id(self):
-        """Function to get the most recent config_id from the database."""
-
-        return self.query_one_item("SELECT max(config_id) FROM config")
 
 
     @default_config_id
     def get_generation_total_fitness(self, config_id):
         """Get each generations total fitness sum from the database """
 
-        return self.query_all(f"SELECT SUM(fitness) FROM data WHERE config_id={config_id} GROUP BY generation;")
+        return self.query_all(f"""
+         SELECT SUM(fitness)
+         FROM data
+         WHERE config_id={config_id}
+         GROUP BY generation;""")
 
 
     @default_config_id
     def get_total_generations(self, config_id):
         """Get the total generations from the database"""
 
-        return self.query_one_item(f"SELECT COUNT(DISTINCT generation) FROM data WHERE config_id={config_id};")
+        return self.query_one_item(f"""
+        SELECT COUNT(DISTINCT generation)
+        FROM data
+        WHERE config_id={config_id};""")
 
 
     @default_config_id
     def get_highest_chromosome(self, config_id):
         """Get the highest fitness of each generation"""
 
-        return self.query_all(f"SELECT fitness, max(fitness) FROM data WHERE config_id={config_id} GROUP by generation;")
+        return self.query_all(f"""
+        SELECT fitness, max(fitness)
+        FROM data
+        WHERE config_id={config_id}
+        GROUP by generation;""")
 
 
     @default_config_id
     def get_lowest_chromosome(self, config_id):
         """Get the lowest fitness of each generation"""
 
-        return self.query_all(f"SELECT fitness, min(fitness) FROM data WHERE config_id={config_id} GROUP by generation;")
+        return self.query_all(f"""
+        SELECT fitness, min(fitness)
+        FROM data
+        WHERE config_id={config_id}
+        GROUP by generation;""")
 
 
     #=====================================#
     # Input information Queries:          #
     #=====================================#
 
-    def insert_config(self,ga):
-        """Insert the configuration attributes into the config."""
-
-        # Structure the insert data
-        db_config_list = list(ga.__dict__.values())
-
-        # Clean up so the sqlite database accepts the data structure
-        for i in range(len(db_config_list)):
-            if callable(db_config_list[i]):
-                db_config_list[i] = db_config_list[i].__name__
-            elif type(db_config_list[i]) not in self.sql_type_list:
-                db_config_list[i] = str(db_config_list[i])
-
-        # Create sql query structure
-        sql = "INSERT INTO config ("             \
-              + ",".join(self.get_var_names(ga)) \
-              + ") VALUES("                      \
-              + ( ",?"*len(db_config_list) )[1:] \
-              + ") "
-
-        # For some reason it has to be in var = array(tuple()) form
-        db_config_list = [tuple(db_config_list)]
-
-        # Execute sql query
-        cur = self.conn.cursor()
-        try:
-            cur.executemany(sql, db_config_list)
-        except:
-            self.remove_database()
-            cur = self.conn.cursor()
-            cur.executemany(sql, db_config_list)
-
-        self.conn.commit()
-        self.config_id = self.get_current_config()
-        return cur.lastrowid
 
 
     def insert_chromosome(self, generation, chromosome):
@@ -190,15 +213,13 @@ class SQL_Database:
         )
 
         # Create sql query structure
-        sql = '''
-            INSERT INTO data(config_id, generation, fitness, chromosome)
-            VALUES(?,?,?,?)
-        '''
+        sql = """INSERT INTO data(config_id, generation, fitness, chromosome)
+                 VALUES(?,?,?,?)"""
 
         cur = self.conn.cursor()
         cur.execute(sql, db_chromosome)
         self.conn.commit()
-        return cur.lastrowid
+
 
 
     def insert_current_population(self, ga):
@@ -217,15 +238,13 @@ class SQL_Database:
         ]
 
         # Create sql query structure
-        sql = '''
-            INSERT INTO data(config_id, generation, fitness, chromosome)
-            VALUES(?,?,?,?)
-        '''
+        sql = """INSERT INTO data(config_id, generation, fitness, chromosome)
+                 VALUES(?,?,?,?)"""
 
         cur = self.conn.cursor()
         cur.executemany(sql, db_chromosome_list)
         self.conn.commit()
-        return cur.lastrowid
+
 
 
     #=====================================#
@@ -251,21 +270,6 @@ class SQL_Database:
         except Error as e:
             print(e)
 
-    def create_config_table_string(self,ga):
-        """Automate the table creation sql statement so that it takes all the
-        attribute variables and adds them as columns in the database table config"""
-
-        # Structure the config table
-        sql = "CREATE TABLE IF NOT EXISTS config (id INTEGER PRIMARY KEY," \
-              + ",".join(
-                  var + ' ' + self.sql_type_of(var)
-                  for var
-                  in self.get_var_names(ga)
-              ) + "); "
-
-        return sql
-
-
 
     @format_query_data
     def query_all(self, query):
@@ -275,6 +279,7 @@ class SQL_Database:
         cur.execute(query)
         return cur.fetchall()
 
+
     @format_query_data
     def query_one_item(self, query):
         """Query for single data point"""
@@ -283,19 +288,10 @@ class SQL_Database:
         cur.execute(query)
         return cur.fetchone()
 
+
     def remove_database(self):
         """Remove the current database file using the database_name attribute."""
         os.remove(self._database_name)
-
-    def sql_type_of(self, obj):
-        """Returns the sql type for the object"""
-
-        if isinstance(obj, int):
-            return 'INT'
-        elif isinstance(obj, float):
-            return 'REAL'
-        else:
-            return 'TEXT'
 
 
     def get_var_names(self, ga):
@@ -306,7 +302,6 @@ class SQL_Database:
 
             # Remove leading underscore
             yield (var[1:] if (var[0] == '_') else var)
-
 
 
     #=====================================#
@@ -340,8 +335,7 @@ class SQL_Database:
 
         # If the connection doesnt exist then print error
         except:
-            raise Exception("""You are required to run a ga before you
-                can connect to the database. Run ga.evolve() or ga.active()""")
+            raise Exception("""You are required to run a ga before you can connect to the database. Run ga.evolve() or ga.active()""")
 
 
     @conn.setter
@@ -363,13 +357,12 @@ class SQL_Database:
       # If the config_id has not been set yet
       try:
           # Check if you can connect to the database
-          self._config_id = self.get_most_recent_config_id()
+          self._config_id = self.get_current_config()
           return self._config_id
 
       # If the config_id doesnt exist then print error
       except:
-          raise Exception("""You are required to run a ga before you
-              can connect to the database. Run ga.evolve() or ga.active()""")
+          raise Exception("""You are required to run a ga before you can connect to the database. Run ga.evolve() or ga.active()""")
 
 
     @config_id.setter

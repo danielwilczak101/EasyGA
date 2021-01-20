@@ -128,13 +128,14 @@ class Attributes:
 
             Database = sql_database.SQL_Database,
             database_name = 'database.db',
-            sql_create_data_structure = """CREATE TABLE IF NOT EXISTS data (
-                                               id INTEGER PRIMARY KEY,
-                                               config_id INTEGER DEFAULT NULL,
-                                               generation INTEGER NOT NULL,
-                                               fitness REAL,
-                                               chromosome TEXT
-                                           ); """,
+            sql_create_data_structure = f"""
+            CREATE TABLE IF NOT EXISTS data (
+            id INTEGER PRIMARY KEY,
+            config_id INTEGER DEFAULT NULL,
+            generation INTEGER NOT NULL,
+            fitness REAL,
+            chromosome TEXT
+            ); """,
 
             Graph = matplotlib_graph.Matplotlib_Graph,
 
