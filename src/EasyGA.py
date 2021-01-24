@@ -211,7 +211,8 @@ class GA(Attributes):
 
         # Replace worst chromosomes with new chromosomes, except for the previous best chromosome
         min_len = min(len(self.population)-1, len(self.population.next_population))
-        self.population[-min_len:] = self.population.next_population[:min_len]
+        if min_len > 0:
+            self.population[-min_len:] = self.population.next_population[:min_len]
         self.population.next_population = []
         self.population.mating_pool = []
 
