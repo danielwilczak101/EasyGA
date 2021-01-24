@@ -181,54 +181,39 @@ class GA(Attributes):
         if self.adapt_population_flag == False:
             return
 
-        # Amount of the population desired to converge (default 50%)
-        amount_converged = round(self.percent_converged*len(self.population))
+        self.parent_selection_impl()
 
-        # Difference between best and i-th chromosomes
-        best_chromosome = self.population[0]
-        tol = lambda i: self.dist(best_chromosome, self.population[i])
+        # Strongly cross the best chromosome with all other chromosomes
+        for n, parent in enumerate(self.population.mating_pool):
 
-        # First non-zero tolerance after amount_converged/4
-        for i in range(amount_converged//4, len(self.population)):
-            tol_i = tol(i)
-            if tol_i > 0:
+            if self.population[n] != self.population[0]:
+
+                # Strongly cross with the best chromosome
+                # May reject negative weight or division by 0
+                try:
+                    self.crossover_individual_impl(
+                        self.population[n],
+                        parent,
+                        weight = -3/4,
+                    )
+
+                # If negative weights can't be used or division by 0, use positive weight
+                except ValueError:
+                    self.crossover_individual_impl(
+                        self.population[n],
+                        parent,
+                        weight = +1/4,
+                    )
+
+            # Stop if we've filled up an entire population
+            if len(self.population.next_population) >= len(self.population):
                 break
 
-        # First significantly different tolerance
-        for j in range(i, len(self.population)):
-            tol_j = tol(j)
-            if tol_j > 2*tol_i:
-                break
-
-        
-
-        # Strongly cross the best chromosome with the worst chromosomes
-        for n in range(len(self.population)-1, i-1, -1):
-
-            # Strongly cross with the best chromosome
-            # May reject negative weight or division by 0
-            try:
-                self.crossover_individual_impl(
-                    self.population[n],
-                    best_chromosome,
-                    weight = min(0.25, 2 * tol_j / (tol(n) - tol_j))
-                )
-
-            # If negative weights can't be used or division by 0,
-            # Cross with j-th chromosome instead
-            except (ValueError, ZeroDivisionError):
-                self.crossover_individual_impl(
-                    self.population[n],
-                    self.population[j],
-                    weight = 0.75
-                )
-
-            if len(self.population.next_population) >= len(self.population) - i:
-                break
-
-        # Replace worst chromosomes with new chromosomes
-        self.population[-len(self.population.next_population):] = self.population.next_population
+        # Replace worst chromosomes with new chromosomes, except for the previous best chromosome
+        min_len = min(len(self.population)-1, len(self.population.next_population))
+        self.population[-min_len:] = self.population.next_population[:min_len]
         self.population.next_population = []
+        self.population.mating_pool = []
 
 
     def initialize_population(self):
