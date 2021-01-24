@@ -6,9 +6,9 @@ with open("README.md", "r") as fh:
 
 setup(
     name='EasyGA',
-    version='1.0.1',
+    version='1.2.0',
     description='EasyGA is a python package designed to provide an easy-to-use Genetic Algorithm. The package is designed to work right out of the box, while also allowing the user to customize features as they see fit.',
-    py_modules=["EasyGA","attributes","test_EasyGA"],
+    py_modules=["EasyGA","attributes","test_EasyGA","decorators.py"],
     packages=find_packages(where='EasyGA'),
     package_dir={
         '': 'EasyGA',
