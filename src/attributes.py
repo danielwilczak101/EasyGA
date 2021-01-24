@@ -272,28 +272,14 @@ class Attributes:
         self.crossover_individual_impl = Crossover.Individual.Permutation.ox1
         self.mutation_individual_impl  = Mutation.Individual.Permutation.swap_genes
 
-        # Count the number of gene pairs they don't have in common
         def dist(self, chromosome_1, chromosome_2):
-
-            # Used to set values during comprehension
-            set_value = lambda arg: True
-
-            # Index of gene from chromosome 1 in chromosome 2
-            j = 0
+            """Count the number of gene pairs they don't have in common."""
 
             return sum(
-                # Add 1 if they are different
-                int(chromosome_1[i-1] != chromosome_2[j-1])
-
-                # Loop over chromosome 1
-                for i
-                in range(1-cycle, len(chromosome_1))
-
-                # Find index of gene from chromosome 1 in chromosome 2
-                if set_value(j := chromosome_2.index_of(chromosome_1[i]))
-
-                # Additional case to check
-                if j + cycle > 0
+                1
+                for x, y
+                in zip(chromosome_1, chromosome_2)
+                if x != y
             )
 
         self.dist = dist
