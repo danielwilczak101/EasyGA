@@ -207,10 +207,8 @@ class Attributes:
         """
 
         # Check for property
-        if hasattr(type(self), name) \
-                and isinstance((prop := getattr(type(self), name)), property):
-            if name == 'dist': print("property")
-            prop.fset(self, value)
+        if hasattr(type(self), name) and isinstance(getattr(type(self), name), property):
+            getattr(type(self), name).fset(self, value)
 
         # Check for function
         elif callable(value) and next(iter(signature(value).parameters), None) in ('self', 'ga'):
@@ -252,10 +250,10 @@ class Attributes:
         self.adapt_rate = 0.10
 
         # Use averaging for crossover
-        self.crossover_individual_impl = Crossover_Methods.Individual.Arithmetic.average
+        self.crossover_individual_impl = Crossover.Individual.Arithmetic.average
 
         # Use averaging for mutation
-        self.mutation_individual_impl = Mutation_Methods.Individual.Arithmetic.average
+        self.mutation_individual_impl = Mutation.Individual.individual_genes
 
         # Euclidean norm
         self.dist = lambda self, chromosome_1, chromosome_2:\
@@ -271,8 +269,8 @@ class Attributes:
 
         cycle = int(cycle)
 
-        self.crossover_individual_impl = Crossover_Methods.Individual.Permutation.ox1
-        self.mutation_individual_impl  = Mutation_Methods.Individual.Permutation.swap_genes
+        self.crossover_individual_impl = Crossover.Individual.Permutation.ox1
+        self.mutation_individual_impl  = Mutation.Individual.Permutation.swap_genes
 
         # Count the number of gene pairs they don't have in common
         def dist(self, chromosome_1, chromosome_2):
