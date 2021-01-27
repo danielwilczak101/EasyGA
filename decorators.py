@@ -2,7 +2,7 @@ import random
 from math import ceil
 
 def function_info(decorator):
-    """Recovers the name and doc-string for decorators throughout EasyGA for documentation purposes."""
+    """Recovers the name and doc-string for decorators throughout EasyGA for documentation purposes.""" 
 
     def new_decorator(method):
 
