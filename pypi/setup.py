@@ -15,7 +15,7 @@ setup(
     },
     python_requires='>=3.6',
     url="https://github.com/danielwilczak101/EasyGA",
-    author="Daniel Wilczak, Jack RyanNguyen, Ryley Griffith, Jared Curtis, Matthew Chase Oxamendi",
+    author="Daniel Wilczak, Jack RyanNguyen, Ryley Griffith, Jared Curtis, Matthew Chase Oxamendi ",
     author_email="danielwilczak101@gmail.com",
     long_description = long_description,
     long_description_content_type = "text/markdown",
