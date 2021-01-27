@@ -1,6 +1,6 @@
 import random
 
-# Import all survivor decorators
+# Import all survivor decorators 
 from decorators import *
 
 
