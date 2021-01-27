@@ -1,4 +1,4 @@
-# Import math for square root (ga.dist()) and ceil (crossover methods) 
+# Import math for square root (ga.dist()) and ceil (crossover methods)
 import math
 
 # Import random for many methods
@@ -13,7 +13,7 @@ from structure import Chromosome as make_chromosome
 from structure import Gene       as make_gene
 
 # Misc. Methods
-from examples import Fitness_Examples
+from examples import Fitness
 from termination import Termination
 
 # Parent/Survivor Selection Methods

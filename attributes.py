@@ -14,7 +14,7 @@ from structure import Chromosome as make_chromosome
 from structure import Gene       as make_gene
 
 # Misc. Methods
-from examples import Fitness_Examples
+from examples import Fitness
 from termination import Termination
 
 # Parent/Survivor Selection Methods
@@ -37,14 +37,14 @@ import matplotlib.pyplot as plt
 class Attributes:
     """Default GA attributes can be found here. If any attributes have not
     been set then they will fall back onto the default attribute. All
-    attributes have been catigorized to explain sections in the ga process.""" 
+    attributes have been catigorized to explain sections in the ga process."""
 
     #=====================#
     # Default GA methods: #
     #=====================#
 
     # Default EasyGA implimentation structure
-    fitness_function_impl = Fitness_Examples.is_it_5
+    fitness_function_impl = Fitness.is_it_5
     make_population = make_population
     make_chromosome = make_chromosome
     make_gene = make_gene

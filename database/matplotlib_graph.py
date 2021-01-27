@@ -2,7 +2,8 @@
 import matplotlib.pyplot as plt
 
 class Matplotlib_Graph:
-    """Prebuilt graphing functions to make visual represention of fitness data. """
+    """Prebuilt graphing functions to make visual
+    represention of fitness data."""
 
     # Common graphing functions
     type_of_graph_dict = {
