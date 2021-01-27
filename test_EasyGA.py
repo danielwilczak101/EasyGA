@@ -1,8 +1,8 @@
 import random
-import EasyGA
+from EasyGA import GA, Parent, Crossover, Mutation, Survivor, Termination
 
 # USE THIS COMMAND WHEN TESTING -
-    # python3 -m pytest 
+    # python3 -m pytest
 
 # Tests can be broken down into three parts.
 #   - Testing correct size
@@ -13,16 +13,18 @@ import EasyGA
 def test_population_size():
     """Test the population size is create correctly"""
 
-    for i in range(1,100):
+    for i in range(4,100):
         # Create the ga to test
-        ga = EasyGA.GA()
+        ga = GA()
+
+        ga.generation_goal = 10
         # Set the upper limit of testing
         ga.population_size = i
         # Evolve the ga
         ga.evolve()
 
         # If they are not equal throw an error
-        assert ga.population.size() == ga.population_size
+        assert int(len(ga.population)) == ga.population_size
 
 def test_chromosome_length():
     """ Test to see if the actual chromosome length is the same as defined."""
@@ -30,14 +32,16 @@ def test_chromosome_length():
     # Test from 0 to 100 chromosome length
     for i in range(1,100):
         # Create the ga to test
-        ga = EasyGA.GA()
+        ga = GA()
+
+        ga.generation_goal = 10
         # Set the upper limit of testing
         ga.chromosome_length = i
         # Evolve the ga
         ga.evolve()
 
         # If they are not equal throw an error
-        assert ga.population.chromosome_list[0].size() == ga.chromosome_length
+        assert len(ga.population.chromosome_list[0]) == ga.chromosome_length
 
 def test_gene_value():
     """ """
@@ -49,7 +53,7 @@ def test_initilization():
 
 def test_default():
     # Create the Genetic algorithm
-    ga = EasyGA.GA()
+    ga = GA()
 
     # Evolve the genetic algorithm
     ga.evolve()
@@ -61,7 +65,7 @@ def test_default():
 
 def test_attributes_gene_impl():
     # Create the Genetic algorithm
-    ga = EasyGA.GA()
+    ga = GA()
 
     # Set necessary attributes
     ga.population_size = 3
@@ -76,7 +80,7 @@ def test_attributes_gene_impl():
 
 def test_attributes_chromosome_impl_lambdas():
     # Create the Genetic algorithm
-    ga = EasyGA.GA()
+    ga = GA()
 
     # Set necessary attributes
     ga.chromosome_length = 3
@@ -95,7 +99,7 @@ def test_attributes_chromosome_impl_lambdas():
 
 def test_attributes_chromosome_impl_functions():
     # Create the Genetic algorithm
-    ga = EasyGA.GA()
+    ga = GA()
 
     # Set necessary attributes
     ga.chromosome_length = 3
@@ -118,108 +122,96 @@ def test_attributes_chromosome_impl_functions():
 
 def test_while_ga_active():
     # Create the Genetic algorithm
-    ga = EasyGA.GA()
+    ga = GA()
 
     # Set necessary attributes
     ga.generation_goal = 1
 
     # Evolve using ga.active
     while ga.active():
-        ga.evolve_generation(5)
+        ga.evolve(5)
 
-
-def test_initilization_impl():
-    # Create the Genetic algorithm
-    ga = EasyGA.GA()
-
-    # Set the initialization_impl
-    ga.initialization_impl = EasyGA.Initialization_Methods.random_initialization
-
-    # Evolve the genetic algorithm
-    ga.evolve()
-
-    assert (ga.initialization_impl == EasyGA.Initialization_Methods.random_initialization) and (ga != None)
 
 def test_parent_selection_impl():
     # Create the Genetic algorithm
-    ga = EasyGA.GA()
+    ga = GA()
 
     # Set the parent_selection_impl
-    ga.parent_selection_impl = EasyGA.Parent_Selection.Fitness.roulette
+    ga.parent_selection_impl = Parent.Fitness.roulette
 
     # Evolve the genetic algorithm
     ga.evolve()
 
-    assert (ga.parent_selection_impl == EasyGA.Parent_Selection.Fitness.roulette) and (ga != None)
+    assert (ga.parent_selection_impl == Parent.Fitness.roulette) and (ga != None)
 
 def test_crossover_population_impl():
     # Create the Genetic algorithm
-    ga = EasyGA.GA()
+    ga = GA()
 
     # Set the crossover_population_impl
-    ga.crossover_population_impl = EasyGA.Crossover_Methods.Population.sequential_selection
+    ga.crossover_population_impl = Cossover.Population.sequential_selection
 
     # Evolve the genetic algorithm
     ga.evolve()
 
-    assert (ga.crossover_population_impl == EasyGA.Crossover_Methods.Population.sequential_selection) and (ga != None)
+    assert (ga.crossover_population_impl == Crossover.Population.sequential_selection) and (ga != None)
 
 def test_crossover_individual_impl():
     # Create the Genetic algorithm
-    ga = EasyGA.GA()
+    ga = GA()
 
     # Set the crossover_individual_impl
-    ga.crossover_individual_impl = EasyGA.Crossover_Methods.Individual.single_point
+    ga.crossover_individual_impl = Crossover.Individual.single_point
 
     # Evolve the genetic algorithm
     ga.evolve()
 
-    assert (ga.crossover_individual_impl == EasyGA.Crossover_Methods.Individual.single_point) and (ga != None)
+    assert (ga.crossover_individual_impl == Crossover.Individual.single_point) and (ga != None)
 
 def test_mutation_population_impl():
     # Create the Genetic algorithm
-    ga = EasyGA.GA()
+    ga = GA()
 
     # Set the mutation_population_impl
-    ga.mutation_population_impl = EasyGA.Mutation_Methods.Population.random_selection
+    ga.mutation_population_impl = Mutation.Population.random_selection
 
     # Evolve the genetic algorithm
     ga.evolve()
 
-    assert (ga.mutation_population_impl == EasyGA.Mutation_Methods.Population.random_selection) and (ga != None)
+    assert (ga.mutation_population_impl == Mutation.Population.random_selection) and (ga != None)
 
 def test_mutation_individual_impl():
     # Create the Genetic algorithm
-    ga = EasyGA.GA()
+    ga = GA()
 
     # Set the mutation_population_impl
-    ga.mutation_individual_impl = EasyGA.Mutation_Methods.Individual.single_gene
+    ga.mutation_individual_impl = Mutation.Individual.single_gene
 
     # Evolve the genetic algorithm
     ga.evolve()
 
-    assert (ga.mutation_individual_impl == EasyGA.Mutation_Methods.Individual.single_gene) and (ga != None)
+    assert (ga.mutation_individual_impl == Mutation.Individual.single_gene) and (ga != None)
 
 def test_survivor_selection_impl():
     # Create the Genetic algorithm
-    ga = EasyGA.GA()
+    ga = GA()
 
     # Set the survivor_selection_impl
-    ga.survivor_selection_impl = EasyGA.Survivor_Selection.fill_in_random
+    ga.survivor_selection_impl = Survivor.fill_in_random
 
     # Evolve the genetic algorithm
     ga.evolve()
 
-    assert (ga.survivor_selection_impl == EasyGA.Survivor_Selection.fill_in_random) and (ga != None)
+    assert (ga.survivor_selection_impl == Survivor.fill_in_random) and (ga != None)
 
 def test_termination_impl():
     # Create the Genetic algorithm
-    ga = EasyGA.GA()
+    ga = GA()
 
     # Set the termination_impl
-    ga.termination_impl = EasyGA.Termination_Methods.fitness_and_generation_based
+    ga.termination_impl = Termination.fitness_and_generation_based
 
     # Evolve the genetic algorithm
     ga.evolve()
 
-    assert (ga.termination_impl == EasyGA.Termination_Methods.fitness_and_generation_based) and (ga != None)
+    assert (ga.termination_impl == Termination.fitness_and_generation_based) and (ga != None)
