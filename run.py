@@ -1,5 +1,4 @@
 import EasyGA
-import random
 
 #Create the Genetic Algorithm
 ga = EasyGA.GA()
