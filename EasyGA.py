@@ -97,13 +97,15 @@ class GA(Attributes):
 
 
     def update_population(self):
-        """Updates the population to the new population and resets the mating pool and new population."""
+        """Updates the population to the new population and resets
+         the mating pool and new population."""
 
         self.population.update()
 
 
     def reset_run(self):
-        """Resets a run by re-initializing the population and modifying counters."""
+        """Resets a run by re-initializing the population
+         and modifying counters."""
 
         self.initialize_population()
         self.current_generation = 0
@@ -111,7 +113,8 @@ class GA(Attributes):
 
 
     def active(self):
-        """Returns if the ga should terminate based on the termination implimented."""
+        """Returns if the ga should terminate based on the
+         termination implimented."""
 
         return self.termination_impl()
 
