@@ -1,25 +1,25 @@
-### To run from the downloaded source code
+### ----- To run from the downloaded source code -----
 run.py
 
-#### Main functionality files
+#### ----- Main functionality files -----
 EasyGA.py
 attributes.py
 
-#### Decorators used to simply code
+#### ----- Decorators used to simply code -----
 decorators.py
 
-#### Genetic Algorithm process
+#### ----- Genetic Algorithm process -----
 crossover/
 mutation/
 parent/
 survivor/
 termination/
 
-#### Building blocks
+#### ----- Building blocks -----
 structure/
 
-#### Fitness functions
+#### ----- Fitness functions -----
 fitness_examples/
 
-#### Testing
+#### ----- Testing -----
 test_EasyGA.py
