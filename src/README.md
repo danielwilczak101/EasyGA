@@ -18,8 +18,8 @@ termination/
 #### ----- Building blocks -----
 structure/
 
-#### ----- Fitness functions -----
-fitness_examples/
+#### ----- Example code -----
+examples/
 
 #### ----- Testing -----
 test_EasyGA.py

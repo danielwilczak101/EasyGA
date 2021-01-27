@@ -14,7 +14,7 @@ from structure import Chromosome as make_chromosome
 from structure import Gene       as make_gene
 
 # Misc. Methods
-from fitness_examples import Fitness_Examples
+from examples import Fitness_Examples
 from termination import Termination
 
 # Parent/Survivor Selection Methods

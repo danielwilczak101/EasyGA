@@ -13,7 +13,7 @@ from structure import Chromosome as make_chromosome
 from structure import Gene       as make_gene
 
 # Misc. Methods
-from fitness_examples import Fitness_Examples
+from examples import Fitness_Examples
 from termination import Termination
 
 # Parent/Survivor Selection Methods
@@ -135,7 +135,7 @@ class GA(Attributes):
         """
 
         # Determines how much to adapt by
-        weight = self.adapt_probability_rate 
+        weight = self.adapt_probability_rate
 
         # Don't adapt
         if weight is None or weight <= 0:
