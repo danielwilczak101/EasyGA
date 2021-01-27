@@ -1,4 +1,4 @@
-# Import math for square root (ga.dist()) and ceil (crossover methods)
+# Import math for square root (ga.dist()) and ceil (crossover methods) 
 import math
 
 # Import random for many methods
