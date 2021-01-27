@@ -37,7 +37,7 @@ import matplotlib.pyplot as plt
 class Attributes:
     """Default GA attributes can be found here. If any attributes have not
     been set then they will fall back onto the default attribute. All
-    attributes have been catigorized to explain sections in the ga process."""
+    attributes have been catigorized to explain sections in the ga process.""" 
 
     #=====================#
     # Default GA methods: #
