@@ -2,7 +2,7 @@ import random
 import EasyGA
 
 # USE THIS COMMAND WHEN TESTING -
-    # python3 -m pytest
+    # python3 -m pytest 
 
 # Tests can be broken down into three parts.
 #   - Testing correct size
