@@ -49,15 +49,11 @@ Chromosome - 9 [7][2][8][10][3][5][5][8][1][7] / Fitness = 2
 We would love to know if your having any issues. Please start a new issue on the [Issues Page](https://github.com/danielwilczak101/EasyGA/issues).
 
 
+## Local System Approach
 
-## Other options
+Download the repository to some folder on your computer.
 
-Download the repository to some folder - If you never used git. Look up a youtube tutorial. It will all make sense.
-```
-git clone https://github.com/danielwilczak101/EasyGA.git
-```
-Or download as a zip file.
 ```
 https://github.com/danielwilczak101/EasyGA/archive/master.zip
 ```
-Use the run_testing.py file inside the src folder to run your code and test while we build the package.
+Use the run.py file inside the EasyGA folder to run your code and test while we build the package.
