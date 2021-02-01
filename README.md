@@ -45,63 +45,10 @@ Chromosome - 8 [5][8][8][6][10][10][5][7][2][7] / Fitness = 2
 Chromosome - 9 [7][2][8][10][3][5][5][8][1][7] / Fitness = 2
 ```
 
+## Issues
+We would love to know if your having any issues. Please start a new issue on the [Issues Page](https://github.com/danielwilczak101/EasyGA/issues).
 
 
-# How Testing works
-
-### Getting started with testing
-
-```bash
-pip3 install pytest
-```
-
-### Navigate to your EasyGA folder and run:
-```bash
-python3 -m pytest
-```
-
-#### Output
-```bash
-============================================= test session starts =========================
-platform darwin -- Python 3.8.6rc1, pytest-6.0.2, py-1.9.0, pluggy-0.13.1
-rootdir: /Users/github/EasyGA
-collected 2 items                                                      
-
-test_EasyGA.py ..                                                                    [100%]
-
-============================================== 2 passed in 0.04s ==========================
-```
-
-
-
-
-This is only an example and we will create hundreds of tests so this list will become bigger and bigger.
-
-
-## Developing EasyGA:
-### If you know how to use Github and git ignore this section.
-
-### Getting started with development
-To work together we plan on using github and the git framework. This is made easy with the Atom software.
-
-Download Atom for whatever OS you have.
-https://atom.io/
-
-Use the github tab to pull the github repository. Its self explanitory.
-
-Use the <b>run_testing.py</b> file inside the src folder to run your code and test while we build the package.
-
-## Upload to PyPi
-
-1. Change version number to whatever plus 1
-2. Rename "src" folder to "EasyGA"
-3. Run these two commands
-```
-python setup.py bdist_wheel sdist // Build the package for publishing
-twine upload dist/* // Upload package to PyPI
-```
-
-The second command requires a username and password.
 
 ## Other options
 
