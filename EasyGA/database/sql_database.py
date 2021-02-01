@@ -178,7 +178,7 @@ class SQL_Database:
         """Get the highest fitness of each generation"""
 
         return self.query_all(f"""
-        SELECT fitness, max(fitness)
+        SELECT max(fitness)
         FROM data
         WHERE config_id={config_id}
         GROUP by generation;""")
@@ -189,16 +189,32 @@ class SQL_Database:
         """Get the lowest fitness of each generation"""
 
         return self.query_all(f"""
-        SELECT fitness, min(fitness)
+        SELECT min(fitness)
         FROM data
         WHERE config_id={config_id}
         GROUP by generation;""")
 
 
+    def get_all_config_id(self):
+        """Get an array of all the DISTINCT config_id in the database"""
+
+        return self.query_all(f"""
+        SELECT DISTINCT config_id
+        FROM config;""")
+
+    def get_each_generation_number(self,config_id):
+        """Get an array of all the generation numbers"""
+
+        return self.query_all(f"""
+        SELECT DISTINCT generation
+        FROM data
+        WHERE config_id={config_id};""")
+
+
+
     #=====================================#
     # Input information Queries:          #
     #=====================================#
-
 
 
     def insert_chromosome(self, generation, chromosome):
