@@ -12,6 +12,7 @@ class Matplotlib_Graph:
         'bar'     : plt.bar
     }
 
+
     def __init__(self, database):
         self.database = database
         self.type_of_graph = 'line'
@@ -19,6 +20,7 @@ class Matplotlib_Graph:
         self.y = None
         self.yscale = "linear"
         self.legend = False
+
 
     def all_config_id(self,function):
         """Graph each config_id's data stored in the database
@@ -37,7 +39,6 @@ class Matplotlib_Graph:
             y = function(config_id)
             # Graph the line but dont show
             self.type_of_graph(x, y, label=f"Config_id - {config_id}")
-
 
 
     def generation_total_fitness(self, config_id = None):
@@ -106,6 +107,7 @@ class Matplotlib_Graph:
 
     def show(self):
         """Used to show the matplot lib graph."""
+
         if self.legend == True:
             plt.legend()
 
