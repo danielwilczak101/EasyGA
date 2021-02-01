@@ -56,4 +56,4 @@ Download the repository to some folder on your computer.
 ```
 https://github.com/danielwilczak101/EasyGA/archive/master.zip
 ```
-Use the run.py file inside the EasyGA folder to run your code and test while we build the package.
+Use the run.py file inside the EasyGA folder to run your code. This is a local version of the package. 
