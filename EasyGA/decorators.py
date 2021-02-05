@@ -1,35 +1,19 @@
 import random
 from math import ceil
-
-def function_info(decorator):
-    """Recovers the name and doc-string for decorators throughout EasyGA for documentation purposes.""" 
-
-    def new_decorator(method):
-
-        # Apply old decorator
-        new_method = decorator(method)
-
-        # Recover name and doc-string
-        new_method.__name__ = method.__name__
-        new_method.__doc__  = method.__doc__
-
-        # Return new method with proper name and doc-string
-        return new_method
-
-    return new_decorator
+from functools import wraps
 
 
 #=======================#
 # Crossover decorators: #
 #=======================#
 
-@function_info
 def _check_weight(individual_method):
     """Checks if the weight is between 0 and 1 before running.
     Exception may occur when using ga.adapt, which will catch
     the error and try again with valid weight.
     """
 
+    @wraps(individual_method)
     def new_method(ga, parent_1, parent_2, *, weight = individual_method.__kwdefaults__.get('weight', None)):
 
         if weight is None:
@@ -41,10 +25,10 @@ def _check_weight(individual_method):
 
     return new_method
 
-@function_info
 def _gene_by_gene(individual_method):
     """Perform crossover by making a single new chromosome by combining each gene by gene."""
 
+    @wraps(individual_method)
     def new_method(ga, parent_1, parent_2, *, weight = individual_method.__kwdefaults__.get('weight', 'None')):
 
         ga.population.add_child(
@@ -62,11 +46,11 @@ def _gene_by_gene(individual_method):
 # Parent decorators: #
 #====================#
 
-@function_info
 def _check_selection_probability(selection_method):
     """Raises a ValueError if the selection_probability is not between 0 and 1 inclusively.
     Otherwise runs the selection method."""
 
+    @wraps(selection_method)
     def new_method(ga):
         if 0 <= ga.selection_probability <= 1:
             selection_method(ga)
@@ -76,11 +60,11 @@ def _check_selection_probability(selection_method):
     return new_method
 
 
-@function_info
 def _check_positive_fitness(selection_method):
     """Raises a ValueError if the population contains a chromosome with negative fitness.
     Otherwise runs the selection method."""
 
+    @wraps(selection_method)
     def new_method(ga):
         if ga.get_chromosome_fitness(0) > 0 and ga.get_chromosome_fitness(-1) >= 0:
             selection_method(ga)
@@ -90,21 +74,21 @@ def _check_positive_fitness(selection_method):
 
     return new_method
 
-@function_info
 def _ensure_sorted(selection_method):
     """Sorts the population by fitness and then runs the selection method."""
 
+    @wraps(selection_method)
     def new_method(ga):
         ga.sort_by_best_fitness()
         selection_method(ga)
 
     return new_method
 
-@function_info
 def _compute_parent_amount(selection_method):
     """Computes the amount of parents needed to be selected,
     and passes it as another argument for the method."""
 
+    @wraps(selection_method)
     def new_method(ga):
         parent_amount = max(2, round(len(ga.population)*ga.parent_ratio))
         selection_method(ga, parent_amount)
@@ -117,10 +101,10 @@ def _compute_parent_amount(selection_method):
 #======================#
 
 
-@function_info
 def _check_chromosome_mutation_rate(population_method):
     """Checks if the chromosome mutation rate is a float between 0 and 1 before running."""
 
+    @wraps(population_method)
     def new_method(ga):
 
         if not isinstance(ga.chromosome_mutation_rate, float):
@@ -135,10 +119,10 @@ def _check_chromosome_mutation_rate(population_method):
     return new_method
 
 
-@function_info
 def _check_gene_mutation_rate(individual_method):
     """Checks if the gene mutation rate is a float between 0 and 1 before running."""
 
+    @wraps(population_method)
     def new_method(ga, index):
 
         if not isinstance(ga.gene_mutation_rate, float):
@@ -153,10 +137,10 @@ def _check_gene_mutation_rate(individual_method):
     return new_method
 
 
-@function_info
 def _reset_fitness(individual_method):
     """Resets the fitness value of the chromosome."""
 
+    @wraps(population_method)
     def new_method(ga, chromosome):
         chromosome.fitness = None
         individual_method(ga, chromosome)
@@ -164,12 +148,12 @@ def _reset_fitness(individual_method):
     return new_method
 
 
-@function_info
 def _loop_random_mutations(individual_method):
     """Runs the individual method until enough
     genes are mutated on the indexed chromosome."""
 
     # Change input to include the gene index being mutated.
+    @wraps(population_method)
     def new_method(ga, chromosome):
 
         sample_space = range(len(chromosome))
@@ -191,10 +175,10 @@ def _loop_random_mutations(individual_method):
 # Termination decorators: #
 #=========================#
 
-@function_info
 def _add_by_fitness_goal(termination_impl):
     """Adds termination by fitness goal to the method."""
 
+    @wraps(termination_method)
     def new_method(ga):
 
         # Try to check the fitness goal
@@ -218,10 +202,10 @@ def _add_by_fitness_goal(termination_impl):
     return new_method
 
 
-@function_info
 def _add_by_generation_goal(termination_impl):
     """Adds termination by generation goal to the method."""
 
+    @wraps(termination_method)
     def new_method(ga):
 
         # If generation goal is set, check it.
@@ -234,10 +218,10 @@ def _add_by_generation_goal(termination_impl):
     return new_method
 
 
-@function_info
 def _add_by_tolerance_goal(termination_impl):
     """Adds termination by tolerance goal to the method."""
 
+    @wraps(termination_method)
     def new_method(ga):
 
         # If tolerance is set, check it, if possible.
