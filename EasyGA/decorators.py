@@ -175,7 +175,7 @@ def _loop_random_mutations(individual_method):
 # Termination decorators: #
 #=========================#
 
-def _add_by_fitness_goal(termination_impl):
+def _add_by_fitness_goal(termination_method):
     """Adds termination by fitness goal to the method."""
 
     @wraps(termination_method)
@@ -202,7 +202,7 @@ def _add_by_fitness_goal(termination_impl):
     return new_method
 
 
-def _add_by_generation_goal(termination_impl):
+def _add_by_generation_goal(termination_method):
     """Adds termination by generation goal to the method."""
 
     @wraps(termination_method)
@@ -218,7 +218,7 @@ def _add_by_generation_goal(termination_impl):
     return new_method
 
 
-def _add_by_tolerance_goal(termination_impl):
+def _add_by_tolerance_goal(termination_method):
     """Adds termination by tolerance goal to the method."""
 
     @wraps(termination_method)
