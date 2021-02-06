@@ -1,18 +1,14 @@
-from setuptools import setup, find_packages
+import setuptools
 
-with open("README.md", "r") as fh:
+with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 
-setup(
+setuptools.setup(
     name='EasyGA',
-    version='1.2.0',
+    version='1.5.1',
     description='EasyGA is a python package designed to provide an easy-to-use Genetic Algorithm. The package is designed to work right out of the box, while also allowing the user to customize features as they see fit.',
-    py_modules=["EasyGA","attributes","test_EasyGA","decorators"],
-    packages=find_packages(where='EasyGA'),
-    package_dir={
-        '': 'EasyGA',
-    },
+    packages=setuptools.find_packages(),
     python_requires='>=3.6',
     url="https://github.com/danielwilczak101/EasyGA",
     author="Daniel Wilczak, Jack RyanNguyen, Ryley Griffith, Jared Curtis, Matthew Chase Oxamendi ",
@@ -20,9 +16,7 @@ setup(
     long_description = long_description,
     long_description_content_type = "text/markdown",
     classifier=[
-        "Programming Language :: Python :: 3.0",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3",
         "License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)",
         "Operating System :: OS Independent",
         ],
