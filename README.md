@@ -8,7 +8,7 @@ EasyGA is a python package designed to provide an easy-to-use Genetic Algorithm.
 
 ## Installation:
 
-Run pyhton's pip3 to install:
+Run python's pip3 to install:
 
 ```Python
 pip3 install EasyGA
