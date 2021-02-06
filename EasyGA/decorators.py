@@ -122,7 +122,7 @@ def _check_chromosome_mutation_rate(population_method):
 def _check_gene_mutation_rate(individual_method):
     """Checks if the gene mutation rate is a float between 0 and 1 before running."""
 
-    @wraps(population_method)
+    @wraps(individual_method)
     def new_method(ga, index):
 
         if not isinstance(ga.gene_mutation_rate, float):
@@ -140,7 +140,7 @@ def _check_gene_mutation_rate(individual_method):
 def _reset_fitness(individual_method):
     """Resets the fitness value of the chromosome."""
 
-    @wraps(population_method)
+    @wraps(individual_method)
     def new_method(ga, chromosome):
         chromosome.fitness = None
         individual_method(ga, chromosome)
@@ -153,7 +153,7 @@ def _loop_random_mutations(individual_method):
     genes are mutated on the indexed chromosome."""
 
     # Change input to include the gene index being mutated.
-    @wraps(population_method)
+    @wraps(individual_method)
     def new_method(ga, chromosome):
 
         sample_space = range(len(chromosome))
@@ -197,7 +197,7 @@ def _add_by_fitness_goal(termination_method):
             pass
 
         # Check other termination methods
-        return termination_impl(ga)
+        return termination_method(ga)
 
     return new_method
 
@@ -213,7 +213,7 @@ def _add_by_generation_goal(termination_method):
             return False
 
         # Check other termination methods
-        return termination_impl(ga)
+        return termination_method(ga)
 
     return new_method
 
@@ -239,7 +239,7 @@ def _add_by_tolerance_goal(termination_method):
             pass
 
         # Check other termination methods
-        return termination_impl(ga)
+        return termination_method(ga)
 
     return new_method
 
