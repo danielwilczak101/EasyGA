@@ -6,6 +6,8 @@ EasyGA is a python package designed to provide an easy-to-use Genetic Algorithm.
 
 ## Check out our [wiki](https://github.com/danielwilczak101/EasyGA/wiki) for more information.
 
+## [Youtube](https://www.youtube.com/watch?v=jbuDKwIiYBw) - Getting started Guide
+
 ## Installation:
 
 Run python's pip3 to install:
