@@ -123,4 +123,6 @@ Download the repository to some folder on your computer.
 ```
 https://github.com/danielwilczak101/EasyGA/archive/master.zip
 ```
+
+## Check out our [wiki](https://github.com/danielwilczak101/EasyGA/wiki) for more information.
 Use the run.py file inside the EasyGA folder to run your code. This is a local version of the package. 
