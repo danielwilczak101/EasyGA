@@ -107,7 +107,7 @@ Chromosome - 8 [E][a][s][y][Z][A] / Fitness = 5
 Chromosome - 9 [E][a][s][Y][G][A] / Fitness = 5
 ```
 
-![ihttps://github.com/danielwilczak101/EasyGA/blob/media/images/password_cracker_results.png]
+![](ihttps://github.com/danielwilczak101/EasyGA/blob/media/images/password_cracker_results.png)
 
 ## Issues
 We would love to know if your having any issues. Please start a new issue on the [Issues Page](https://github.com/danielwilczak101/EasyGA/issues).
