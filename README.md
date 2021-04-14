@@ -53,13 +53,16 @@ import random
 ga = EasyGA.GA()
 
 word = input("Please enter a word: \n")
+
+# Basic Attributes
 ga.chromosome_length = len(word)
 ga.fitness_goal = len(word)
 
+# Size Attributes
 ga.population_size = 50
 ga.generation_goal = 10000
 
-
+# User definded fitness
 def password_fitness(chromosome):
 
     return sum(1 for gene, letter
@@ -69,6 +72,7 @@ def password_fitness(chromosome):
 
 ga.fitness_function_impl = password_fitness
 
+# What the genes will look like.
 ga.gene_impl = lambda: random.choice(["A","a","B","b","C","c","D","d","E","e",
                                       "F","f","G","g","H","h","I","i","J","j",
                                       "K","k","L","l","M","m","N","n","O","o",
