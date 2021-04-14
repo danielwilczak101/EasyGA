@@ -62,9 +62,7 @@ ga.generation_goal = 10000
 
 def password_fitness(chromosome):
 
-    return sum(
-        1
-        for gene, letter
+    return sum(1 for gene, letter
         in zip(chromosome, word)
         if gene.value == letter
     )
