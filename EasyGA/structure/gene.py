@@ -19,6 +19,11 @@ class Gene:
         return self.value == Gene(other_gene).value
 
 
+    def __hash__(self):
+        """Hash genes by value so that they can be used in sets/dictionaries."""
+        return hash(self.value)
+
+
     def __repr__(self):
         """
         Allows the user to use

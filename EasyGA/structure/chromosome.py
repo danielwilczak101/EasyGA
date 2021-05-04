@@ -112,6 +112,11 @@ class Chromosome():
         return self.gene_list == chromosome.gene_list
 
 
+    def __hash__(self):
+        """Hash chromosomes by genes so they can be used in sets/dictionaries."""
+        return hash(tuple(self))
+
+
     def __add__(self, chromosome):
         """Return self + chromosome, a chromosome made by concatenating the genes."""
         return Chromosome(chain(self, chromosome))
