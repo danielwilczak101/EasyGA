@@ -99,6 +99,7 @@ class Attributes:
             population = None,
             target_fitness_type = 'max',
             update_fitness = False,
+            save_data = True,
 
             parent_ratio = 0.10,
             selection_probability = 0.50,
@@ -151,6 +152,7 @@ class Attributes:
         self.population = population
         self.target_fitness_type = target_fitness_type
         self.update_fitness = update_fitness
+        self.save_data = save_data
 
         # Selection variables
         self.parent_ratio = parent_ratio
