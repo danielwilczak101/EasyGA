@@ -1,10 +1,18 @@
+import matplotlib.pyplot as plt
+
 import EasyGA
 
-#Create the Genetic Algorithm
-ga = EasyGA.GA()
+for _ in range(2):
+    # Create a new genetic algorithm each.
+    ga = EasyGA.GA()
+    ga.evolve()
+    ga.print_population()
 
-ga.evolve()
+# Graph the average of the two runs
+plt.subplot(1, 2, 1)
+ga.graph.highest_value_chromosome("average")
 
-#Print your default genetic algorithm
-ga.print_generation()
-ga.print_population()
+plt.subplot(1, 2, 1)
+ga.graph.highest_value_chromosome("all")
+
+ga.graph.show()

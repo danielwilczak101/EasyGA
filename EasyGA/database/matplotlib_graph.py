@@ -1,5 +1,7 @@
 # Graphing package
 import matplotlib.pyplot as plt
+import numpy as np
+
 
 class Matplotlib_Graph:
     """Prebuilt graphing functions to make visual
@@ -21,6 +23,22 @@ class Matplotlib_Graph:
         self.yscale = "linear"
         self.legend = False
 
+    def average_config_id(self,function):
+        """Graph average line of all config_id's from data stored
+        in the database."""
+
+        # Get all the config's
+        config_ids = self.database.get_all_config_id()
+
+        stored_list = []
+
+        # Store each list so it can be averaged later
+        for config_id in config_ids:
+            stored_list.append(function(config_id))
+
+        y = np.average(stored_list, axis=0)
+        x = self.database.get_each_generation_number(config_id)
+        self.type_of_graph(x, y)
 
     def all_config_id(self,function):
         """Graph each config_id's data stored in the database
@@ -29,7 +47,7 @@ class Matplotlib_Graph:
         config_ids = self.database.get_all_config_id()
 
         # Turn on the legend
-        self.legend = True
+        #self.legend = True
 
         # Get the x and y data for each config_id
         for config_id in config_ids:
@@ -47,6 +65,9 @@ class Matplotlib_Graph:
         if config_id == "all":
             # If the user want to plot all the config_id's
             self.all_config_id(self.database.get_generation_total_fitness)
+        elif config_id == "average":
+            # if the user wants an average plot of all config_id's
+            self.average_config_id(self.database.get_generation_total_fitness)
         else:
             # Query the X data
             generations = self.database.get_total_generations(config_id)
@@ -69,6 +90,9 @@ class Matplotlib_Graph:
         if config_id == "all":
             # If the user want to plot all the config_id's
             self.all_config_id(self.database.get_highest_chromosome)
+        elif config_id == "average":
+            # if the user wants an average plot of all config_id's
+            self.average_config_id(self.database.get_highest_chromosome)
         else:
             # Query the X data
             generations = self.database.get_total_generations(config_id)
@@ -90,6 +114,9 @@ class Matplotlib_Graph:
         if config_id == "all":
             # If the user want to plot all the config_id's
             self.all_config_id(self.database.get_lowest_chromosome)
+        elif config_id == "average":
+            # if the user wants an average plot of all config_id's
+            self.average_config_id(self.database.get_lowest_chromosome)
         else:
             # Query the X data
             generations = self.database.get_total_generations(config_id)
@@ -98,6 +125,7 @@ class Matplotlib_Graph:
             # Query for Y data
             self.y = self.database.get_lowest_chromosome(config_id)
             self.type_of_graph(self.x, self.y)
+
 
         plt.yscale(self.yscale)
         plt.xlabel('Generation')
