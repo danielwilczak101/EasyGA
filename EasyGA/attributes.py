@@ -84,7 +84,7 @@ class Attributes:
     mutation_population_impl: Callable[[Attributes], None] = Mutation.Population.random_avoid_best
     termination_impl: Callable[[Attributes], None] = Termination.fitness_generation_tolerance
 
-    database: Database = sql_database.SQL_Database
+    database: Database = field(default_factory=sql_database.SQL_Database)
     database_name: str = 'database.db'
     sql_create_data_structure: str = """
         CREATE TABLE IF NOT EXISTS data (
