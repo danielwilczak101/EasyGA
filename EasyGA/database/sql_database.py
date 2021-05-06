@@ -1,5 +1,4 @@
 import sqlite3
-import os
 
 from tabulate import tabulate
 
@@ -59,9 +58,8 @@ class SQL_Database:
         db_config_dict = (
             (attr_name, getattr(ga, attr_name))
             for attr_name
-            in dir(ga)
-            if attr_name[0] != '_'
-            if attr_name != 'population'
+            in ga.__annotations__
+            if attr_name != "population"
         )
 
         # Types supported in the database
@@ -70,21 +68,18 @@ class SQL_Database:
         # Loop through all attributes
         for name, value in db_config_dict:
 
-            # Inserting a function, do special stuff
-            if callable(value):
-                value = ""
+            # not a function
+            if not callable(value):
 
-            # Not a function
-            else:
                 # Convert to the right type
-                if type(value) not in sql_type_list:
+                value = str(value)
 
-                    value = str(value)
+                if "'" not in value and '"' not in value:
 
-                # Insert into database
-                self.conn.execute(f"""
-                INSERT INTO config(config_id,attribute_name, attribute_value)
-                VALUES ('{self.config_id}', '{name}','{value}');""")
+                    # Insert into database
+                    self.conn.execute(f"""
+                    INSERT INTO config(config_id, attribute_name, attribute_value)
+                    VALUES ('{self.config_id}', '{name}','{value}');""")
 
 
         self.config_id = self.get_current_config()
