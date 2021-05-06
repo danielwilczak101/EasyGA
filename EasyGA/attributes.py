@@ -274,6 +274,7 @@ for name in (
     "weighted_random",
     "gene_impl",
     "chromosome_impl",
+    "population_impl",
 ):
     setattr(Attributes, name, property(get_method(name), set_method(name)))
 
