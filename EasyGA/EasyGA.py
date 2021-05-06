@@ -1,8 +1,5 @@
-# Import math for square root (ga.dist()) and ceil (crossover methods)
-import math
-
-# Import random for many methods
-import random
+from __future__ import annotations
+from typing import Optional, MutableSequence, Iterable
 
 # Import all decorators
 import decorators
@@ -11,6 +8,9 @@ import decorators
 from structure import Population as make_population
 from structure import Chromosome as make_chromosome
 from structure import Gene       as make_gene
+from structure import Population
+from structure import Chromosome
+from structure import Gene
 
 # Misc. Methods
 from examples import Fitness
@@ -37,18 +37,27 @@ import matplotlib.pyplot as plt
 
 
 class GA(Attributes):
-    """GA is the main class in EasyGA. Everything is run through the ga
-    class. The GA class inherites all the default ga attributes from the
-    attributes class.
+    """
+    GA is the main controller class for EasyGA. Everything is run
+    through the GA class. The GA class inherits all default attributes
+    from the Attributes dataclass.
 
-    An extensive wiki going over all major functions can be found at
+    An extensive wiki going over all major functionalities can be found at
     https://github.com/danielwilczak101/EasyGA/wiki
     """
 
 
-    def evolve(self, number_of_generations = float('inf'), consider_termination = True):
-        """Evolves the ga the specified number of generations
-        or until the ga is no longer active if consider_termination is True."""
+    def evolve(self: GA, number_of_generations: float = float('inf'), consider_termination: bool = True) -> None:
+        """
+        Evolves the ga until the ga is no longer active.
+
+        Parameters
+        ----------
+        number_of_generations : float = inf
+            The number of generations before the GA terminates. Runs forever by default.
+        consider_termination : bool = True
+            Whether GA.active() is checked for termination.
+        """
 
         # Create the initial population if necessary.
         if self.population is None:
@@ -84,8 +93,7 @@ class GA(Attributes):
             self.sort_by_best_fitness()
 
             # Save the population to the database
-            if self.save_data == True:
-                self.save_population()
+            self.save_population()
 
             # Adapt the ga if the generation times the adapt rate
             # passes through an integer value.
@@ -97,30 +105,25 @@ class GA(Attributes):
             self.current_generation += 1
 
 
-    def update_population(self):
-        """Updates the population to the new population and resets
-         the mating pool and new population."""
-
+    def update_population(self: GA) -> None:
+        """
+        Updates the population to the new population
+        and resets the mating pool and new population.
+        """
         self.population.update()
 
 
-    def reset_run(self):
-        """Resets a run by re-initializing the population
-         and modifying counters."""
-
+    def reset_run(self: GA) -> None:
+        """
+        Resets a run by re-initializing the
+        population and modifying counters.
+        """
         self.initialize_population()
         self.current_generation = 0
         self.run += 1
 
 
-    def active(self):
-        """Returns if the ga should terminate based on the
-         termination implimented."""
-
-        return self.termination_impl()
-
-
-    def adapt(self):
+    def adapt(self: GA) -> None:
         """Adapts the ga to hopefully get better results."""
 
         self.adapt_probabilities()
@@ -131,11 +134,11 @@ class GA(Attributes):
         self.sort_by_best_fitness()
 
 
-    def adapt_probabilities(self):
-        """Modifies the parent ratio and mutation rates
-        based on the adapt rate and percent converged.
-        Attempts to balance out so that a portion of the
-        population gradually approaches the solution.
+    def adapt_probabilities(self: GA) -> None:
+        """
+        Modifies the parent ratio and mutation rates based on the adapt
+        rate and percent converged. Attempts to balance out so that a
+        portion of the population gradually approaches the solution.
         """
 
         # Determines how much to adapt by
@@ -173,7 +176,7 @@ class GA(Attributes):
         self.gene_mutation_rate       = average(bounds[2], self.gene_mutation_rate)
 
 
-    def adapt_population(self):
+    def adapt_population(self: GA) -> None:
         """
         Performs weighted crossover between the best chromosome and
         the rest of the chromosomes, using negative weights to push
@@ -221,39 +224,24 @@ class GA(Attributes):
         self.population.mating_pool = []
 
 
-    def initialize_population(self):
-        """Initialize the population using
-        the initialization implimentation
-        that is currently set.
+    def initialize_population(self: GA) -> None:
         """
-
-        if self.chromosome_impl is not None:
-            self.population = self.make_population(
-                self.chromosome_impl()
-                for _
-                in range(self.population_size)
-            )
-
-        elif self.gene_impl is not None:
-            self.population = self.make_population(
-                (
-                    self.gene_impl()
-                    for __
-                    in range(self.chromosome_length)
-                )
-                for _
-                in range(self.population_size)
-            )
-
-        else:
-            raise ValueError("No chromosome or gene impl specified.")
+        Sets self.population using the chromosome implementation and population size.
+        """
+        self.population = self.make_population(self.population_impl())
 
 
-    def set_all_fitness(self):
-        """Will get and set the fitness of each chromosome in the population.
-        If update_fitness is set then all fitness values are updated.
-        Otherwise only fitness values set to None (i.e. uninitialized
-        fitness values) are updated.
+    def set_all_fitness(self: GA) -> None:
+        """
+        Sets the fitness of each chromosome in the population.
+
+        Attributes
+        ----------
+        update_fitness : bool
+            Whether fitnesses are recalculated even if they were previously calculated.
+            Allows chromosomes which exist in dynamic environments.
+        fitness_function_impl(chromosome) -> float
+            The fitness function which measures how well a chromosome is doing.
         """
 
         # Check each chromosome
@@ -264,11 +252,40 @@ class GA(Attributes):
                 chromosome.fitness = self.fitness_function_impl(chromosome)
 
 
-    def sort_by_best_fitness(self, chromosome_list = None, in_place = True):
-        """Sorts the chromosome list by fitness based on fitness type.
+    def sort_by_best_fitness(
+            self: GA,
+            chromosome_list: Optional[
+                Union[MutableSequence[Chromosome],
+                Iterable[Chromosome]]
+                ] = None,
+            in_place: bool = True,
+        ) -> MutableSequence[Chromosome]:
+        """
+        Sorts the chromosome list by fitness based on fitness type.
         1st element has best fitness.
         2nd element has second best fitness.
         etc.
+
+        Parameters
+        ----------
+        chromosome_list : MutableSequence[Chromosome] = self.population
+            The list of chromosomes to be sorted. By default, the population is used.
+            May be sorted in-place.
+        chromosome_list : Iterable[Chromosome]
+            The list of chromosomes to be sorted. By default, the population is used.
+            May not be sorted in-place.
+        in_place : bool = True
+            Whether the sort is done in-place, modifying the original object, or not.
+
+        Attributes
+        ----------
+        target_fitness_type : str in ('max', 'min')
+            The way the chromosomes should be sorted.
+
+        Returns
+        -------
+        chromosome_list : MutableSequence[Chromosome]
+            The sorted chromosomes.
         """
 
         if self.target_fitness_type not in ('max', 'min'):
@@ -282,57 +299,100 @@ class GA(Attributes):
         reverse = (self.target_fitness_type == 'max')
 
         # Sort by fitness, assuming None should be moved to the end of the list
-        key = lambda chromosome: (chromosome.fitness if (chromosome.fitness is not None) else (float('inf') * (+1, -1)[int(reverse)]))
+        def key(chromosome):
+            if chromosome.fitness is not None:
+                return chromosome_fitness
+            elif reverse:
+                return float('-inf')
+            else:
+                return float('inf')
 
         if in_place:
-            chromosome_list.sort(key = key, reverse = reverse)
+            chromosome_list.sort(key=key, reverse=reverse)
             return chromosome_list
 
         else:
-            return sorted(chromosome_list, key = key, reverse = reverse)
+            return sorted(chromosome_list, key=key, reverse=reverse)
 
 
-    def get_chromosome_fitness(self, index):
-        """Returns the fitness value of the chromosome
-        at the specified index after conversion based
-        on the target fitness type.
+    def get_chromosome_fitness(self: GA, index: int) -> float:
         """
+        Computes the converted fitness of a chromosome at an index.
+        The converted fitness remaps the fitness to sensible values
+        for various methods.
 
+        Parameters
+        ----------
+        index : int
+            The index of the chromosome in the population.
+
+        Attributes
+        ----------
+        convert_fitness(float) -> float
+            A method for redefining the fitness value.
+
+        Returns
+        -------
+        fitness : float
+            The converted fitness value.
+        """
         return self.convert_fitness(self.population[index].fitness)
 
 
-    def convert_fitness(self, fitness_value):
-        """Returns the fitness value if the type of problem
-        is a maximization problem. Otherwise the fitness is
-        inverted using max - value + min.
+    def convert_fitness(self: GA, fitness: float) -> float:
+        """
+        Calculates a modified version of the fitness for various
+        methods, which assume the fitness should be maximized.
+
+        Parameters
+        ----------
+        fitness : float
+            The fitness value to be changed.
+
+        Attributes
+        ----------
+        target_fitness_type : str in ('max', 'min')
+            The way the chromosomes should be sorted.
+
+        Returns
+        -------
+        fitness : float
+            Unchanged if the fitness is already being maximized.
+        max_fitness - fitness + min_fitness : float
+            The fitness flipped if the fitness is being minimized.
+
+        Requires
+        --------
+        The population must be sorted already, and the fitnesses can't be None.
         """
 
         # No conversion needed
-        if self.target_fitness_type == 'max': return fitness_value
+        if self.target_fitness_type == 'max':
+            return fitness
 
         max_fitness = self.population[-1].fitness
         min_fitness = self.population[0].fitness
 
-        return max_fitness - fitness_value + min_fitness
+        return max_fitness - fitness + min_fitness
 
 
-    def print_generation(self):
-        """Prints the current generation"""
+    def print_generation(self: GA) -> None:
+        """Prints the current generation."""
         print(f"Current Generation \t: {self.current_generation}")
 
 
-    def print_population(self):
-        """Prints the entire population"""
+    def print_population(self: GA) -> None:
+        """Prints the entire population."""
         print(self.population)
 
 
-    def print_best_chromosome(self):
-        """Prints the best chromosome and its fitness"""
+    def print_best_chromosome(self: GA) -> None:
+        """Prints the best chromosome and its fitness."""
         print(f"Best Chromosome \t: {self.population[0]}")
         print(f"Best Fitness    \t: {self.population[0].fitness}")
 
 
-    def print_worst_chromosome(self):
-        """Prints the worst chromosome and its fitness"""
+    def print_worst_chromosome(self: GA) -> None:
+        """Prints the worst chromosome and its fitness."""
         print(f"Worst Chromosome \t: {self.population[-1]}")
         print(f"Worst Fitness    \t: {self.population[-1].fitness}")
