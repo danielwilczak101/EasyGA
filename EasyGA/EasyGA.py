@@ -301,7 +301,7 @@ class GA(Attributes):
         # Sort by fitness, assuming None should be moved to the end of the list
         def key(chromosome):
             if chromosome.fitness is not None:
-                return chromosome_fitness
+                return chromosome.fitness
             elif reverse:
                 return float('-inf')
             else:
