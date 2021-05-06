@@ -48,7 +48,7 @@ class Attributes:
     generation_goal: int = 100
     fitness_goal: Optional[float] = None
     tolerance_goal: Optional[float] = None
-    percentage_converged: float = 0.5
+    percent_converged: float = 0.5
 
     chromosome_mutation_rate: float = 0.15
     gene_mutation_rate: float = 0.05
