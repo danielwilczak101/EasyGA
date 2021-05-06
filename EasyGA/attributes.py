@@ -252,12 +252,14 @@ def set_method(name: str) -> Callable[[Attributes, Optional[Callable[..., Any]]]
     """
     def setter(self: Attributes, method: Optional[Callable[..., Any]]) -> None:
         if method is None:
-            pass
+            new_method = method
         elif not callable(method):
             raise TypeError(f"{name} must be a method i.e. callable.")
         elif next(iter(signature(method).parameters), None) in ("self", "ga"):
-            method = wraps(method)(lambda *args, **kwargs: method(self, *args, **kwargs))
-        self.properties[name] = method
+            new_method = wraps(method)(lambda *args, **kwargs: method(self, *args, **kwargs))
+        else:
+            new_method = method
+        self.properties[name] = new_method
     return setter
 
 
