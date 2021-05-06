@@ -50,18 +50,7 @@ class Individual:
     @_loop_random_mutations
     def individual_genes(ga, chromosome, index):
         """Mutates random genes by making completely new genes."""
-
-        # Using the chromosome_impl
-        if ga.chromosome_impl is not None:
-            chromosome[index] = ga.make_gene(ga.chromosome_impl()[index])
-
-        # Using the gene_impl
-        elif ga.gene_impl is not None:
-            chromosome[index] = ga.make_gene(ga.gene_impl())
-
-        # Exit because no gene creation method specified
-        else:
-            raise Exception("Did not specify any initialization constraints.")
+        chromosome[index] = ga.make_chromosome(ga.chromosome_impl())[index]
 
 
     class Arithmetic:
@@ -77,18 +66,7 @@ class Individual:
             number of generations run."""
 
             weight = 1/max(1, ga.current_generation)
-
-            # Using the chromosome_impl
-            if ga.chromosome_impl is not None:
-                new_value = ga.chromosome_impl()[index]
-
-            # Using the gene_impl
-            elif ga.gene_impl is not None:
-                new_value = ga.gene_impl()
-
-            # Exit because no gene creation method specified
-            else:
-                raise Exception("Did not specify any initialization constraints.")
+            new_value = ga.make_chromosome(ga.chromosome_impl())[index]
 
             chromosome[index] = ga.make_gene((1-weight)*chromosome[index].value + weight*new_value)
 
